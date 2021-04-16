@@ -35,7 +35,8 @@ _product_ - тип продукта (считай, варианты: A или B 
 _amount_ - сумма покупок\
 _transactions_ - количество транзакций
 
-![Посмотрел на датасет глазками](//images/2020-4-16-avito-experiments-01/Screenshot_2021-04-17_00-05-12.png "Посмотрели на датасет глазками*
+![Посмотрел на датасет глазками](//images/2020-4-16-avito-experiments-01/Screenshot_2021-04-17_00-05-12.png) 
+*Посмотрели на датасет глазками*
 
 Proin convallis mi ac felis pharetra aliquam. Curabitur dignissim accumsan rutrum. In arcu magna, aliquet vel pretium et, molestie et arcu. Mauris lobortis nulla et felis ullamcorper bibendum.
 
