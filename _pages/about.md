@@ -4,26 +4,24 @@ title: About
 permalink: /about/
 ---
 
-[Reverie](https://github.com/amitmerchant1990/reverie) is a Jekyll theme which is simple and opinionated. It's actually a fork of [jekyll-now](https://github.com/barryclark/jekyll-now) with some additional features and personal touches which I've implemented to suit my needs for [my blog](https://www.amitmerchant.com).
+## Что-то обо мне
 
-This is a plug-and-play Jekyll theme which you can use on GitHub Pages without even setting up a local environment.
+✌️Привет, меня зовут Егорка и я классический студент-Junior👾
 
-## Features
+🏋Обычно я пишу код, при этом, конечно, много думаю и делаю вид, что умею в математику (иногда даже получается!). Немного стажировался в Joom, потом пошёл в стартап рядом с ВУЗом в Долгопрудном работать джуном, потому что в предыдущую компанию не брали на part-time, и вообще таски крутые, мутим компуктер вижн на роботах с лидаром!
 
-- Command-line free fork-first workflow, using GitHub.com to create, customize and post to your blog
-- Fully responsive and mobile optimized base theme
-- Sass/Coffeescript support using Jekyll 2.0
-- Free hosting on your GitHub Pages user site
-- All the SEO goodies comes in-built
-- Markdown blogging
-- Syntax highlighting using Pygments
-    - [Dracula syntax theme](https://draculatheme.com/) included
-- Disqus commenting
-- Google Analytics integration
-- Fuzzy search across blog posts
-- Pagination of posts works out-of-the-box.
-- Categorize posts out-of-the box
-- RSS Feed
-- In-built sitemap
+🛫Живу пока в Москве с по- на- приехавшими родителями, но часто гоняю в Долгопрудный (да-да, в тот ВУЗ, о котором ты подумал).
 
-Learn more about it [here](https://github.com/amitmerchant1990/reverie) on how to get started.
+💻Обожаю учиться, впитывать всё как губка и вообще учиться – смысл моей жизни. Шучу. В свободное время читаю книжки и пытаюсь не рефлексировать о том, что крутых вещей на свете больше, чем я могу охватить. Немножко по фану инвестирую в попытке скопить на зарубежную магистратуру. Кстати об учёбе.
+
+🧠Учусь на Московском Физтехе, обожаю дискретный анализ и всё, что с ним связано. Райгородский сказал, что я хороший парень, хоть я его ни разу лично и не видел (правда сказал, я сам офигел).
+Научные интересы пролегают где-то в долине математической оптимизации и транспортных и логистических задач, потихоньку стекая вниз в мейнстриме CV.
+
+🏆Недавно Авито открыло свой аналог ШАДа (но на 20 часов в неделю, а не на 60, как у Яндекса), так что теперь я ещё и там на полставки подрабатываю хабом между учениками и админами, благо и те и те мегаталантливые и горящие люди. Обожаю нетворкинг-не-вставая-с-дивана.
+
+🕺🏻А ещё я люблю классическую музыку и социальные танцы, особенно хастл. Но коронавирус решил, что нам не суждено быть вместе почти год уже (блинб!), поэтому пока не танцую.
+
+🌚На мой код и на проектики можно глянуть здесь: https://github.com/yk4r2 (кстати, там мега-модная шапка, цени)
+🌍Мой линкедын: https://www.linkedin.com/in/yk4r2/
+☄️Телега, если вдруг захочется написать мне, какой я молодец: @ykvr2
+📬Емаил, на который мне тоже можно писать, т.к. я не полковник: zhestov.ea@phystech.edu
