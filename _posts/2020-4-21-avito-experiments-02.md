@@ -205,3 +205,9 @@ $H_0$: {выручка увеличилась} ∩ {пользовательск
 - А ещё мы хорошо подрастили конверсию, что приятно.
 - Кстати, я бы померял рекламу более детально, потому что вдруг мы её просадили не всю.
 
+### The end.
+
+[Код к этому безобразию](https://github.com/yk4r2/AAA/blob/main/Experiments/homeworks/HW2/main.ipynb)
+
+[Данные, если хочется пощупать самому](https://github.com/yk4r2/AAA/blob/main/Experiments/homeworks/HW2/data/banner_test_results.csv)
+
