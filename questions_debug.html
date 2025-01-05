@@ -60,10 +60,10 @@
             border-bottom: 1px solid #e2e8f0;
         }
 
-        /* Metadata section */
+        /* Новые стили для метаданных */
         .metadata {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: 150px 1fr; /* Уменьшаем первую колонку */
             gap: 12px;
             margin-bottom: 24px;
         }
@@ -123,6 +123,35 @@
             text-decoration: underline;
         }
 
+            /* Стили для ссылки */
+        .source-link {
+            color: #4f46e5;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .source-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Стиль для внешней иконки */
+        .external-icon {
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .source-link:hover .external-icon {
+            opacity: 1;
+        }
+
         /* MathJax adjustments */
         .MathJax {
             overflow-x: auto !important;
@@ -133,7 +162,7 @@
 </head>
 <div class="question-container">
     <h2>Place or Take</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/place-or-take' target='_blank'>https://quantguide.io/questions/place-or-take</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -165,7 +194,7 @@
 
 <div class="question-container">
     <h2>Collecting Toys II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/collecting-toys-ii' target='_blank'>https://quantguide.io/questions/collecting-toys-ii</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -197,7 +226,7 @@
 
 <div class="question-container">
     <h2>Chess Tournament I</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/chess-tournament-i' target='_blank'>https://quantguide.io/questions/chess-tournament-i</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -229,7 +258,7 @@
 
 <div class="question-container">
     <h2>Poker Hands I</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/poker-hands-i' target='_blank'>https://quantguide.io/questions/poker-hands-i</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -262,7 +291,7 @@ $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to 
 
 <div class="question-container">
     <h2>Free Sundae</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/free-sundae' target='_blank'>https://quantguide.io/questions/free-sundae</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -294,7 +323,7 @@ $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to 
 
 <div class="question-container">
     <h2>Rubik's Cube Stickers</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/rubiks-cube-stickers' target='_blank'>https://quantguide.io/questions/rubiks-cube-stickers</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -327,7 +356,7 @@ $$4^3-2^3=56$$</p></details>
 
 <div class="question-container">
     <h2>Mental Arithmetic</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/mental-arithmetic' target='_blank'>https://quantguide.io/questions/mental-arithmetic</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -368,7 +397,7 @@ $m$ can be any integer greater than $1$, and $a$ is chosen to make $b$ an intege
 
 <div class="question-container">
     <h2>Observance Range</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/observance-range' target='_blank'>https://quantguide.io/questions/observance-range</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -412,7 +441,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
 
 <div class="question-container">
     <h2>River Length</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/river-length' target='_blank'>https://quantguide.io/questions/river-length</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -444,7 +473,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
 
 <div class="question-container">
     <h2>Heaven 37</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/heaven-37' target='_blank'>https://quantguide.io/questions/heaven-37</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -476,7 +505,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
 
 <div class="question-container">
     <h2>Basketball Practice II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/basketball-practice-ii' target='_blank'>https://quantguide.io/questions/basketball-practice-ii</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -508,7 +537,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
 
 <div class="question-container">
     <h2>Increasing Uniform Chain II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/increasing-uniform-chain-ii' target='_blank'>https://quantguide.io/questions/increasing-uniform-chain-ii</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -540,7 +569,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
 
 <div class="question-container">
     <h2>Candleburn</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/candleburn' target='_blank'>https://quantguide.io/questions/candleburn</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -572,7 +601,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
 
 <div class="question-container">
     <h2>Ten Consecutive Heads</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/ten-consecutive-heads' target='_blank'>https://quantguide.io/questions/ten-consecutive-heads</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -604,7 +633,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
 
 <div class="question-container">
     <h2>Consecutive Tails</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/consecutive-tails' target='_blank'>https://quantguide.io/questions/consecutive-tails</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -644,7 +673,7 @@ We now need some initial conditions. For $n = 1$, there is $1$ sequence satisfyi
 
 <div class="question-container">
     <h2>Bowl of Cherries II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/bowl-of-cherries-ii' target='_blank'>https://quantguide.io/questions/bowl-of-cherries-ii</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -696,7 +725,7 @@ Alternatively, we know that the last three spots must be $RPP$, so the probabili
 
 <div class="question-container">
     <h2>Specific Card Pull II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/specific-card-pull-ii' target='_blank'>https://quantguide.io/questions/specific-card-pull-ii</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -734,7 +763,7 @@ For a more combinatorial approach, there are $3!$ ways to arrange around the jac
 
 <div class="question-container">
     <h2>Straddle Delta</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/straddle-delta' target='_blank'>https://quantguide.io/questions/straddle-delta</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>finance</span>
@@ -769,7 +798,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
 
 <div class="question-container">
     <h2>Mixing Glasses</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/mixing-glasses' target='_blank'>https://quantguide.io/questions/mixing-glasses</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -801,7 +830,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
 
 <div class="question-container">
     <h2>Cheese Lover II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/cheese-lover-ii' target='_blank'>https://quantguide.io/questions/cheese-lover-ii</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -833,7 +862,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
 
 <div class="question-container">
     <h2>Beer Bottles</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/beer-bottles' target='_blank'>https://quantguide.io/questions/beer-bottles</a>
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
@@ -925,7 +954,7 @@ Our answer is $1^2 + 1^2 = 2$.</p></details>
 
 <div class="question-container">
     <h2>Consecutive Children</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/consecutive-children' target='_blank'>https://quantguide.io/questions/consecutive-children</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -961,7 +990,7 @@ For the youngest child to be born, we must have that $m - 4s \geq 0$, which mean
 
 <div class="question-container">
     <h2>Fleeing Flea</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/fleeing-flea' target='_blank'>https://quantguide.io/questions/fleeing-flea</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -995,7 +1024,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
 
 <div class="question-container">
     <h2>Determination II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/determination-ii' target='_blank'>https://quantguide.io/questions/determination-ii</a>
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
@@ -1028,7 +1057,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
 
 <div class="question-container">
     <h2>Coin on Chess Board</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/coin-on-chess-board' target='_blank'>https://quantguide.io/questions/coin-on-chess-board</a>
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
@@ -1062,7 +1091,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
 
 <div class="question-container">
     <h2>Shattering Orbs</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/shattering-orbs' target='_blank'>https://quantguide.io/questions/shattering-orbs</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1102,7 +1131,7 @@ With this initial condition, we can recurse and clearly see that $$a_n = a_{n-1}
 
 <div class="question-container">
     <h2>Matrix Exponential</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/matrix-exponential' target='_blank'>https://quantguide.io/questions/matrix-exponential</a>
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
@@ -1164,7 +1193,7 @@ In addition, note the following:
 
 <div class="question-container">
     <h2>Consecutive Pairs</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/consecutive-pairs' target='_blank'>https://quantguide.io/questions/consecutive-pairs</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1208,7 +1237,7 @@ Adding it all up, we conclude there are $5 + 60 + 105 + 56 + 9 = 235$ possible s
 
 <div class="question-container">
     <h2>Die Multiple II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/die-multiple-ii' target='_blank'>https://quantguide.io/questions/die-multiple-ii</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1240,7 +1269,7 @@ Adding it all up, we conclude there are $5 + 60 + 105 + 56 + 9 = 235$ possible s
 
 <div class="question-container">
     <h2>Thick Coin</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/thick-coin' target='_blank'>https://quantguide.io/questions/thick-coin</a>
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
@@ -1284,7 +1313,7 @@ The question here is how thick is the sphere? Let's call the radius $R$. The Pyt
 
 <div class="question-container">
     <h2>Arithmetic Mean</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/arithmetic-mean' target='_blank'>https://quantguide.io/questions/arithmetic-mean</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>statistics</span>
@@ -1319,7 +1348,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
 
 <div class="question-container">
     <h2>Intersecting Chords</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/intersecting-chords' target='_blank'>https://quantguide.io/questions/intersecting-chords</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1351,7 +1380,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
 
 <div class="question-container">
     <h2>Particle Reach I</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/particle-reach-i' target='_blank'>https://quantguide.io/questions/particle-reach-i</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1383,7 +1412,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
 
 <div class="question-container">
     <h2>Silly SDE</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/silly-sde' target='_blank'>https://quantguide.io/questions/silly-sde</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>pure math</span>
@@ -1415,7 +1444,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
 
 <div class="question-container">
     <h2>St. Petersburg Paradox</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/petersburg-paradox' target='_blank'>https://quantguide.io/questions/petersburg-paradox</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1447,7 +1476,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
 
 <div class="question-container">
     <h2>Correlation Ranges</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/correlation-ranges' target='_blank'>https://quantguide.io/questions/correlation-ranges</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1494,7 +1523,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
 
 <div class="question-container">
     <h2>Coefficient Swap</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/coefficient-swap' target='_blank'>https://quantguide.io/questions/coefficient-swap</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>statistics</span>
@@ -1526,7 +1555,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
 
 <div class="question-container">
     <h2>Colorful Socks I</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/colorful-socks-i' target='_blank'>https://quantguide.io/questions/colorful-socks-i</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1558,7 +1587,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
 
 <div class="question-container">
     <h2>Slippery Ladder II</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/slippery-ladder-ii' target='_blank'>https://quantguide.io/questions/slippery-ladder-ii</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>pure math</span>
@@ -1590,7 +1619,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
 
 <div class="question-container">
     <h2>Bull Call Spread I</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/bull-call-spread-i' target='_blank'>https://quantguide.io/questions/bull-call-spread-i</a>
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
@@ -1628,7 +1657,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
 
 <div class="question-container">
     <h2>Limiting Values I</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/limiting-values-i' target='_blank'>https://quantguide.io/questions/limiting-values-i</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1660,7 +1689,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
 
 <div class="question-container">
     <h2>Absolute Difference</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/absolute-difference' target='_blank'>https://quantguide.io/questions/absolute-difference</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1692,7 +1721,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
 
 <div class="question-container">
     <h2>Counting Digits</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/counting-digits' target='_blank'>https://quantguide.io/questions/counting-digits</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -1727,7 +1756,7 @@ Thus, $99^{99}$ has 198 digits.</p></details>
 
 <div class="question-container">
     <h2>Horse Arbitrage</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/horse-arbitrage' target='_blank'>https://quantguide.io/questions/horse-arbitrage</a>
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
@@ -1764,7 +1793,7 @@ We obtain our proportions because the sum of the probabilities is $11/12$, so al
 
 <div class="question-container">
     <h2>Ants on a Triangle</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/ants-on-a-triangle' target='_blank'>https://quantguide.io/questions/ants-on-a-triangle</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1796,7 +1825,7 @@ We obtain our proportions because the sum of the probabilities is $11/12$, so al
 
 <div class="question-container">
     <h2>McQueen Speeding</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/mcqueen-speeding' target='_blank'>https://quantguide.io/questions/mcqueen-speeding</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>brainteasers</span>
@@ -1833,7 +1862,7 @@ Since Lightning McQueen moves at a speed $\dfrac{25}{16}$ times as large as Chic
 
 <div class="question-container">
     <h2>The Perfect Hedge I </h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/the-perfect-hedge-i-' target='_blank'>https://quantguide.io/questions/the-perfect-hedge-i-</a>
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
@@ -1875,7 +1904,7 @@ We see that the expected returns do not matter. We can obtain a riskless portfol
 
 <div class="question-container">
     <h2>First Ace</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/first-ace' target='_blank'>https://quantguide.io/questions/first-ace</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1910,7 +1939,7 @@ We have found that the expected number of cards in the first section is $\frac{4
 
 <div class="question-container">
     <h2>4 Die Sum</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/4-die-sum' target='_blank'>https://quantguide.io/questions/4-die-sum</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
@@ -1942,7 +1971,7 @@ We have found that the expected number of cards in the first section is $\frac{4
 
 <div class="question-container">
     <h2>Common Ball Draw</h2><div class="metadata-item">
-        URL: <a href='https://quantguide.io/questions/common-ball-draw' target='_blank'>https://quantguide.io/questions/common-ball-draw</a></p><div class="metadata">
+        URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a></p><div class="metadata">
     <div class="metadata-item">
         <span>Topic:</span>
         <span>probability</span>
