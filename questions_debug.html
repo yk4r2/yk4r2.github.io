@@ -26,114 +26,107 @@
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
     <style>
-        /* Основные переменные для цветов и отступов */
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #475569;
-            --background-light: #f8fafc;
-            --border-color: #e2e8f0;
-            --shadow-color: rgba(0, 0, 0, 0.1);
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
+            line-height: 1.5;
             color: #1e293b;
-            margin: 0;
             padding: 20px;
         }
 
-        /* Основной контейнер вопроса */
+        /* Question container */
         .question-container {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 25px;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px var(--shadow-color);
-            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 24px;
         }
 
-        .question-container:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px var(--shadow-color);
-        }
-
-        /* Заголовок вопроса */
+        /* Question header */
         .question-container h2 {
-            color: var(--primary-color);
+            color: #2563eb;
             font-size: 1.5rem;
-            margin: 0 0 15px 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        /* Метаданные */
+        /* Metadata section */
         .metadata {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-            padding: 15px;
-            background: var(--background-light);
-            border-radius: 8px;
-            font-size: 0.9rem;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .metadata-item {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #f1f5f9;
+            border-radius: 4px;
         }
 
-        /* Задача */
+        .metadata-item span:first-child {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Task section */
         .task {
-            margin: 20px 0;
-            padding: 20px;
-            background: var(--background-light);
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
+            background: #f8fafc;
+            border-left: 3px solid #2563eb;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 0 4px 4px 0;
         }
 
-        /* Подсказка и решение */
+        /* Details/Summary sections */
         details {
-            margin: 15px 0;
-            padding: 10px;
-            border-radius: 8px;
-            background: white;
-            border: 1px solid var(--border-color);
+            margin: 12px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
         }
 
         details summary {
+            padding: 12px 16px;
             cursor: pointer;
-            color: var(--primary-color);
-            font-weight: 600;
-            padding: 10px;
+            background: #f8fafc;
+            color: #2563eb;
+            font-weight: 500;
         }
 
         details[open] summary {
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        /* Математические формулы */
+        details > :not(summary) {
+            padding: 16px;
+        }
+
+        /* Links */
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* MathJax adjustments */
         .MathJax {
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding: 10px 0;
-        }
-
-        /* Адаптивность для мобильных устройств */
-        @media (max-width: 768px) {
-            .question-container {
-                margin: 15px auto;
-                padding: 15px;
-            }
-
-            .metadata {
-                grid-template-columns: 1fr;
-            }
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
         }
     </style>
 
