@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 16</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Bullseye</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/bullseye' target='_blank'>https://quantguide.io/questions/bullseye</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Discrete Random Variables', 'Events']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-9-7 19:56:37 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Fred throws darts at a dartboard. There is a $10\%$ chance that he hits the bullseye on any given throw, independent between throws. How many throws $n$ must Fred perform to have at least a $90\%$ chance of hitting the bullseye at least once in $n$ throws?</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>The complement is just that he misses the bullseye on each of the $n$ throws. You should get a function $p(n)$ that is increasing in $n$, so find the smallest $n$ such that $p(n) \geq 0.9$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Let's first find the probability Fred lands a bullseye within $n$ throws. The complement is just that he misses the bullseye on each of the $n$ throws. There is a $0.9$ probability per throw that he misses the bullseye. Therefore, the probability of hitting at least once in $n$ throws is $1 - (0.9)^n$. 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 16</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Bullseye</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/bullseye' target='_blank'>https://quantguide.io/questions/bullseye</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Discrete Random Variables', 'Events']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-9-7 19:56:37 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Fred throws darts at a dartboard. There is a $10\%$ chance that he hits the bullseye on any given throw, independent between throws. How many throws $n$ must Fred perform to have at least a $90\%$ chance of hitting the bullseye at least once in $n$ throws?</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>The complement is just that he misses the bullseye on each of the $n$ throws. You should get a function $p(n)$ that is increasing in $n$, so find the smallest $n$ such that $p(n) \geq 0.9$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Let's first find the probability Fred lands a bullseye within $n$ throws. The complement is just that he misses the bullseye on each of the $n$ throws. There is a $0.9$ probability per throw that he misses the bullseye. Therefore, the probability of hitting at least once in $n$ throws is $1 - (0.9)^n$. 
 
 
 

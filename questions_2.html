@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 2</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Diagonal Eigenvalue</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/diagonal-eigenvalue' target='_blank'>https://quantguide.io/questions/diagonal-eigenvalue</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>pure math</td></tr><tr><td>Tags:</td><td>['Linear Algebra']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>['Akuna', 'WorldQuant', 'Goldman Sachs', 'DE Shaw']</td></tr><tr><td>Last Edited at:</td><td>2023-11-7 13:07:47 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Consider the matrix $30 \times 30$ matrix $A$ with $A_{ii} = 30$ for $1 \leq i \leq 30$ and $A_{ij} = 1$ for $i \neq j$. Let $\lambda = \begin{bmatrix} \lambda_1 \\ \lambda_2 \end{bmatrix}$ be the vector of distinct eigenvalues $\lambda_1 \neq \lambda_2$ of $A$ and $g = \begin{bmatrix} g_1 \\ g_2 \end{bmatrix}$ be the vector of geometric multiplicities corresponding to $\lambda_1$ and $\lambda_2$, respectively. Find $||\lambda + g||^2$</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>A fact from Linear Algebra states that if $M$ is $n \times n$ with eigenvalues (repeated according to multiplicity) $\{\lambda_i\}_{i=1}^n$, then the eigenvalues of $M + kI_n$ is $\{\lambda_i + k\}_{i=1}^n$. Note that we can write $A = 1_{30} + 29I_{30}$, where $1_{30}$ is the $30 \times 30$ matrix of all ones. </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>A fact from Linear Algebra states that if $M$ is $n \times n$ with eigenvalues (repeated according to multiplicity) $\{\lambda_i\}_{i=1}^n$, then the eigenvalues of $M + kI_n$ is $\{\lambda_i + k\}_{i=1}^n$. Note that we can write $A = 1_{30} + 29I_{30}$, where $1_{30}$ is the $30 \times 30$ matrix of all ones. 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 2</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Diagonal Eigenvalue</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/diagonal-eigenvalue' target='_blank'>https://quantguide.io/questions/diagonal-eigenvalue</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>pure math</td></tr><tr><td>Tags:</td><td>['Linear Algebra']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>['Akuna', 'WorldQuant', 'Goldman Sachs', 'DE Shaw']</td></tr><tr><td>Last Edited at:</td><td>2023-11-7 13:07:47 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Consider the matrix $30 \times 30$ matrix $A$ with $A_{ii} = 30$ for $1 \leq i \leq 30$ and $A_{ij} = 1$ for $i \neq j$. Let $\lambda = \begin{bmatrix} \lambda_1 \\ \lambda_2 \end{bmatrix}$ be the vector of distinct eigenvalues $\lambda_1 \neq \lambda_2$ of $A$ and $g = \begin{bmatrix} g_1 \\ g_2 \end{bmatrix}$ be the vector of geometric multiplicities corresponding to $\lambda_1$ and $\lambda_2$, respectively. Find $||\lambda + g||^2$</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>A fact from Linear Algebra states that if $M$ is $n \times n$ with eigenvalues (repeated according to multiplicity) $\{\lambda_i\}_{i=1}^n$, then the eigenvalues of $M + kI_n$ is $\{\lambda_i + k\}_{i=1}^n$. Note that we can write $A = 1_{30} + 29I_{30}$, where $1_{30}$ is the $30 \times 30$ matrix of all ones. </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>A fact from Linear Algebra states that if $M$ is $n \times n$ with eigenvalues (repeated according to multiplicity) $\{\lambda_i\}_{i=1}^n$, then the eigenvalues of $M + kI_n$ is $\{\lambda_i + k\}_{i=1}^n$. Note that we can write $A = 1_{30} + 29I_{30}$, where $1_{30}$ is the $30 \times 30$ matrix of all ones. 
 
 
 

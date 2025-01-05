@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 4</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Straddle Gamma</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/straddle-gamma' target='_blank'>https://quantguide.io/questions/straddle-gamma</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>finance</td></tr><tr><td>Tags:</td><td>['Finance']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-9-15 09:26:35 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let's consider a straddle on underlying $S$ with strike $K$ and expiry $T$. You have a call option on $S$, also with strike $K$ and expiry $T$. This call option has $\Gamma = 0.03$. What is the $\Gamma$ of the straddle? Assume Black-Scholes dynamics. </p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>What is the relationship between gamma of a put and call?</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>A straddle is a derivative that is long a call option and long a put option at the same strike $K$. From Black-Scholes, we know that at the same strike $K$, the put and call have the same $\Gamma$. So, the gamma of a straddle is $\Gamma_C + \Gamma_P = 2\Gamma_C = 2(0.03) = 0.06$. </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>0.06</li></ul></details></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 4</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Straddle Gamma</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/straddle-gamma' target='_blank'>https://quantguide.io/questions/straddle-gamma</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>finance</td></tr><tr><td>Tags:</td><td>['Finance']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-9-15 09:26:35 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let's consider a straddle on underlying $S$ with strike $K$ and expiry $T$. You have a call option on $S$, also with strike $K$ and expiry $T$. This call option has $\Gamma = 0.03$. What is the $\Gamma$ of the straddle? Assume Black-Scholes dynamics. </p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>What is the relationship between gamma of a put and call?</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>A straddle is a derivative that is long a call option and long a put option at the same strike $K$. From Black-Scholes, we know that at the same strike $K$, the put and call have the same $\Gamma$. So, the gamma of a straddle is $\Gamma_C + \Gamma_P = 2\Gamma_C = 2(0.03) = 0.06$. </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>0.06</li></ul></details></div>
 
 
 <div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Power to the Matrix</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/power-to-the-matrix' target='_blank'>https://quantguide.io/questions/power-to-the-matrix</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>pure math</td></tr><tr><td>Tags:</td><td>['Linear Algebra']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>['Goldman Sachs']</td></tr><tr><td>Last Edited at:</td><td>2023-9-17 13:09:24 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let $A = \begin{bmatrix}

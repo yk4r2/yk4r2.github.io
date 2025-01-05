@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 21</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Unit Distance</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/unit-distance' target='_blank'>https://quantguide.io/questions/unit-distance</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>pure math</td></tr><tr><td>Tags:</td><td>['Linear Algebra']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-9-30 23:21:25 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let $x$ and $y$ be two unit length orthogonal vectors in $\mathbb{R}^n$. Compute $||x-y||$. This answer is in the form $\sqrt{a}$ for an integer $a$. Find $a$.</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Let $u = x-y$. Then we know that $||u||^2 = u^Tu$. Distribute afterwards.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Let $u = x-y$. Then we know that $||u||^2 = u^Tu$. Therefore, $$||x-y||^2 = (x-y)^T(x-y) = x^Tx - x^Ty - y^Tx + y^Ty$$ As $x$ and $y$ are vectors, $x^Ty$ and $y^Tx$ are both just $x \cdot y$, which is $0$ in this case due to the orthogonality of $x$ and $y$. Therefore, $||x-y||^2 = ||x||^2 + ||y||^2 = 2$, as $x$ and $y$ are both unit length. This means that $||x - y|| = sqrt{2}$, so $a = 2$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>2</li></ul></details></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 21</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Unit Distance</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/unit-distance' target='_blank'>https://quantguide.io/questions/unit-distance</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>pure math</td></tr><tr><td>Tags:</td><td>['Linear Algebra']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-9-30 23:21:25 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let $x$ and $y$ be two unit length orthogonal vectors in $\mathbb{R}^n$. Compute $||x-y||$. This answer is in the form $\sqrt{a}$ for an integer $a$. Find $a$.</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Let $u = x-y$. Then we know that $||u||^2 = u^Tu$. Distribute afterwards.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Let $u = x-y$. Then we know that $||u||^2 = u^Tu$. Therefore, $$||x-y||^2 = (x-y)^T(x-y) = x^Tx - x^Ty - y^Tx + y^Ty$$ As $x$ and $y$ are vectors, $x^Ty$ and $y^Tx$ are both just $x \cdot y$, which is $0$ in this case due to the orthogonality of $x$ and $y$. Therefore, $||x-y||^2 = ||x||^2 + ||y||^2 = 2$, as $x$ and $y$ are both unit length. This means that $||x - y|| = sqrt{2}$, so $a = 2$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>2</li></ul></details></div>
 
 
 <div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Empty Urn</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/empty-urn' target='_blank'>https://quantguide.io/questions/empty-urn</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Combinatorics', 'Conditional Probability']</td></tr><tr><td>Difficulty:</td><td>hard</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-9-9 21:20:07 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>3</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>We flip a fair coin until we obtain our first heads. If the first heads occurs on the $k$th flip, we are given $k$ balls. We put them into 3 bins labeled 1,2, and 3 at random. Find the probability that none of the three bins are empty.</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Condition on the number of times the coin was flipped before seeing the first tails to leverage the Inclusion-Exclusion Principle.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Let $E_i$ be the event that bin $i$ is empty. We want $\mathbb{P}[E_1^c\cap E_2^c \cap E_3^c] = 1 - \mathbb{P}[E_1 \cup E_2 \cup E_3]$. We compute $\mathbb{P}[E_1\cup E_2 \cup E_3]$ by first using the Law of Total Expectation, as we do not know the number of balls $k$ that we are distributing. Thus, $\mathbb{P}[E_1 \cup E_2 \cup E_3] = \sum_{k=1}^{\infty} \mathbb{P}[E_1 \cup E_2 \cup E_3 \mid H_k]\mathbb{P}[H_k]$. $H_k$ here is the event that the first head occurs on the $k$th flip. From our work previously, $\mathbb{P}[H_k] = \dfrac{1}{2^k}$, so:

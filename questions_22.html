@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 22</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Uniform Order I</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/uniform-order-i' target='_blank'>https://quantguide.io/questions/uniform-order-i</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Continuous Random Variables']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-10-19 12:38:15 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let $X_1,X_2,\dots,X_{20}$ be IID Unif$(0,1)$ random variables. Compute $\mathbb{P}[X_1 &gt \text{max}\{X_2,X_{10},X_{15}\}]$</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Can you write another probability statement in the form of $X_1 = \text{(something)}$?</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>This question is really asking us the probability that $X_1$ is the largest of the $4$ random variables $X_1,X_2,X_{10},$ and $X_{15}$. Since the random variables are IID, they are exchangeable. Therefore, by exchangeability, it is no more or less likely that $X_1$ is the largest of the $4$ than any other random variable, so the $4$ random variables have equal probability of being largest, implying this probability is $\dfrac{1}{4}$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/4</li></ul></details></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 22</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Uniform Order I</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/uniform-order-i' target='_blank'>https://quantguide.io/questions/uniform-order-i</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Continuous Random Variables']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-10-19 12:38:15 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let $X_1,X_2,\dots,X_{20}$ be IID Unif$(0,1)$ random variables. Compute $\mathbb{P}[X_1 &gt \text{max}\{X_2,X_{10},X_{15}\}]$</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Can you write another probability statement in the form of $X_1 = \text{(something)}$?</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>This question is really asking us the probability that $X_1$ is the largest of the $4$ random variables $X_1,X_2,X_{10},$ and $X_{15}$. Since the random variables are IID, they are exchangeable. Therefore, by exchangeability, it is no more or less likely that $X_1$ is the largest of the $4$ than any other random variable, so the $4$ random variables have equal probability of being largest, implying this probability is $\dfrac{1}{4}$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/4</li></ul></details></div>
 
 
 <div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Bank Account Arbitrage</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/bank-account-arbitrage' target='_blank'>https://quantguide.io/questions/bank-account-arbitrage</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>finance</td></tr><tr><td>Tags:</td><td>['Finance']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>2023-9-30 23:13:24 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let's say you have two bank accounts, $B_1$ with interest rate $0.04$ and $B_2$ with interest rate $0.02$ (annual interest rates). Both are compounded continuously. Both bank accounts start with initial value $B_1 = B_2 = 1$. What is the minimum amount of money you are guaranteed to make in $1$ year, assuming you can only deposit / borrow integer numbers in both bank accounts? You have $\$0$ initially and cannot just deposit your money into one of the bank accounts. Round to $2$ decimal points. </p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>What bank should we borrow from? </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>The arbitrage can be seen immediately. We borrow from the bank ($1$) with the lower interest rate and deposit money into the bank ($2$) with the higher interest rate. Our deposit will cover the interest we owe to the bank $1$ while still giving us some profit. 

@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 8</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Matrix Editor</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/matrix-editor' target='_blank'>https://quantguide.io/questions/matrix-editor</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Expected Value', 'Conditional Expectation']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>None</td></tr><tr><td>Last Edited by:</td><td>None</td></tr><tr><td>Internal Difficulty:</td><td>3</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Suppose you start with the $2 \times 2$ identity matrix $I_2$. At each step, select one of the four elements of the matrix uniformly at random. If the element you select is a $1$, change it to $0$. If the element you select is a $0$, change it to $1$. Find the expected number of steps needed to obtain a singular matrix (i.e. the determinant is 0).</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Let $I$ be the number of steps needed to obtain a singular matrix starting from the identity matrix. This value depends on which value in our matrix is edited first, so apply Law of Total Expectation to what value is edited first. </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Let $I$ be the number of steps needed to obtain a singular matrix starting from the identity matrix. This value depends on which value in our matrix is edited first, so let's apply Law of Total Expectation to what value is edited first. 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 8</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Matrix Editor</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/matrix-editor' target='_blank'>https://quantguide.io/questions/matrix-editor</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Expected Value', 'Conditional Expectation']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>None</td></tr><tr><td>Last Edited by:</td><td>None</td></tr><tr><td>Internal Difficulty:</td><td>3</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Suppose you start with the $2 \times 2$ identity matrix $I_2$. At each step, select one of the four elements of the matrix uniformly at random. If the element you select is a $1$, change it to $0$. If the element you select is a $0$, change it to $1$. Find the expected number of steps needed to obtain a singular matrix (i.e. the determinant is 0).</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Let $I$ be the number of steps needed to obtain a singular matrix starting from the identity matrix. This value depends on which value in our matrix is edited first, so apply Law of Total Expectation to what value is edited first. </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Let $I$ be the number of steps needed to obtain a singular matrix starting from the identity matrix. This value depends on which value in our matrix is edited first, so let's apply Law of Total Expectation to what value is edited first. 
 
 
 

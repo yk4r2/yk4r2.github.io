@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 13</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Precise N Sum</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/precise-n-sum' target='_blank'>https://quantguide.io/questions/precise-n-sum</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Conditional Probability', 'Discrete Random Variables']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>None</td></tr><tr><td>Last Edited by:</td><td>None</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Suppose $N &gt 0$ is an integer. Let $X_1,X_2,X_3$ be independently selected uniformly at random from the set $\{0,1,\dots,N\}$. Let $p_N = \mathbb{P}[X_1 + X_2 + X_3 = N]$. Find $\displaystyle \lim_{N \rightarrow \infty} Np_N$. If this limit does not exist, enter $-1$.</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>For $X_1+X_2+X_3 = N$ to occur, we would need $X_1 + X_2 \leq N$ and $X_3 = N - X_1 - X_2$ to occur simultaneously. Condition on the first event happening to compute the probability the second event happens.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>For $X_1+X_2+X_3 = N$ to occur, we would need $X_1 + X_2 \leq N$ and $X_3 = N - X_1 - X_2$ to occur simultaneously. This is because all of the values we select are non-negative. Let $A_N = \{X_1 + X_2 \leq N\}$ and $B_N = \{X_3 = N - X_1 - X_2\}$. Then we want $$\mathbb{P}[A_N \cap B_N] = \mathbb{P}[B_N \mid A_N]\mathbb{P}[A_N]$$ $\mathbb{P}[B_N \mid A_N]$ asks for the probability $X_3 = N - X_1 - X_2$ given $X_1 + X_2 \leq N$. This probability is just $\dfrac{1}{N+1}$ since $X_3$ is discrete uniform over $\{0,1,\dots,N\}$ and the requested value is in the support since we know $0 \leq X_1 + X_2 \leq N$, meaning $N - X_1 - X_2$ is too. 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 13</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Precise N Sum</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/precise-n-sum' target='_blank'>https://quantguide.io/questions/precise-n-sum</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Conditional Probability', 'Discrete Random Variables']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>None</td></tr><tr><td>Last Edited by:</td><td>None</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Suppose $N &gt 0$ is an integer. Let $X_1,X_2,X_3$ be independently selected uniformly at random from the set $\{0,1,\dots,N\}$. Let $p_N = \mathbb{P}[X_1 + X_2 + X_3 = N]$. Find $\displaystyle \lim_{N \rightarrow \infty} Np_N$. If this limit does not exist, enter $-1$.</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>For $X_1+X_2+X_3 = N$ to occur, we would need $X_1 + X_2 \leq N$ and $X_3 = N - X_1 - X_2$ to occur simultaneously. Condition on the first event happening to compute the probability the second event happens.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>For $X_1+X_2+X_3 = N$ to occur, we would need $X_1 + X_2 \leq N$ and $X_3 = N - X_1 - X_2$ to occur simultaneously. This is because all of the values we select are non-negative. Let $A_N = \{X_1 + X_2 \leq N\}$ and $B_N = \{X_3 = N - X_1 - X_2\}$. Then we want $$\mathbb{P}[A_N \cap B_N] = \mathbb{P}[B_N \mid A_N]\mathbb{P}[A_N]$$ $\mathbb{P}[B_N \mid A_N]$ asks for the probability $X_3 = N - X_1 - X_2$ given $X_1 + X_2 \leq N$. This probability is just $\dfrac{1}{N+1}$ since $X_3$ is discrete uniform over $\{0,1,\dots,N\}$ and the requested value is in the support since we know $0 \leq X_1 + X_2 \leq N$, meaning $N - X_1 - X_2$ is too. 
 
 
 

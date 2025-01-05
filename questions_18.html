@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 18</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Midrange</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/midrange' target='_blank'>https://quantguide.io/questions/midrange</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Continuous Random Variables']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>None</td></tr><tr><td>Last Edited by:</td><td>None</td></tr><tr><td>Internal Difficulty:</td><td>3</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Suppose $X_1,X_2 \sim \text{Exp}(1)$ IID. Let $O_1$ and $O_2$ be the minimum and maximum order statistics, respectively. Find the probability that the range of $X_1$ and $X_2$ is larger than the midpoint of $X_1$ and $X_2$.
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 18</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Midrange</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/midrange' target='_blank'>https://quantguide.io/questions/midrange</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Continuous Random Variables']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>[]</td></tr><tr><td>Last Edited at:</td><td>None</td></tr><tr><td>Last Edited by:</td><td>None</td></tr><tr><td>Internal Difficulty:</td><td>3</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Suppose $X_1,X_2 \sim \text{Exp}(1)$ IID. Let $O_1$ and $O_2$ be the minimum and maximum order statistics, respectively. Find the probability that the range of $X_1$ and $X_2$ is larger than the midpoint of $X_1$ and $X_2$.
 </p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>The range of $X_1$ and $X_2$ is $O_2 - O_1$, as it is the larger minus the smaller. The midpoint is simply $\dfrac{X_1 + X_2}{2}$. Note that $X_1 + X_2 = O_1 + O_2$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>The range of $X_1$ and $X_2$ is $O_2 - O_1$, as it is the larger minus the smaller. The midpoint is simply $\dfrac{X_1 + X_2}{2}$. Therefore, we want $\mathbb{P}\left[O_2 - O_1 &gt \dfrac{X_1 + X_2}{2}\right]$. However, the trick here is that $X_1$ and $X_2$ correspond $O_1$ and $O_2$, as each random variable must be one of the order statistics. Therefore, this probability is the same as $\mathbb{P}\left[O_2 - O_1 &gt \dfrac{O_1 + O_2}{2}\right]$. Rearranging, this is equivalent to $\mathbb{P}[O_2 &gt 3O_1]$. The joint PDF of the order statistics, by our order statistics formula, is given by $f(x,y) = 2e^{-(x+y)}I_{(0,\infty)}(x)I_{(x,\infty)}(y)$. Therefore, we have that our probability is given by $$\int_0^{\infty} \int_{3x}^{\infty} 2e^{-(x+y)} dydx = \int_0^{\infty} 2e^{-4x} dx = \dfrac{1}{2}$$
 </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/2</li></ul></details></div>
 

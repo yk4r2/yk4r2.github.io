@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 5</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Perfect Seating I</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/perfect-seating-i' target='_blank'>https://quantguide.io/questions/perfect-seating-i</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Combinatorics']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>['Jane Street', 'Optiver', 'WorldQuant']</td></tr><tr><td>Last Edited at:</td><td>2023-9-9 22:05:34 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Seven people with distinct ages randomly sit down at a circular table with seven seats. What is the probability that the people sit themselves in increasing order of age, irrespective of direction?</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>If you start from the youngest person, how many arrangements of the other $6$ people at the circular table are increasing?</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Seat the youngest person at the table in any spot. There are $6!$ ways to arrange the remaining $6$ people that have not been seated at the table. Of those arrangements, exactly $2$ of them are in increasing order of age. Namely, these occur when they are increasing in age clockwise or counter-clockwise. Therefore, $2$ of these $6!$ equally likely permutations are in increasing order of age, so our result is $\dfrac{2}{6!} = \dfrac{1}{360}$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/360</li></ul></details></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 5</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Perfect Seating I</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/perfect-seating-i' target='_blank'>https://quantguide.io/questions/perfect-seating-i</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Combinatorics']</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>['Jane Street', 'Optiver', 'WorldQuant']</td></tr><tr><td>Last Edited at:</td><td>2023-9-9 22:05:34 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Seven people with distinct ages randomly sit down at a circular table with seven seats. What is the probability that the people sit themselves in increasing order of age, irrespective of direction?</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>If you start from the youngest person, how many arrangements of the other $6$ people at the circular table are increasing?</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>Seat the youngest person at the table in any spot. There are $6!$ ways to arrange the remaining $6$ people that have not been seated at the table. Of those arrangements, exactly $2$ of them are in increasing order of age. Namely, these occur when they are increasing in age clockwise or counter-clockwise. Therefore, $2$ of these $6!$ equally likely permutations are in increasing order of age, so our result is $\dfrac{2}{6!} = \dfrac{1}{360}$.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/360</li></ul></details></div>
 
 
 <div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Straddle Price</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/straddle-price' target='_blank'>https://quantguide.io/questions/straddle-price</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>finance</td></tr><tr><td>Tags:</td><td>['Finance']</td></tr><tr><td>Difficulty:</td><td>medium</td></tr><tr><td>Companies:</td><td>['Goldman Sachs']</td></tr><tr><td>Last Edited at:</td><td>2023-11-7 12:15:34 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>2</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>What is the price of an at-the-money straddle with underlying $S = 20$, time-until-expiry $T = 0.36$, and volatility $\sigma = 0.4$? Round to $2$ decimal points. </p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>How can we approximate at-the-money options? </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>For at-the-money calls and puts, we can approximate the option price with the following formula:

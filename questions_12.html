@@ -1,14 +1,32 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>QuantGuide Questions 12</title>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
-</script>
-<script type="text/javascript"
-  src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-</head><div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Kiddie Pool</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/kiddie-pool' target='_blank'>https://quantguide.io/questions/kiddie-pool</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>brainteasers</td></tr><tr><td>Tags:</td><td>[]</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>['SIG']</td></tr><tr><td>Last Edited at:</td><td>2023-9-13 14:50:24 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>You are trying to fill up an inflatable kiddie pool. One hose can fill it up in $20$ minutes. Another hose can fill it up in $10$ minutes. If the pool is full, it takes $15$ minutes to drain out the water after the drain is opened. How long does it take in minutes to fill the pool with both hoses and the drain being open?</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Write the rates for all these variables. </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>This is a rates problem so let's answer it as such. For every minute, the first hose fills up $\frac{1}{20}^{\text{th}}$ of the pool, the second hose fills up $\frac{1}{10}^{\text{th}}$, and the drain removes $\frac{1}{15}^{\text{th}}$ of the pool. Thus the combined rate is $\frac{1}{20}+\frac{1}{10}-\frac{1}{15} = \frac{1}{12}$. With the two hoses and the drain open, we fill up $\frac{1}{12}^{\text{th}}$ of the pool every minute. Thus it takes $12$ minutes to completely fill up the pool.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>12</li></ul></details></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions 12</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Kiddie Pool</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/kiddie-pool' target='_blank'>https://quantguide.io/questions/kiddie-pool</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>brainteasers</td></tr><tr><td>Tags:</td><td>[]</td></tr><tr><td>Difficulty:</td><td>easy</td></tr><tr><td>Companies:</td><td>['SIG']</td></tr><tr><td>Last Edited at:</td><td>2023-9-13 14:50:24 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>1</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>You are trying to fill up an inflatable kiddie pool. One hose can fill it up in $20$ minutes. Another hose can fill it up in $10$ minutes. If the pool is full, it takes $15$ minutes to drain out the water after the drain is opened. How long does it take in minutes to fill the pool with both hoses and the drain being open?</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Write the rates for all these variables. </p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Solution</summary><p>This is a rates problem so let's answer it as such. For every minute, the first hose fills up $\frac{1}{20}^{\text{th}}$ of the pool, the second hose fills up $\frac{1}{10}^{\text{th}}$, and the drain removes $\frac{1}{15}^{\text{th}}$ of the pool. Thus the combined rate is $\frac{1}{20}+\frac{1}{10}-\frac{1}{15} = \frac{1}{12}$. With the two hoses and the drain open, we fill up $\frac{1}{12}^{\text{th}}$ of the pool every minute. Thus it takes $12$ minutes to completely fill up the pool.</p></details><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>12</li></ul></details></div>
 
 
 <div style='max-width: 65%; margin: 20px auto; padding: 15px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); font-family: Arial, sans-serif;'><h2 style='color: #333; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style-type: none; margin: 0; padding: 0;'>Good Grid II</h2><p style='font-size: 14px; color: #555; font-family: 'Arial', sans-serif;'>URL: <a href='https://quantguide.io/questions/good-grid-ii' target='_blank'>https://quantguide.io/questions/good-grid-ii</a></p><table style='width:100%; margin-top: 10px;'><tr><td>Topic:</td><td>probability</td></tr><tr><td>Tags:</td><td>['Combinatorics', 'Discrete Random Variables']</td></tr><tr><td>Difficulty:</td><td>hard</td></tr><tr><td>Companies:</td><td>['Tower Research Capital']</td></tr><tr><td>Last Edited at:</td><td>2023-9-4 18:10:35 America/New_York</td></tr><tr><td>Last Edited by:</td><td>Gabe</td></tr><tr><td>Internal Difficulty:</td><td>3</td></tr></table><h3 style='color: #007BFF; font-family: 'Arial', sans-serif;'>Task</h3><p style='font-family: 'Verdana', Geneva, Tahoma, sans-serif;'>Let $a,b,c,$ and $d$ be uniformly at random selected from $S_n = [-n,n] \cap \mathbb{Z}$, the integers that are at most $n$. Define the two closed intervals $I_1 = [\text{min}\{a,b\},\text{max}\{a,b\}]$ and $I_2 = [\text{min}\{c,d\},\text{max}\{c,d\}]$. Let $p(n)$ be the probability (as a function of $n$) that $I_1$ is completely contained inside $I_2$. This means that $$\text{min}\{c,d\} &lt \text{min}\{a,b\} \leq \text{max}\{a,b\} &lt \text{max}\{c,d\}$$ Define $p = \displaystyle \lim_{n \rightarrow \infty} p(n)$. Compute $\dfrac{p - p(10)}{p}$.</p><details style='margin-top: 10px;'><summary style='cursor: pointer; font-weight: bold; color: #007BFF; font-family: 'Arial', sans-serif;'>Hint</summary><p>Our sample space here is the collection of all pairs of intervals. Note that we have two cases here for each of the two intervals we form. First, we could have that our interval is a singular point, which occurs if $a = b$ or $c = d$. There are $2n+1$ ways for this to occur. Alternatively, we can have that $a \neq b$ or $c \neq d$. 
