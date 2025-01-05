@@ -1,27 +1,65 @@
+<!DOCTYPE html>
 <html lang="en">
-<a href="https://yk4r2.github.io/questions_1.html">Quant prep questions 1</a><br>
-<a href="https://yk4r2.github.io/questions_2.html">Quant prep questions 2</a><br>
-<a href="https://yk4r2.github.io/questions_3.html">Quant prep questions 3</a><br>
-<a href="https://yk4r2.github.io/questions_4.html">Quant prep questions 4</a><br>
-<a href="https://yk4r2.github.io/questions_5.html">Quant prep questions 5</a><br>
-<a href="https://yk4r2.github.io/questions_6.html">Quant prep questions 6</a><br>
-<a href="https://yk4r2.github.io/questions_7.html">Quant prep questions 7</a><br>
-<a href="https://yk4r2.github.io/questions_8.html">Quant prep questions 8</a><br>
-<a href="https://yk4r2.github.io/questions_9.html">Quant prep questions 9</a><br>
-<a href="https://yk4r2.github.io/questions_10.html">Quant prep questions 10</a><br>
-<a href="https://yk4r2.github.io/questions_11.html">Quant prep questions 11</a><br>
-<a href="https://yk4r2.github.io/questions_12.html">Quant prep questions 12</a><br>
-<a href="https://yk4r2.github.io/questions_13.html">Quant prep questions 13</a><br>
-<a href="https://yk4r2.github.io/questions_14.html">Quant prep questions 14</a><br>
-<a href="https://yk4r2.github.io/questions_15.html">Quant prep questions 15</a><br>
-<a href="https://yk4r2.github.io/questions_16.html">Quant prep questions 16</a><br>
-<a href="https://yk4r2.github.io/questions_17.html">Quant prep questions 17</a><br>
-<a href="https://yk4r2.github.io/questions_18.html">Quant prep questions 18</a><br>
-<a href="https://yk4r2.github.io/questions_19.html">Quant prep questions 19</a><br>
-<a href="https://yk4r2.github.io/questions_20.html">Quant prep questions 20</a><br>
-<a href="https://yk4r2.github.io/questions_21.html">Quant prep questions 21</a><br>
-<a href="https://yk4r2.github.io/questions_22.html">Quant prep questions 22</a><br>
-<a href="https://yk4r2.github.io/questions_23.html">Quant prep questions 23</a><br>
-<a href="https://yk4r2.github.io/questions_24.html">Quant prep questions 24</a><br>
-<a href="https://yk4r2.github.io/questions_25.html">Quant prep questions 25</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quant Prep Questions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .question-button {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .question-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+        }
+        
+        .question-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s;
+        }
+        
+        .question-button:hover:before {
+            left: 100%;
+        }
 
+        .container {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen py-12">
+    <div class="container mx-auto px-4 max-w-4xl">
+        <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">Quant Prep Questions</h1>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <!-- Question buttons dynamically generated -->
+            <script>
+                const container = document.querySelector('.grid');
+                for (let i = 1; i <= 25; i++) {
+                    const button = document.createElement('a');
+                    button.href = `https://yk4r2.github.io/questions_${i}.html`;
+                    button.className = 'question-button text-white py-4 px-6 rounded-lg text-center font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center';
+                    button.innerHTML = `Question Set ${i}`;
+                    button.style.animationDelay = `${i * 0.05}s`;
+                    container.appendChild(button);
+                }
+            </script>
+        </div>
+    </div>
+</body>
+</html>
