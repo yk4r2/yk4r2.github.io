@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Problems Collection</title>
+    <!-- MathJax Configuration -->
     <script>
         window.MathJax = {
             tex: {
@@ -12,45 +13,17 @@
                 processEscapes: true,
                 packages: ['base', 'ams', 'noerrors', 'noundefined']
             },
-            startup: {
-                pageReady: () => {
-                    return MathJax.startup.defaultPageReady().then(() => {
-                        console.log('Initial MathJax typesetting complete');
-                    });
-                }
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
             }
         };
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
-    <style>
-        /* Previous styles remain the same */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .pagination button {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            background: var(--card);
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .pagination button.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -66,165 +39,14 @@
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
             </select>
-            <span id="total-count" style="margin-left: 1rem;"></span>
         </div>
 
         <div id="problems" class="problems">
             <div class="loading">Loading problems...</div>
         </div>
-
-        <div class="pagination" id="pagination"></div>
     </div>
 
-    <script>
-        const ITEMS_PER_PAGE = 6;
-        let currentPage = 1;
-        let cachedQuestions = null;
-        let filteredQuestions = [];
-
-        const questionCache = {
-            set: (key, value) => {
-                localStorage.setItem(key, JSON.stringify(value));
-            },
-            get: (key) => {
-                const item = localStorage.getItem(key);
-                return item ? JSON.parse(item) : null;
-            }
-        };
-
-        async function loadQuestions() {
-            try {
-                // Try to get questions from cache first
-                const cachedData = questionCache.get('mathProblems');
-                if (cachedData) {
-                    console.log('Loading questions from cache');
-                    return cachedData;
-                }
-
-                console.log('Fetching fresh questions');
-                const response = await fetch('questions.json');
-                if (!response.ok) {
-                    throw new Error('Failed to load questions');
-                }
-                const data = await response.json();
-                
-                // Cache the fetched questions
-                questionCache.set('mathProblems', data);
-                return data;
-            } catch (error) {
-                console.error('Error loading questions:', error);
-                document.getElementById('problems').innerHTML = 
-                    '<div class="loading">Error loading problems. Please try again later.</div>';
-                return [];
-            }
-        }
-
-        function createProblemCard(problem) {
-            const card = document.createElement('div');
-            card.className = 'problem-card';
-            
-            const tags = JSON.parse(problem.Tags.replace(/'/g, '"'));
-            const companies = JSON.parse(problem.Companies.replace(/'/g, '"'));
-            
-            card.innerHTML = `
-                <div class="problem-header">
-                    <span class="topic">${problem.Topic}</span>
-                    <span class="difficulty ${problem.Difficulty.toLowerCase()}">${problem.Difficulty}</span>
-                </div>
-                <div class="problem-content">${problem.task}</div>
-                <div class="tags">
-                    ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    ${companies.map(company => `<span class="tag">${company}</span>`).join('')}
-                </div>
-            `;
-            
-            return card;
-        }
-
-        function createPagination(totalItems) {
-            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-            const paginationContainer = document.getElementById('pagination');
-            paginationContainer.innerHTML = '';
-
-            // Previous button
-            const prevButton = document.createElement('button');
-            prevButton.textContent = '←';
-            prevButton.disabled = currentPage === 1;
-            prevButton.onclick = () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    displayProblems();
-                }
-            };
-            paginationContainer.appendChild(prevButton);
-
-            // Page numbers
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement('button');
-                pageButton.textContent = i;
-                pageButton.classList.toggle('active', i === currentPage);
-                pageButton.onclick = () => {
-                    currentPage = i;
-                    displayProblems();
-                };
-                paginationContainer.appendChild(pageButton);
-            }
-
-            // Next button
-            const nextButton = document.createElement('button');
-            nextButton.textContent = '→';
-            nextButton.disabled = currentPage === totalPages;
-            nextButton.onclick = () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    displayProblems();
-                }
-            };
-            paginationContainer.appendChild(nextButton);
-        }
-
-        async function displayProblems() {
-            const problemsContainer = document.getElementById('problems');
-            const start = (currentPage - 1) * ITEMS_PER_PAGE;
-            const end = start + ITEMS_PER_PAGE;
-            const pageQuestions = filteredQuestions.slice(start, end);
-
-            problemsContainer.innerHTML = '';
-            
-            pageQuestions.forEach(problem => {
-                problemsContainer.appendChild(createProblemCard(problem));
-            });
-
-            // Process MathJax only for the current page
-            MathJax.typesetPromise([problemsContainer]).catch(err => {
-                console.error('MathJax typesetting error:', err);
-            });
-
-            createPagination(filteredQuestions.length);
-            document.getElementById('total-count').textContent = 
-                `Showing ${Math.min(filteredQuestions.length, end)} of ${filteredQuestions.length} problems`;
-        }
-
-        async function filterProblems() {
-            const difficulty = document.getElementById('difficulty').value;
-            
-            // Load questions if not already cached
-            if (!cachedQuestions) {
-                cachedQuestions = await loadQuestions();
-            }
-            
-            filteredQuestions = cachedQuestions.filter(
-                problem => difficulty === 'all' || problem.Difficulty.toLowerCase() === difficulty
-            );
-
-            currentPage = 1; // Reset to first page when filter changes
-            displayProblems();
-        }
-
-        document.getElementById('difficulty').addEventListener('change', filterProblems);
-        
-        // Initial load
-        filterProblems();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
+
