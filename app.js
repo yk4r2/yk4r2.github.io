@@ -123,8 +123,18 @@ createApp({
     methods: {
         async loadQuestions() {
             try {
-                const response = await fetch('questions.json');
-                this.questions = await response.json();
+                // Use the full path to questions.json
+                const response = await fetch('/questions.json');
+                if (!response.ok) {
+                    // Fallback to relative path if full path fails
+                    const fallbackResponse = await fetch('./questions.json');
+                    if (!fallbackResponse.ok) {
+                        throw new Error('Could not load questions');
+                    }
+                    this.questions = await fallbackResponse.json();
+                } else {
+                    this.questions = await response.json();
+                }
                 
                 // Load solved states from localStorage
                 const solvedStates = JSON.parse(localStorage.getItem('solvedStates') || '{}');
@@ -135,6 +145,7 @@ createApp({
                 });
             } catch (error) {
                 console.error('Error loading questions:', error);
+                document.body.innerHTML = 'Error loading questions. Please ensure questions.json is present.';
             }
         },
 
