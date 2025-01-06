@@ -25,162 +25,156 @@
     <script type="text/javascript" id="MathJax-script" async
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
+
     <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    /* Reset and base styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            background-color: #f8fafc;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.5;
-            color: #1e293b;
-            padding: 20px;
-        }
+    body {
+        background-color: #f8fafc;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.5;
+        color: #1e293b;
+        padding: 20px;
+    }
 
-        /* Левая колонка с метаданными */
+    /* Main container */
+    .question-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin: 20px auto;
+        max-width: 1200px;
+        padding: 24px;
+    }
+
+    /* Header */
+    .question-container h2 {
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    /* Content wrapper */
+    .content-wrapper {
+        display: flex;
+        gap: 24px;
+    }
+
+    /* Metadata sidebar */
+    .metadata-sidebar {
+        flex: 0 0 250px;
+    }
+
+    /* Metadata sections */
+    .metadata {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Individual metadata items */
+    .metadata-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px;
+        background: #f8fafc;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    .metadata-item span:first-child {
+        color: #64748b;
+        font-weight: 500;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Content area */
+    .content-area {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* Task section */
+    .task {
+        position: relative;
+        background: #f8fafc;
+        padding: 16px;
+        border-left: 3px solid #2563eb;
+        border-radius: 0 4px 4px 0;
+    }
+
+    /* Details/Summary sections */
+    details {
+        border-left: 3px solid #2563eb;
+        border-radius: 0 4px 4px 0;
+        background: #f8fafc;
+    }
+
+    details summary {
+        padding: 12px 16px;
+        cursor: pointer;
+        font-weight: 500;
+        color: #2563eb;
+    }
+
+    details[open] summary {
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    details > :not(summary) {
+        padding: 16px;
+    }
+
+    /* Links */
+    a {
+        color: #2563eb;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    /* Source link */
+    .source-link {
+        color: #4f46e5;
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .content-wrapper {
+            flex-direction: column;
+        }
+        
         .metadata-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            flex: none;
+            width: 100%;
         }
-
-        /* Основной контейнер */
-        .question-container {
-            display: grid;
-            grid-template-columns: 200px 1fr; /* 200px для метаданных, остальное для контента */
-            gap: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 1200px;
-            padding: 24px;
-        }
-
-        /* Новые стили для метаданных */
-        .metadata {
-            display: grid;
-            grid-template-columns: 150px 1fr; /* Уменьшаем первую колонку */
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-
-        /* Элементы метаданных */
-        .metadata-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding: 8px;
-            background: #f8fafc;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-
-        .content-area {
-            flex: 1;
-        }
-
-        .metadata-item span:first-child {
-            color: #64748b;
-            font-weight: 500;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Task section */
-        .task {
-            background: #f8fafc;
-            border-left: 3px solid #2563eb;
-            padding: 16px;
-            margin: 16px 0;
-            border-radius: 0 4px 4px 0;
-        }
-
-        /* Details/Summary sections */
-        details {
-            margin: 12px 0;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-        }
-
-        details summary {
-            padding: 12px 16px;
-            cursor: pointer;
-            background: #f8fafc;
-            color: #2563eb;
-            font-weight: 500;
-        }
-
-        details[open] summary {
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        details > :not(summary) {
-            padding: 16px;
-        }
-
-        /* Links */
-        a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Заголовок */
-        .question-container h2 {
-            grid-column: 1 / -1; /* Заголовок на всю ширину */
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        /* Стили для ссылки */
-        .source-link {
-            color: #4f46e5;
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .source-link:hover {
-            text-decoration: underline;
-        }
-
-        .source-link svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Стиль для внешней иконки */
-        .external-icon {
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
-
-        .source-link:hover .external-icon {
-            opacity: 1;
-        }
-
-        /* MathJax adjustments */
-        .MathJax {
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
-        }
+    }
     </style>
 
 </head>
+
 <div class="question-container">
     <h2>Place or Take</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -207,6 +201,7 @@
         <span>Internal Difficulty:</span>
         <span>4</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>You are playing a one-player game with two opaque boxes. At each turn, you can choose to either "place" or "take". "Place" places $\$$1 from a third party into one box randomly. "Take" empties out one box randomly and that money is yours. This game consists of 100 turns where you must either place or take. Assuming optimal play, what is the expected payoff of this game? Note that you do not know how much money you have taken until the end of the game.</p>
@@ -215,11 +210,12 @@
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>2961/32</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Collecting Toys II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -246,6 +242,7 @@
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Every box of cereal contains one toy from a group of $5$ distinct toys, each of which is mutually independent from the others and is equally likely to be within a given box. How many distinct toys can you expect to collect if you bought $7$ boxes?</p>
@@ -254,11 +251,12 @@
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>61741/15625</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Chess Tournament I</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -285,6 +283,7 @@
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>A chess tournament has 128 players, each with a distinct rating. Assume that the player with the higher rating always wins against a lower rated opponent and that the winner proceeds to the subsequent round. What is the probability that the highest rated and second-highest rated players will meet in the final?</p>
@@ -293,11 +292,12 @@
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>64/127</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Poker Hands I</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -324,6 +324,7 @@
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>A poker hand consists of five cards from a standard deck of $52$ cards. If $p$ is the probability that you have a four-of-a-kind (four of the five cards have the same rank), find the reciprocal of $p$.</p>
@@ -333,11 +334,12 @@
 $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to the question is $4165$.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>4165</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Free Sundae</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -364,6 +366,7 @@ $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to 
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>You are in line at an ice cream shop when the manager announces that she will give a free sundae to the first person in line whose birthday is the same as someone who has already bought an ice cream. Assuming that you do not know anyone else's birthday and that all birthdays are uniformly distributed across the 365 days in a normal year, what position in line will you choose to maximize your probability of receiving the free sundae?</p>
@@ -372,11 +375,12 @@ $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to 
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>20</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Rubik's Cube Stickers</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -403,6 +407,7 @@ $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to 
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>A $4 \times 4 \times 4$ Rubik's Cube is composed of $1 \times 1 \times 1$ mini-cubes. The Rubik's Cube has stickers on its outer layer to denote the colors of the cube. How many mini-cubes have at least one sticker on them?</p>
@@ -412,11 +417,12 @@ $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to 
 $$4^3-2^3=56$$</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>56</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Mental Arithmetic</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -443,6 +449,7 @@ $$4^3-2^3=56$$</p></details>
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Find the pair of positive integers $(a,b)$ that minimizes $a+b$ and satisfies $a^2 + b^2 +ab = c^2$ for an integer $c$. Find $c^2$.
@@ -460,11 +467,12 @@ $$\\$$
 $m$ can be any integer greater than $1$, and $a$ is chosen to make $b$ an integer. Set $m = 2$, $a = 3$ and $b = 5$. Plugging these values into the formula, we obtain $49$. However, $a = 8$ and $b = 7$ also works. </p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>49</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Observance Range</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -491,6 +499,7 @@ $m$ can be any integer greater than $1$, and $a$ is chosen to make $b$ an intege
         <span>Internal Difficulty:</span>
         <span>0</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Find the smallest value of $n$ such that if we generate $n$ IID Unif$(0,1)$ random variables, the probability that at least one of them lies in the interval $(0.48,0.52)$ is at least $99\%$.</p>
@@ -498,24 +507,19 @@ $m$ can be any integer greater than $1$, and $a$ is chosen to make $b$ an intege
     </div></details>
 <details>    <summary>Solution</summary><p>Let $p_n$ be the probability in question when we have $n$ IID Unif$(0,1)$ random variables. We want to find the smallest $n$ such that $p_n \geq 0.99$. The event that at least one of the random variables is in this interval is the complement of the event that all $n$ of the random variables are outside this interval. This latter probability is much easier to compute, as we have intersections of events now instead of unions.
 
-
-
 Therefore, the probability of the complement is $1-p_n$, so we want to find the smallest $n$ such that $1 - p_n \leq 0.01$. Now, we want to find an expression for $1 - p_n$, the probability of the complement.
 
-
-
 If the complement occurs, none of the $n$ IID random variables are in $(0.48,0.52)$. This is saying $\mathbb{P}[X_1 \notin (0.48,0.52), \dots X_n \notin (0.48,0.52)] = \mathbb{P}[X_1 \notin (0.48,0.52)]\dots \mathbb{P}[X_n \notin (0.48,0.52)]$ by independence. As all of the random variables have identical distributions, we can evaluate one of the probabilities and raise it to the $n$th power, so this is $(\mathbb{P}[X_1 \notin (0.48,0.52)])^n$. The probability $X_1$ is in $(0.48,0.52)$ is just $\dfrac{0.04}{1} = 0.04$. This is because we have a uniform density on $(0,1)$, so the probability our random variable belongs to some sub-interval is just the length of that interval over the total length of our supported interval. As the probability $X_1$ is in the interval is $0.04$, the probability it is not in the interval is $0.96$. 
-
-
 
 All of this work above has led us to finding the smallest $n$ such that $(0.96)^n \leq 0.01$. Namely, we can solve this with logarithms to be $n = \text{ceil}\left(\dfrac{\ln(0.01)}{\ln(0.96)}\right) = 113$. We need to take ceilings as $n$ must be an integer and the floor would be too small and not satisfy the condition.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>113</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>River Length</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -542,6 +546,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>You are in a river of unknown length and velocity. You know that if you are stationary on the river, then it takes you $6$ seconds for you to reach the other end. If you swim down the river at a rate of $3$ feet per second, then it takes you $4$ seconds to reach the other end. Find the length of the river (in feet).</p>
@@ -550,11 +555,12 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>36</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Heaven 37</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -581,6 +587,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Let $x$ be a $5$ digit integer in the form $37abc$ such that $37abc, 37bca,$ and $37cab$ are all divisible by $37$. How many possible values of $x$ are there?</p>
@@ -589,11 +596,12 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>28</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Basketball Practice II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -620,6 +628,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Frank is shooting free throws. He makes his first free throw and misses his second free throw. For $n \geq 3$, the probability of making the $n$th free throw is equal to the proportion of free throws he made during his first $n-1$ attempts. How many free throws can Frank expect to make in 100 attempts?</p>
@@ -628,11 +637,12 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>50</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Increasing Uniform Chain II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -659,6 +669,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Let $X_1,X_2,\dots \sim \text{Unif}(0,1)$ IID. Let $N$ be the first index $n$ where $X_n \neq \text{max}\{X_1,\dots, X_n\}$. Find $\mathbb{E}[N]$. The answer will be in the form $a + be$ for integers $a$ and $b$. Note here that $e$ is Euler's constant. Find $a + b$.</p>
@@ -667,11 +678,12 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Candleburn</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -698,6 +710,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>We have two candles of the same size and uniform density. One burns in $2$ hours, while the other burns in $1$ hour. At what time should we simultaneously light these candles in order to have one candle be double the length of the other at $4$ PM? Answer in military time. For example if the answer is $8:20$ PM, answer $2020$.</p>
@@ -706,11 +719,12 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1520</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Ten Consecutive Heads</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -737,6 +751,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>On average, how many times must a fair coin be flipped to obtain $10$ consecutive heads?</p>
@@ -745,11 +760,12 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>2046</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Consecutive Tails</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -776,6 +792,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Suppose a coin is flipped $10$ times and the outcomes are recorded. Find the probability that any tails occur only in consecutive pairs. For example, with $4$ flips, $TTHH, TTTT,$ and $HHHH$ are both valid, but $HTHH$ and $TTTH$ are not valid.</p>
@@ -783,20 +800,17 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div></details>
 <details>    <summary>Solution</summary><p>Consider this problem with $n$ coin flips. Let $t_n$ be the number of sequences of length $n$ where this is satisfied. For any such valid sequence of length $n$, it must end with either $H$ or $TT$. These subcases are both disjoint.
 
-
-
 If our sequence ends with $H$, we can have any satisfactory sequence for the first $n-1$ flips. Therefore, there are $t_{n-1}$ such sequences of flips satisfying this. If our sequence ends with $TT$, we can have any satisfactory sequence for the first $n-2$ flips. Therefore, there are $t_{n-2}$ such sequences of flips satisfying this case. Therefore, we obtain the recurrence $t_n = t_{n-1} + t_{n-2}$.
-
-
 
 We now need some initial conditions. For $n = 1$, there is $1$ sequence satisfying this: $H$. For $n = 2$, there are $2$ sequences satisfying this: $HH$ and $TT$. Therefore, we can fully recognize this as $t_n = F_{n+1}$, where $F_n$ is the $n$th Fibonacci number. Thus, our probability is $\dfrac{F_{n+1}}{2^n}$. For $n = 10$, we get that our answer is $\dfrac{89}{1024}$.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>89/1024</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Bowl of Cherries II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -822,6 +836,7 @@ We now need some initial conditions. For $n = 1$, there is $1$ sequence satisfyi
     </div><div class="metadata-item">
         <span>Internal Difficulty:</span>
         <span>2</span>
+    </div>
     </div>
 </div></div>
     <div class="content-area">
@@ -851,11 +866,12 @@ Thus, the probability is
 Alternatively, we know that the last three spots must be $RPP$, so the probability of this sequence is $\dfrac{5}{13} \cdot \dfrac{8}{12} \cdot \dfrac{7}{11} = \dfrac{70}{429}$</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>70/429</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Specific Card Pull II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -882,6 +898,7 @@ Alternatively, we know that the last three spots must be $RPP$, so the probabili
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>A deck of cards is shuffled well. The cards are dealt one-by-one, until the two of hearts appears. Find the probability that exactly one king, queen and jack appear before the two of hearts.</p>
@@ -891,16 +908,15 @@ Alternatively, we know that the last three spots must be $RPP$, so the probabili
 
 Combining all of the above probabilities, we get $$\frac{12}{13} \cdot \frac{8}{12} \cdot \frac{4}{11} \cdot \frac{1}{10} = \frac{16}{715}$$
 
-
-
 For a more combinatorial approach, there are $3!$ ways to arrange around the jack, queen, and king that come before the two of hearts. There are $4$ ways to pick each of the suits from the three ranks above. After these three, the next card must be the two of hearts. Thus, there are $3! \cdot 4^3$ such sequences that satisfy our condition in the first four cards, and there are $13 \cdot 12 \cdot 11 \cdot 10$ total ways to draw the first four cards, so the probability is $$\dfrac{3! \cdot 4^3}{13 \cdot 12 \cdot 11 \cdot 10} = \dfrac{16}{715}$$</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>16/715</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Straddle Delta</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -927,6 +943,7 @@ For a more combinatorial approach, there are $3!$ ways to arrange around the jac
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Let's consider a straddle on underlying $S$ with strike $K$ and expiry $T$. You have a put option on $S$, also with strike $K$ and expiry $T$. This put option has $\Delta = -0.31$. What is the $\Delta$ of the straddle? Assume Black-Scholes dynamics. </p>
@@ -938,11 +955,12 @@ $$\\$$
 This is an interesting result: this straddle has positive delta, not $0$ delta as someone may naively think.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>0.38</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Mixing Glasses</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -969,6 +987,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
         <span>Internal Difficulty:</span>
         <span>0</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>You have a glass of orange juice and a glass of water with equal volumes. You pour some water into the orange juice glass and then pour some of the mixed fluids back into the water glass such that their volumes are again equal. Let $x$ be the percent concentration of water in the glass of diluted water, and $y$ be the percent concentration of orange juice in the glass of diluted orange juice. What is $x-y$?</p>
@@ -977,11 +996,12 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>0</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Cheese Lover II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1008,6 +1028,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Jon loves cheese. He decides to make $100$ blocks of cheese. The distribution of the weight (in grams) of each block he makes follows IID Exp$\left(\dfrac{1}{250}\right)$ distribution. Let $W_i$ denote the weight of the $i$th block of cheese, and $T_{100}$ represent the total weight of the $100$ blocks of cheese. Using Chebyshev's Inequality, what is an upper bound on $\mathbb{P}[T_{100} &gt 30000]$?</p>
@@ -1016,11 +1037,12 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/4</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Beer Bottles</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
@@ -1045,6 +1067,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
     </div><div class="metadata-item">
         <span>Internal Difficulty:</span>
         <span>5</span>
+    </div>
     </div>
 </div></div>
     <div class="content-area">
@@ -1113,11 +1136,12 @@ Substituting, we find
 Our answer is $1^2 + 1^2 = 2$.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>2</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Consecutive Children</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1144,6 +1168,7 @@ Our answer is $1^2 + 1^2 = 2$.</p></details>
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>$9$ children of distinct ages (in years) were born with a fixed interval of time between consecutive children. The sum of the squares of the ages of all the children is equal to the square of their father's age. Assuming that the father is aged at most $60$, what is the father's age?</p>
@@ -1151,16 +1176,15 @@ Our answer is $1^2 + 1^2 = 2$.</p></details>
     </div></details>
 <details>    <summary>Solution</summary><p>Let $m$ be the age of the middle child, $s$ be the spacing between the children's births, and $d$ be the age of the dad. Then our condition says that $(m-4s)^2 + (m-3s)^2 + \dots + m^2 + (m+s)^2  + \dots + (m+4s)^2 = d^2$. After expanding and cancelling, this reduces to $d^2 = 9m^2 + 60s^2$. Since the RHS is a multiple of $3$, we have that $3 \mid d^2$, which means $3 \mid d$. Therefore, let $d = 3r$ for an integer $r$. This means that $9r^2 = 9m^2 + 60s^2$, which equivalent is $(r-m)(r+m) = \dfrac{20}{3}s^2$. Since the LHS is an integer, this means that $3 \mid s$ as well. 
 
-
-
 For the youngest child to be born, we must have that $m - 4s \geq 0$, which means $m \geq 4s$. Therefore, we have that $d^2 \geq 9(4s)^2 + 60s^2 = 204s^2 \geq (14s)^2$. Therefore, $d \geq 14s$. Since $3 \mid s$ and $d \geq 60$, we must have that $s = 0, 3$. Since they are not of the same age, $s = 3$. Plugging this in, we have that $(r-m)(r+m) = 60$. We now need to find factorizations of $60$ that have an integer midpoint, as the midpoint of $r-m$ and $r+m$ is $r$. Namely, we see that $10\cdot 6$ and $30 \cdot 2$ both have integer midpoints. If we select the former, then $r = 8$ and $m = 2$, meaning that the middle child has age $2$. As $s = 3$, we would get some negative ages. Therefore, we must have that the midpoint is $r = 16$ and $m = 14$. This is now consistent, as the children would be aged $2,5,8,11,14,17,20,23,$ and $26$. Since the father's age is $3r$, we get that the father is aged $3 \cdot 16 = 48$.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>48</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Fleeing Flea</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1187,6 +1211,7 @@ For the youngest child to be born, we must have that $m - 4s \geq 0$, which mean
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>There is a flea being chased by a snake and it needs to get safety as fast as possible. The flea is sitting on one of the corners of a right parrallelpiped with side lengths of $2$, $2$, and $3$ and can run at a pace of $2.5$ units per second. It is trying to reach the safety of the direct opposite corner, how many seconds until it can reach the other corner?</p>
@@ -1197,11 +1222,12 @@ For the youngest child to be born, we must have that $m - 4s \geq 0$, which mean
 Our shortest path of the two is $5$ units, meaning our flea can flee to the other corner in $\frac{5}{2.5} = 2$ seconds.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>2</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Determination II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
@@ -1227,6 +1253,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Given three data sets $X_1, X_2,$ and $Y$ , we run two linear regressions to obtain $y \sim \alpha_1 + \beta_1 x_1$ and $y \sim \alpha_2 + \beta_2 x_2$. The $R^2$ value for both regressions is $0.05$. Find the lowest upper bound on $R^2$ value of the regression $y \sim \alpha + \beta' x_1 + \beta'' x_2$.
@@ -1235,11 +1262,12 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
 <details>    <summary>Solution</summary><p>Consider the dataset $Y$ that is sampled perfectly from a parabola far from the origin. Let $X_2$ be the dataset where each value of $X_1$ is squared. If $Y$ is far enough from the origin, $y \sim \alpha_1 + \beta_1 x_1$ has low $R^2$ since it is linear, while $Y$ is quadratic. Furthermore, $y \sim \alpha_2 + \beta_2 x_2 = \alpha_2 + \beta_2 x_1^2$ is also low $R^2$ because although it is a parabola, it is not able to be shifted around horzontally to match $Y$. Therefore, individually, these linear regressions have low $R^2$. However, the model $y \sim \alpha + \beta' x_1 + \beta'' x_2$ has $R^2 = 1$, as you can now shift the parabola around in the plane to perfectly match the non-noisy dataset $Y$. </p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1</li><li>100</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Coin on Chess Board</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
@@ -1265,6 +1293,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>A chess board consists of 2 inch by 2 inch squares. We toss a coin (diameter of 1 inch) that lands somewhere on the board randomly. What is the probability that the coin is completely within one of the 2 inch by 2 inch squares (not on more than 1 square)?
@@ -1274,11 +1303,12 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
 </p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>0.25</li><li>1/4</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Shattering Orbs</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1305,6 +1335,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
         <span>Internal Difficulty:</span>
         <span>4</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>$7$ orbs are labeled $1-7$ and are linked linearly in a vertical stack from the ceiling with orb 1 being a part of the ceiling and orb 7 being closest to the floor. Each orb is attached to adjacent orbs by a chain link. At each time step, one of the remaining links is going to be uniformly at random selected and cut. As a result, all the orbs below that link will fall and shatter. What is the expected number of cuts needed until orb 1 is the only remaining orb?</p>
@@ -1312,20 +1343,17 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
     </div></details>
 <details>    <summary>Solution</summary><p>We are going to solve this for the general case of when there are $n$ links. Let $a_n$ be the expected number of cuts needed with $n$ links. We want to find a recurrence relation for $a_n$. To do this, let's consider what happens after the first cut. If we cut at link $k$, $1 \leq k \leq n$, where link $1$ connects orbs $1$ and $2$, then this means we have $k-1$ links above it still standing. Thus, we have added $1$ to our count and want to now find the same expectation but starting from $k-1$ links instead of $n$. Mathematically, this means that $a_n = \displaystyle \dfrac{1}{n} \sum_{k=1}^n (1 + a_{k-1})$, as with probability $\dfrac{1}{n}$, we cut each given link on the first step. This is just Law of Total Expectation above, where we have conditioned on the position of the first cut. We index shift this sum by $1$ to get $a_n = \dfrac{1}{n} \displaystyle \sum_{k=0}^{n-1} (1 + a_k) = 1 + \dfrac{1}{n} \sum_{k=0}^{n-1} a_k$.
 
-
-
 Now, consider $a_n - a_{n-1}$. Using the recurrence relation above, we obtain that $$a_n - a_{n-1} = \displaystyle 1 + \dfrac{1}{n}\sum_{k=0}^{n-1}a_k - \left(1 + \dfrac{1}{n-1} \sum_{k=0}^{n-2}a_k\right) = \dfrac{1}{n} a_{n-1} + \left(\dfrac{1}{n} - \dfrac{1}{n-1}\right)\sum_{k=0}^{n-2} a_k$$ Note that $\dfrac{1}{n} - \dfrac{1}{n-1} = -\dfrac{1}{n(n-1)}$, so the above reduces to $$a_n - a_{n-1} = \displaystyle \dfrac{1}{n}a_{n-1} - \dfrac{1}{n}\left[\dfrac{1}{n-1} \sum_{k=0}^{n-2}a_k\right]$$ The term in brackets is just $a_{n-1} - 1$ by our original recurrence relation. Therefore, $a_n - a_{n-1} = \dfrac{1}{n}a_{n-1} - \dfrac{1}{n}(a_{n-1} - 1) = \dfrac{1}{n}$. Rearranging, $a_n = a_{n-1} + \dfrac{1}{n}$. Our initial condition on this that makes physical sense is that $a_1 = 1$, as we only have one link to select from and we cut it on our first trial.
-
-
 
 With this initial condition, we can recurse and clearly see that $$a_n = a_{n-1} + \dfrac{1}{n} = a_{n-2} + \dfrac{1}{n-1} + \dfrac{1}{n} = \dots = a_1 + \dfrac{1}{2} + \dots + \dfrac{1}{n} = \sum_{k=1}^n \dfrac{1}{k}$$ Therefore, this is our solution for general $n$, and our specific case is when $n = 6$, as we have $6$ links. Thus, the final result is $\dfrac{49}{20}$.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>49/20</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Matrix Exponential</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
@@ -1350,6 +1378,7 @@ With this initial condition, we can recurse and clearly see that $$a_n = a_{n-1}
     </div><div class="metadata-item">
         <span>Internal Difficulty:</span>
         <span>2</span>
+    </div>
     </div>
 </div></div>
     <div class="content-area">
@@ -1388,11 +1417,12 @@ In addition, note the following:
 \] Therefore, our answer is $3 \cdot 6 = 18$</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>18</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Consecutive Pairs</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1419,6 +1449,7 @@ In addition, note the following:
         <span>Internal Difficulty:</span>
         <span>4</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Consider the set of 10 consecutive integers $\{1, 2, \ldots, 10\}$. How many subsets contain exactly 1 pair of consecutive integers? For example, $\{3, 5, 6, 9\}$ contains exactly 1 pair of consecutive integers. </p>
@@ -1439,11 +1470,12 @@ Case 5: There are 2 total integers in the subset. In other words, is 1 $UCC$ til
 Adding it all up, we conclude there are $5 + 60 + 105 + 56 + 9 = 235$ possible subsets that contain exactly 1 pair of consecutive integers. </p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>235</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Die Multiple II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1470,6 +1502,7 @@ Adding it all up, we conclude there are $5 + 60 + 105 + 56 + 9 = 235$ possible s
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>You roll a fair $6-$sided die until the sum of all upfaces is a multiple of $6$. Find the expected number of rolls performed.</p>
@@ -1478,11 +1511,12 @@ Adding it all up, we conclude there are $5 + 60 + 105 + 56 + 9 = 235$ possible s
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>6</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Thick Coin</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
@@ -1508,30 +1542,26 @@ Adding it all up, we conclude there are $5 + 60 + 105 + 56 + 9 = 235$ possible s
         <span>Internal Difficulty:</span>
         <span>4</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Let the radius of a penny be $1$. Assume that the thickness of the penny is non-negligible so that a flipped penny can land on its side. Find the thickness of the penny that, when flipped, has a $\dfrac{1}{3}$ chance of landing on its side. The answer is in the form $\dfrac{1}{\sqrt{k}}$ for an integer $k$. Find $k$. 
-
-
 
 $\textbf{Note:}$ There is no definite answer for this question. Take the approach of inscribing the penny in a sphere.</p>
 <details>    <summary>Hint</summary><p>When we inscribe the coin in the sphere, we should take the sphere and the coin to be concentric. The coin can be regarded as a right cylinder. Then, we select a uniformly random point on the surface of the sphere. If the radius that is drawn from the point that we select to the center strikes the cylinder, then we say that the coin landed on its side. A theorem in geometry helps simplify this problem. When two parallel planes cut a sphere, the surface of the sphere between the two planes is called a zone. The theorem states that the zone is proportional to the distance between the planes.</p></details>
 <details>    <summary>Solution</summary><p>When we inscribe the coin in the sphere, we should take the sphere and the coin to be concentric. The coin can be regarded as a right cylinder. Then, we select a uniformly random point on the surface of the sphere. If the radius that is drawn from the point that we select to the center strikes the cylinder, then we say that the coin landed on its side. 
 
-
-
 A theorem in geometry helps simplify this problem. When two parallel planes cut a sphere, the surface of the sphere between the two planes is called a zone. The theorem states that the zone is proportional to the distance between the planes. This means that our coin should be $\dfrac{1}{3}$ as thick as the sphere's diameter.  In this case, the "planes" are the head and tail faces of the coin, as we inscribe our cylinder into a sphere.
-
-
 
 The question here is how thick is the sphere? Let's call the radius $R$. The Pythagorean Theorem gives that $$R^2 = 1^2 + \left(\dfrac{R}{3}\right)^2$$ This is because the distance from the center of the coin to the upper face is the radius of the sphere. Additionally, we know that the radius of the coin is $1$ and the thickness (height) of the coin is $\dfrac{R}{3}$ from before. Solving this yields $R = \dfrac{3}{\sqrt{8}}$. However, we want $\dfrac{1}{3}(2R) = \dfrac{1}{\sqrt{2}}$. We want $2R$ because that is the diameter, and hence how thick the coin should be. Our answer is $k = 2$. </p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>2</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Arithmetic Mean</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1558,6 +1588,7 @@ The question here is how thick is the sphere? Let's call the radius $R$. The Pyt
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>The arithmetic mean of 5, 6, 11, $x$, and $y$ is 20. What is the arithmetic mean of $x$ and $y$?</p>
@@ -1569,11 +1600,12 @@ $$\frac{5+6+11+x+y}{5} = 20 \Rightarrow x+y = 78$$
 Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>39</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Intersecting Chords</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1600,6 +1632,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>$10$ chords with uniformly randomly chosen endpoints are drawn on a circle. What is the expected number of intersections?</p>
@@ -1608,11 +1641,12 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>15</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Particle Reach I</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1639,6 +1673,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Consider a particle that performs a random walk on the integers starting at position $0$. At each step, the particle moves from position $i$ to position $i+1$ with probability $p$, while the probability it moves from $i$ to $i-1$ is $1-p$. If $p = 1/3$, find the probability the particle ever reaches position $1$.</p>
@@ -1647,11 +1682,12 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/2</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Silly SDE</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1678,6 +1714,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
         <span>Internal Difficulty:</span>
         <span>4</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Let $W_t$ be a standard Brownian Motion. Let $X_t$ be a process satisfying the SDE $$dX_t = \kappa(\theta-X_t)dt - \sigma\sqrt{X_t}dW_t$$ with $X_0 = x &gt 0$. It can be shown (you do not need to do this) that if $\dfrac{2\kappa}{\theta} &gt \sigma^2$, $X_t &gt 0$ with probability $1$, so $\sqrt{X_t}$ is defined almost surely. For $T &gt 0$, $\mathbb{E}[X_T]$ can be written as a function of $x,\kappa,\theta,\sigma,$ and $T$. Evaluate this function when $T = 10, \kappa = 0.2, \theta = 2, x = 5,$ and $\sigma = 0.1$. The answer will be in the form $A + Be^C$ for integers $A,B,$ and $C$. Find $ABC$.</p>
@@ -1686,11 +1723,12 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>-12</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>St. Petersburg Paradox</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1717,6 +1755,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Suppose you are offered to play a game where you flip a fair coin until you obtain a heads for the first time. If the first heads occurs on the $n$th flip, you are paid out $\$2^n$. What is the fair value of this game? If your answer is infinite, enter $-1$.</p>
@@ -1725,11 +1764,12 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>-1</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Correlation Ranges</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1756,6 +1796,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></details
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Suppose that $X,Y,$ and $Z$ are three random variables. We know that Corr$(X,Y) = \dfrac{5}{13}$ and Corr$(Y,Z) = \dfrac{12}{13}$. The range of possible values for Corr$(X,Z)$ is an interval in the form $[0,b]$, where $b$ is a fraction in fully reduced form. Find $b$.</p>
@@ -1770,20 +1811,17 @@ $$
 \end{bmatrix}
 $$
 
-
-
 A condition to show that a matrix is positive definite is that each of the sub-matrices of order $1 \times 1, 2 \times 2, \dots, n \times n$, where $n$ is a size of the matrix, originating from the top left corner have non-negative determinant. In this case, it is easy to see that the top left $2\times 2$ matrix has determinant $C_{11}C_{22} - C_{12}C_{21} = \dfrac{144}{169} &gt 0$, so we only need to check that the entire matrix $C$ has non-negative determinant.
-
-
 
 Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfrac{120}{169}\rho - \rho^2$. Setting this equal to $0$, we obtain that $\rho = 0,\dfrac{120}{169}$. As this polynomial had a negative leading coefficient for $\rho^2$, it follows that the parabola (i.e. determinant) must have been positive between the two roots, so $\rho^* = \dfrac{120}{169}$ is the largest value where this determinant is non-negative.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>120/169</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Coefficient Swap</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1810,6 +1848,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Suppose that we have two datasets $X$ and $Y$ with $\text{Var}(X) = 10$ and $\text{Var}(Y) = 20$. We perform the linear regression $y \sim \alpha_x + \beta_x x$ and obtain $\beta_x = 1$. Suppose now that we perform the regression $x \sim \alpha_y + \beta_y y$. Find $\beta_y$. If the value can't be determined, enter $-100$. </p>
@@ -1818,11 +1857,12 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/2</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Colorful Socks I</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1849,6 +1889,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>$10$ pairs of socks, each with a distinct color, are in a drawer. You draw out 2 socks at random. Find the probability that you obtain a matching pair.</p>
@@ -1857,11 +1898,12 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/19</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Slippery Ladder II</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1888,6 +1930,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>A $50-$ft ladder is placed against a vertical wall of a large building. The base of the ladder is in oil, which makes the base slip and the tip of the ladder slide down the wall. The base of the ladder slips away from the wall at a constant rate of $4$ feet per minute. Find the rate at which the angle between the ladder and ground is decreasing (in radians per minute) when the base of the ladder is $30$ feet away from the wall.</p>
@@ -1896,11 +1939,12 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/10</li><li>-1/10</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Bull Call Spread I</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
@@ -1926,6 +1970,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Consider the following asset $S$, with initial price $S_0 = 7$. In this bull call spread, you will long a call at strike $K = 5$ and short a call at strike $K = 10$. What is the maximum and minimum $\textit{payoff}$ of this contract? 
@@ -1939,11 +1984,12 @@ Give the result in the form: $\max^2 + \min^2$
 So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. In general, a bull call spread can cap the upside, but can also limit the downside loss. This option contract is the best when an investor expects a moderate increase in the stock (i.e it stays in the range of $K_1$ and $K_2$). </p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>25</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Limiting Values I</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -1970,6 +2016,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>You roll a fair die until a value other than 1 appears and are paid the amount on the die that appears on the last roll. What is the fair value of this game?</p>
@@ -1978,11 +2025,12 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>4</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Absolute Difference</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -2009,6 +2057,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Let $x_0 = 0$ and let $x_1,\dots,x_{10}$ satisfy that $|x_i - x_{i-1}| = 1$ for $1 \leq i \leq 10$ and $x_{10} = 4$. How many such sequences are there satisfying these conditions?</p>
@@ -2017,11 +2066,12 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>120</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Counting Digits</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -2048,6 +2098,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>How many digits are in 99 to the 99th power?</p>
@@ -2059,11 +2110,12 @@ $$99^{99} = 99^{99} \times (\frac{100}{100})^{99} = 100^{99} \times (\frac{99}{1
 Thus, $99^{99}$ has 198 digits.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>198</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Horse Arbitrage</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
@@ -2089,6 +2141,7 @@ Thus, $99^{99}$ has 198 digits.</p></details>
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>There are three horses numbered $1,2,$ and $3$. You have $\$1$ to make bets. You may make bets in fractions of dollars. If horse $1$ wins, you get $\$2$ back for a $\$1$ bet. If horse $2$ wins, you receive $\$4$ back for a $\$1$ bet. If horse $3$ wins, you receive $\$6$ back for a $\$1$ bet. Note that you do not receive your initial bet back. There is an arbitrage here. Find the maximum guaranteed profit that can be made from this arbitrage.
@@ -2096,16 +2149,15 @@ Thus, $99^{99}$ has 198 digits.</p></details>
 <details>    <summary>Hint</summary><p>The implied odds of the respect horses are $1/2, 1/4,$ and $1/6$, respectively. These sum to strictly less than $1$, so there is an arbitrage.</p></details>
 <details>    <summary>Solution</summary><p>The implied odds of the respect horses are $1/2, 1/4,$ and $1/6$, respectively. These sum to strictly less than $1$, so there is an arbitrage. We want to make a constant amount of money regardless of the outcome. Namely, if we bet our money in proportions $\$6/11, \$3/11,$ and $\$2/11$ in order on the three horses, we see that regardless of the outcome, we get a payout of $\$12/11$. However, we only bet $\$1$, yielding a profit of $\$1/11$ always. 
 
-
-
 We obtain our proportions because the sum of the probabilities is $11/12$, so all we need to do is bet in a way that yields a constant positive expected payout relative to the probabilities of each horse winning. </p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/11</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Ants on a Triangle</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -2132,6 +2184,7 @@ We obtain our proportions because the sum of the probabilities is $11/12$, so al
         <span>Internal Difficulty:</span>
         <span>1</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>There are three ants each on their own side of an equilateral triangle. Each picks one adjacent vertex to move to with equal probability. What is the probability that no two ants will intersect at a corner?</p>
@@ -2140,11 +2193,12 @@ We obtain our proportions because the sum of the probabilities is $11/12$, so al
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>1/4</li><li>0.25</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>McQueen Speeding</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -2171,6 +2225,7 @@ We obtain our proportions because the sum of the probabilities is $11/12$, so al
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Lightning McQueen, Doc Hudson, and Chick Hicks all race in the Piston Cup to run it back. They race around an $1$ kilometer track. It turns out that Lightning McQueen is first, Doc Hudson is second, and Chick Hicks is third. Lightning McQueen finishes his lap $200$ meters ahead of Doc Hudson. Furthermore, Doc Hudson finishes his lap $200$ meters ahead of Chick Hicks. Assuming that each car moves with a constant speed, at the moment when Lightning McQueen finishes his lap, how many meters is Chick Hicks away from finishing his lap?</p>
@@ -2178,17 +2233,15 @@ We obtain our proportions because the sum of the probabilities is $11/12$, so al
     </div></details>
 <details>    <summary>Solution</summary><p>To solve this, we must obtain the relative speed of Lightning McQueen to Chick Hicks. Let $s$ be the speed Chick Hicks. Doc Hudson must move at a speed of $\dfrac{5}{4}s$, as Doc Hudson moves $1000$ meters in the time that Chick Hicks moves $800$ meters. Similarly, Lightning McQueen must move at a rate of $\dfrac{5}{4}\left(\dfrac{5}{4}s\right) = \dfrac{25}{16}s$ by the same logic of comparing his distance travelled to Doc Hudson. 
 
-
-
-
 Since Lightning McQueen moves at a speed $\dfrac{25}{16}$ times as large as Chick Hicks, this says that if Lightning McQueen covers a distance $d$, Chick Hicks covers a distance of $\dfrac{16}{25}d$. In particular, $d = 1000$ here, so Chick Hicks has travelled $640$ meters in the lap, meaning he is $360$ meters away from finishing his lap.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>360</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>The Perfect Hedge I </h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         URL: <a href="" class="source-link" target="_blank">QuantGuide<svg class="external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3"></path></svg></a>
     </div><div class="metadata">
@@ -2214,6 +2267,7 @@ Since Lightning McQueen moves at a speed $\dfrac{25}{16}$ times as large as Chic
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>You have two assets. We will call them asset $1$ and asset $2$. Asset $1$ has an expected return of $4\%$ and a variance of $15\%$. Asset $2$ has an expected return of $2\%$ and a variance of $4\%$. They have a correlation $\rho = -1$. 
@@ -2231,11 +2285,12 @@ This gives us $w = \frac{\sqrt{.04}}{\sqrt{.15} + \sqrt{.04}} \approx 0.34$.
 We see that the expected returns do not matter. We can obtain a riskless portfolio from two assets if they have a correlation of $-1$ and weight them using the above manner. This rarely happens in real life. </p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>.34</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>First Ace</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -2262,6 +2317,7 @@ We see that the expected returns do not matter. We can obtain a riskless portfol
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>On average, how many cards in a normal deck of 52 playing cards do you need to flip over to observe your first ace?</p>
@@ -2273,11 +2329,12 @@ $$E\left[\displaystyle \sum_{i=1}^5 X_i\right] = 5\times E[X_1] = 48 \Rightarrow
 We have found that the expected number of cards in the first section is $\frac{48}{5}$, so we will observe the first ace on the next card. Hence, we expect to flip $\frac{48}{5}+1 = 10.6$ cards to observe the first ace.</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>10.6</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>4 Die Sum</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -2304,6 +2361,7 @@ We have found that the expected number of cards in the first section is $\frac{4
         <span>Internal Difficulty:</span>
         <span>2</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>Calculate the probability that when we roll $4$ fair $6-$sided dice, the sum of their upfaces is 20.</p>
@@ -2312,11 +2370,12 @@ We have found that the expected number of cards in the first section is $\frac{4
     </div></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>35/1296</li></ul></details>
     </div>
+    </div>
 </div>
-
 
 <div class="question-container">
     <h2>Common Ball Draw</h2>
+    <div class="content-wrapper">
     <div class="metadata-sidebar"><div class="metadata-item">
         <span>Source</span>
         <a href="" class="source-link">QuantGuide ↗</a>
@@ -2343,6 +2402,7 @@ We have found that the expected number of cards in the first section is $\frac{4
         <span>Internal Difficulty:</span>
         <span>3</span>
     </div>
+    </div>
 </div></div>
     <div class="content-area">
         <div class="task">    <p>$k \geq 2$ people play a game as follows: Each of the $k$ people go up one-at-a-time to draw $1 \leq r \leq n$ balls without replacement from an urn that contains $n$ balls labelled $1-n$. Once a given person has drawn their $r$ balls, they note them, and then put them back in the urn for the next player to draw. Let $p(k,n,r)$ be the probability that all $k$ of the people draw at least one ball in common under the specifications above. Find $p(4,17,5)$. Round your answer to three decimal places.</p>
@@ -2350,10 +2410,9 @@ We have found that the expected number of cards in the first section is $\frac{4
     </div></details>
 <details>    <summary>Solution</summary><p>Let $A_i$ be the event that ball $i$, $1 \leq i \leq r$, is selected in common between all $k$ people. We want $\mathbb{P}\left[\displaystyle\bigcup_{i=1}^r A_i\right]$. The events $A_i$ are not mutually exclusive, so we need to use inclusion-exclusion here to calculate this probability. As all of the balls are exchangeable, all individual probabilities and intersection probabilities are the same regardless of which intersection we consider. Therefore, by the inclusion-exclusion formula, we have that $$\mathbb{P}\left[\displaystyle\bigcup_{i=1}^r A_i\right] = \displaystyle \sum_{i=1}^r (-1)^{i+1} \binom{n}{i}\mathbb{P}\left[\displaystyle\bigcap_{m=1}^i A_m\right]$$ We get the $\displaystyle \binom{n}{i}$ term from the fact that there are $\displaystyle {n \choose i}$ ways to select $i$ of the $n$ balls to be in common to everyone. The $(-1)^{i+1}$ term comes from the inclusion-exclusion formula itself. All that remains is to compute the intersection probability.
 
-
-
 The event $\displaystyle \bigcap_{m=1}^i A_m$ means that all of the first $i$ balls are in common to all $k$ people selecting. Therefore, fix those $i$ balls. We now need to select $r-i$ balls from the remaining $n-i$ in the urn per person, which can be done in $\displaystyle \binom{n-i}{r-i}$ ways. The total number of ways to select $r$ balls from $n$ is $\displaystyle \binom{n}{r}$, so the probability that any individual person selects the first $i$ balls is $$\dfrac{\displaystyle \binom{n-i}{r-i}}{\displaystyle \binom{n}{r}}$$ As this needs to be done for all $k$ people, we raise the previous term to the $k$th power. Therefore, we get our final answer of $$p(k,n,r) = \displaystyle \sum_{i=1}^r (-1)^{i+1} \binom{n}{i}\left[\dfrac{\displaystyle \binom{n-i}{r-i}}{\displaystyle \binom{n}{r}}\right]^k$$ Plugging in the respective values, we get that $$p(4,17,5) = 103566035/840373563 \approx 0.123$$</p></details>
 <details>    <summary>Answer</summary><ul style='list-style-type: none; padding: 0;'><li>0.123</li></ul></details>
+    </div>
     </div>
 </div>
 
