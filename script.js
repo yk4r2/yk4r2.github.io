@@ -36,7 +36,7 @@ async function loadQuestions() {
             '<div class="loading">Error loading problems. Please try again later.</div>';
         return [];
     }
-
+}
 
 function toggleSpoiler(element) {
     const content = element.nextElementSibling;
