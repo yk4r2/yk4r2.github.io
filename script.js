@@ -150,9 +150,10 @@ async function filterProblems() {
     // Process MathJax for all new content
     MathJax.typesetPromise([problemsContainer]);
 
-    // Add pagination
-    const paginationContainer = createPagination(window.currentPage, totalPages);
-    problemsContainer.appendChild(paginationContainer);
+    // Update pagination
+    const paginationContainer = document.getElementById('pagination');
+    paginationContainer.innerHTML = '';
+    paginationContainer.appendChild(createPagination(window.currentPage, totalPages));
 }
 
 document.getElementById('difficulty').addEventListener('change', () => {

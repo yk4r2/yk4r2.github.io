@@ -153,6 +153,14 @@ select {
     display: block;
 }
 
+.pagination-container {
+    margin: 2rem 0;
+    padding: 1rem;
+    background: var(--card);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
 .pagination {
     display: flex;
     justify-content: center;
