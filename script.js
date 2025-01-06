@@ -1,19 +1,31 @@
 async function loadQuestions() {
     try {
-        // Try to fetch Brotli version first
-        let response = await fetch('questions.json.br');
-        if (!response.ok) {
-            // Fallback to GZIP
-            response = await fetch('questions.json.gz');
+        // Try to fetch GZIP version (Brotli requires special handling)
+        let response = await fetch('questions.json.gz');
+        if (response.ok) {
+            // Get the compressed data as ArrayBuffer
+            const compressedData = await response.arrayBuffer();
+            // Convert to Uint8Array for pako
+            const compressed = new Uint8Array(compressedData);
+            // Decompress
+            const decompressed = pako.inflate(compressed);
+            // Convert to text
+            const textDecoder = new TextDecoder();
+            const jsonString = textDecoder.decode(decompressed);
+            // Parse JSON
+            const data = JSON.parse(jsonString);
+            window.questions = data;
+            window.currentPage = 1;
+            await filterProblems();
+            return;
         }
+
+        // Fallback to uncompressed if GZIP fails
+        response = await fetch('questions.json');
         if (!response.ok) {
-            // Final fallback to uncompressed
-            response = await fetch('questions.json');
+            throw new Error('Failed to load questions');
         }
-        
         const data = await response.json();
-        
-        // Implement pagination immediately
         window.questions = data;
         window.currentPage = 1;
         await filterProblems();
@@ -24,7 +36,7 @@ async function loadQuestions() {
             '<div class="loading">Error loading problems. Please try again later.</div>';
         return [];
     }
-}
+
 
 function toggleSpoiler(element) {
     const content = element.nextElementSibling;
