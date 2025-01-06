@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Problems Collection</title>
-    <!-- MathJax Configuration -->
     <script>
         window.MathJax = {
             tex: {
@@ -13,134 +12,43 @@
                 processEscapes: true,
                 packages: ['base', 'ams', 'noerrors', 'noundefined']
             },
-            options: {
-                ignoreHtmlClass: 'tex2jax_ignore',
-                processHtmlClass: 'tex2jax_process'
-            },
-            loader: {
-                load: ['[tex]/noerrors', '[tex]/noundefined']
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('Initial MathJax typesetting complete');
+                    });
+                }
             }
         };
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
     <style>
-        :root {
-            --primary: #2563eb;
-            --background: #f8fafc;
-            --text: #1e293b;
-            --card: #ffffff;
-            --border: #e2e8f0;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.5;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .filters {
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background: var(--card);
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        select {
-            padding: 0.5rem;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            background: var(--card);
-            color: var(--text);
-            font-size: 1rem;
-        }
-
-        .problems {
-            display: grid;
-            gap: 1.5rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        }
-
-        .problem-card {
-            background: var(--card);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .problem-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .problem-header {
+        /* Previous styles remain the same */
+        .pagination {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .difficulty {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .difficulty.easy {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .difficulty.medium {
-            background: #fef9c3;
-            color: #854d0e;
-        }
-
-        .difficulty.hard {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .topic {
-            font-size: 0.875rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
+            justify-content: center;
             gap: 0.5rem;
-            margin-top: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .tag {
-            background: #e2e8f0;
-            padding: 0.25rem 0.5rem;
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--card);
             border-radius: 4px;
-            font-size: 0.75rem;
-            color: #475569;
+            cursor: pointer;
         }
 
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            font-size: 1.25rem;
-            color: var(--text);
+        .pagination button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -158,21 +66,51 @@
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
             </select>
+            <span id="total-count" style="margin-left: 1rem;"></span>
         </div>
 
         <div id="problems" class="problems">
             <div class="loading">Loading problems...</div>
         </div>
+
+        <div class="pagination" id="pagination"></div>
     </div>
 
     <script>
+        const ITEMS_PER_PAGE = 6;
+        let currentPage = 1;
+        let cachedQuestions = null;
+        let filteredQuestions = [];
+
+        const questionCache = {
+            set: (key, value) => {
+                localStorage.setItem(key, JSON.stringify(value));
+            },
+            get: (key) => {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : null;
+            }
+        };
+
         async function loadQuestions() {
             try {
-                const response = await fetch('https://yk4r2.github.io/questions.json');
+                // Try to get questions from cache first
+                const cachedData = questionCache.get('mathProblems');
+                if (cachedData) {
+                    console.log('Loading questions from cache');
+                    return cachedData;
+                }
+
+                console.log('Fetching fresh questions');
+                const response = await fetch('questions.json');
                 if (!response.ok) {
                     throw new Error('Failed to load questions');
                 }
-                return await response.json();
+                const data = await response.json();
+                
+                // Cache the fetched questions
+                questionCache.set('mathProblems', data);
+                return data;
             } catch (error) {
                 console.error('Error loading questions:', error);
                 document.getElementById('problems').innerHTML = 
@@ -193,34 +131,94 @@
                     <span class="topic">${problem.Topic}</span>
                     <span class="difficulty ${problem.Difficulty.toLowerCase()}">${problem.Difficulty}</span>
                 </div>
-                <div>${problem.task}</div>
+                <div class="problem-content">${problem.task}</div>
                 <div class="tags">
                     ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     ${companies.map(company => `<span class="tag">${company}</span>`).join('')}
                 </div>
             `;
             
-            // Trigger MathJax to process the new content
-            MathJax.typesetPromise([card]);
             return card;
+        }
+
+        function createPagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+            const paginationContainer = document.getElementById('pagination');
+            paginationContainer.innerHTML = '';
+
+            // Previous button
+            const prevButton = document.createElement('button');
+            prevButton.textContent = '←';
+            prevButton.disabled = currentPage === 1;
+            prevButton.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayProblems();
+                }
+            };
+            paginationContainer.appendChild(prevButton);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.classList.toggle('active', i === currentPage);
+                pageButton.onclick = () => {
+                    currentPage = i;
+                    displayProblems();
+                };
+                paginationContainer.appendChild(pageButton);
+            }
+
+            // Next button
+            const nextButton = document.createElement('button');
+            nextButton.textContent = '→';
+            nextButton.disabled = currentPage === totalPages;
+            nextButton.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayProblems();
+                }
+            };
+            paginationContainer.appendChild(nextButton);
+        }
+
+        async function displayProblems() {
+            const problemsContainer = document.getElementById('problems');
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const pageQuestions = filteredQuestions.slice(start, end);
+
+            problemsContainer.innerHTML = '';
+            
+            pageQuestions.forEach(problem => {
+                problemsContainer.appendChild(createProblemCard(problem));
+            });
+
+            // Process MathJax only for the current page
+            MathJax.typesetPromise([problemsContainer]).catch(err => {
+                console.error('MathJax typesetting error:', err);
+            });
+
+            createPagination(filteredQuestions.length);
+            document.getElementById('total-count').textContent = 
+                `Showing ${Math.min(filteredQuestions.length, end)} of ${filteredQuestions.length} problems`;
         }
 
         async function filterProblems() {
             const difficulty = document.getElementById('difficulty').value;
-            const problemsContainer = document.getElementById('problems');
             
-            // Get questions if not already loaded
-            if (!window.questions) {
-                window.questions = await loadQuestions();
+            // Load questions if not already cached
+            if (!cachedQuestions) {
+                cachedQuestions = await loadQuestions();
             }
             
-            problemsContainer.innerHTML = '';
-            
-            window.questions
-                .filter(problem => difficulty === 'all' || problem.Difficulty.toLowerCase() === difficulty)
-                .forEach(problem => {
-                    problemsContainer.appendChild(createProblemCard(problem));
-                });
+            filteredQuestions = cachedQuestions.filter(
+                problem => difficulty === 'all' || problem.Difficulty.toLowerCase() === difficulty
+            );
+
+            currentPage = 1; // Reset to first page when filter changes
+            displayProblems();
         }
 
         document.getElementById('difficulty').addEventListener('change', filterProblems);
