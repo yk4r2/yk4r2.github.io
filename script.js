@@ -1,10 +1,23 @@
 async function loadQuestions() {
     try {
-        const response = await fetch('questions.json');
+        // Try to fetch Brotli version first
+        let response = await fetch('questions.json.br');
         if (!response.ok) {
-            throw new Error('Failed to load questions');
+            // Fallback to GZIP
+            response = await fetch('questions.json.gz');
         }
-        return await response.json();
+        if (!response.ok) {
+            // Final fallback to uncompressed
+            response = await fetch('questions.json');
+        }
+        
+        const data = await response.json();
+        
+        // Implement pagination immediately
+        window.questions = data;
+        window.currentPage = 1;
+        await filterProblems();
+        
     } catch (error) {
         console.error('Error loading questions:', error);
         document.getElementById('problems').innerHTML = 

@@ -1,0 +1,7 @@
+/*.json.br
+  Content-Type: application/json
+  Content-Encoding: br
+
+/*.json.gz
+  Content-Type: application/json
+  Content-Encoding: gzip
