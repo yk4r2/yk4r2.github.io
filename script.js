@@ -48,8 +48,11 @@ function createProblemCard(problem) {
     
     card.innerHTML = `
         <div class="problem-header">
-            <span class="topic">${problem.Topic}</span>
-            <span class="difficulty ${problem.Difficulty.toLowerCase()}">${problem.Difficulty}</span>
+            <div class="problem-header-top">
+                <span class="topic">${problem.Topic}</span>
+                <span class="difficulty ${problem.Difficulty.toLowerCase()}">${problem.Difficulty}</span>
+            </div>
+            ${problem.url ? `<a href="${problem.url}" class="problem-link" target="_blank">View Original Problem →</a>` : ''}
         </div>
         <div>${problem.task}</div>
         <div class="tags">
@@ -137,7 +140,7 @@ async function changePage(pageNum) {
 }
 
 async function filterProblems() {
-    const ITEMS_PER_PAGE = 9;
+    const ITEMS_PER_PAGE = 10;
     const difficulty = document.getElementById('difficulty').value;
     const problemsContainer = document.getElementById('problems');
     

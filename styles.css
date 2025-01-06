@@ -45,7 +45,7 @@ select {
 .problems {
     display: grid;
     gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
 }
 
 .problem-card {
@@ -193,3 +193,27 @@ select {
     padding: 0.5rem;
     color: var(--text);
 }
+
+.problem-header {
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.problem-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.problem-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s;
+}
+
+.problem-link:hover {
+    text-decoration: underline;
+}
+
