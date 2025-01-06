@@ -1,0 +1,146 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantGuide Questions</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div id="app" class="container mx-auto px-4 py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div v-for="(count, topic) in topicStats" 
+                 :key="topic" 
+                 class="bg-white rounded-lg shadow p-4">
+                <h3 class="font-bold">{{ topic }}</h3>
+                <p>Unsolved: {{ count.unsolved }}/{{ count.total }}</p>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Companies Filter -->
+                <div class="space-y-2">
+                    <label class="block font-medium">Companies</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button v-for="company in uniqueCompanies" 
+                                :key="company"
+                                @click="toggleCompany(company)"
+                                :class="['px-2 py-1 rounded', 
+                                        selectedCompanies.includes(company) ? 'bg-blue-500 text-white' : 'bg-gray-200']">
+                            {{ company }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Topics Filter -->
+                <div class="space-y-2">
+                    <label class="block font-medium">Topics</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button v-for="topic in uniqueTopics" 
+                                :key="topic"
+                                @click="toggleTopic(topic)"
+                                :class="['px-2 py-1 rounded', 
+                                        includedTopics.includes(topic) ? 'bg-green-500 text-white' : 
+                                        excludedTopics.includes(topic) ? 'bg-red-500 text-white' : 'bg-gray-200']">
+                            {{ topic }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tags Filter -->
+                <div class="space-y-2">
+                    <label class="block font-medium">Tags</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button v-for="tag in uniqueTags" 
+                                :key="tag"
+                                @click="toggleTag(tag)"
+                                :class="['px-2 py-1 rounded', 
+                                        includedTags.includes(tag) ? 'bg-green-500 text-white' : 
+                                        excludedTags.includes(tag) ? 'bg-red-500 text-white' : 'bg-gray-200']">
+                            {{ tag }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <!-- Difficulty Filter -->
+                <div>
+                    <label class="block font-medium">Difficulty</label>
+                    <select v-model="selectedDifficulty" class="w-full border rounded p-2">
+                        <option value="">All</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+
+                <!-- Internal Difficulty Filter -->
+                <div>
+                    <label class="block font-medium">Internal Difficulty</label>
+                    <div class="flex gap-2">
+                        <input type="number" v-model="minInternalDifficulty" class="w-1/2 border rounded p-2" placeholder="Min">
+                        <input type="number" v-model="maxInternalDifficulty" class="w-1/2 border rounded p-2" placeholder="Max">
+                    </div>
+                </div>
+
+                <!-- Time Added Filter -->
+                <div>
+                    <label class="block font-medium">Added After</label>
+                    <input type="date" v-model="addedAfter" class="w-full border rounded p-2">
+                </div>
+            </div>
+
+            <!-- Solved Status -->
+            <div class="flex gap-4 mt-4">
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" v-model="showSolved">
+                    Solved
+                </label>
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" v-model="showRepeated">
+                    Solved Again
+                </label>
+            </div>
+        </div>
+
+        <!-- Questions List -->
+        <div class="space-y-4">
+            <div v-for="question in filteredQuestions" 
+                 :key="question.url" 
+                 class="bg-white rounded-lg shadow p-6">
+                <div class="flex justify-between items-start">
+                    <h2 class="text-xl font-bold">{{ question.title }}</h2>
+                    <div class="flex gap-2">
+                        <button @click="toggleSolved(question)" 
+                                :class="['px-3 py-1 rounded', 
+                                        question.solved ? 'bg-green-500 text-white' : 'bg-gray-200']">
+                            Solved
+                        </button>
+                        <button @click="toggleRepeated(question)"
+                                :class="['px-3 py-1 rounded', 
+                                        question.repeated ? 'bg-blue-500 text-white' : 'bg-gray-200']">
+                            Repeated
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <p><strong>Topic:</strong> {{ question.topic }}</p>
+                    <p><strong>Difficulty:</strong> {{ question.difficulty }}</p>
+                    <p><strong>Internal Difficulty:</strong> {{ question.internal_difficulty }}</p>
+                    <p><strong>Companies:</strong> {{ question.companies.join(', ') }}</p>
+                    <p><strong>Tags:</strong> {{ question.tags.join(', ') }}</p>
+                    <p><strong>Added:</strong> {{ formatDate(question.last_edited_at) }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
