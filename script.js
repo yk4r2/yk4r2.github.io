@@ -116,7 +116,7 @@ async function changePage(pageNum) {
 }
 
 async function filterProblems() {
-    const ITEMS_PER_PAGE = 5;
+    const ITEMS_PER_PAGE = 9;
     const difficulty = document.getElementById('difficulty').value;
     const problemsContainer = document.getElementById('problems');
     
