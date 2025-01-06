@@ -1,40 +1,33 @@
+window.questions = [];
+window.currentPage = 1;
+
 async function loadQuestions() {
     try {
-        // Try to fetch GZIP version (Brotli requires special handling)
+        // Try to fetch GZIP version
         let response = await fetch('questions.json.gz');
         if (response.ok) {
-            // Get the compressed data as ArrayBuffer
             const compressedData = await response.arrayBuffer();
-            // Convert to Uint8Array for pako
             const compressed = new Uint8Array(compressedData);
-            // Decompress
             const decompressed = pako.inflate(compressed);
-            // Convert to text
             const textDecoder = new TextDecoder();
             const jsonString = textDecoder.decode(decompressed);
-            // Parse JSON
-            const data = JSON.parse(jsonString);
-            window.questions = data;
-            window.currentPage = 1;
+            window.questions = JSON.parse(jsonString);
             await filterProblems();
             return;
         }
 
-        // Fallback to uncompressed if GZIP fails
+        // Fallback to uncompressed
         response = await fetch('questions.json');
         if (!response.ok) {
             throw new Error('Failed to load questions');
         }
-        const data = await response.json();
-        window.questions = data;
-        window.currentPage = 1;
+        window.questions = await response.json();
         await filterProblems();
         
     } catch (error) {
         console.error('Error loading questions:', error);
         document.getElementById('problems').innerHTML = 
             '<div class="loading">Error loading problems. Please try again later.</div>';
-        return [];
     }
 }
 
@@ -124,7 +117,10 @@ function createPageButton(pageNum, currentPage) {
     const button = document.createElement('button');
     button.className = `page-button ${pageNum === currentPage ? 'active' : ''}`;
     button.textContent = pageNum;
-    button.onclick = () => changePage(pageNum);
+    button.addEventListener('click', async () => {
+        window.currentPage = pageNum;
+        await filterProblems();
+    });
     return button;
 }
 
@@ -145,18 +141,15 @@ async function filterProblems() {
     const difficulty = document.getElementById('difficulty').value;
     const problemsContainer = document.getElementById('problems');
     
-    // Get questions if not already loaded
-    if (!window.questions) {
-        window.questions = await loadQuestions();
+    if (!window.questions || window.questions.length === 0) {
+        await loadQuestions();
+        return;
     }
     
-    // Filter questions by difficulty
     const filteredQuestions = window.questions
         .filter(problem => difficulty === 'all' || problem.Difficulty.toLowerCase() === difficulty);
 
-    // Calculate pagination
     const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
-    window.currentPage = window.currentPage || 1;
     window.currentPage = Math.min(window.currentPage, totalPages);
 
     const startIndex = (window.currentPage - 1) * ITEMS_PER_PAGE;
@@ -168,7 +161,6 @@ async function filterProblems() {
         problemsContainer.appendChild(createProblemCard(problem));
     });
 
-    // Only typeset if MathJax is loaded
     if (window.MathJax) {
         try {
             await MathJax.typesetPromise([problemsContainer]);
@@ -177,7 +169,6 @@ async function filterProblems() {
         }
     }
 
-    // Update pagination
     const paginationContainer = document.getElementById('pagination');
     paginationContainer.innerHTML = '';
     paginationContainer.appendChild(createPagination(window.currentPage, totalPages));
