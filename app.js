@@ -37,7 +37,9 @@ createApp({
         uniqueTags() {
             const tags = new Set();
             this.questions.forEach(q => {
-                q.tags.forEach(t => tags.add(t));
+                if (q.tags && Array.isArray(q.tags)) {
+                    q.tags.forEach(t => tags.add(t));
+                }
             });
             return Array.from(tags).sort();
         },
