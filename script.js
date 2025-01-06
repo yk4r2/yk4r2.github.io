@@ -43,8 +43,13 @@ function createProblemCard(problem) {
     const card = document.createElement('div');
     card.className = 'problem-card';
     
-    const tags = JSON.parse(problem.Tags.replace(/'/g, '"'));
-    const companies = JSON.parse(problem.Companies.replace(/'/g, '"'));
+    // Safely parse tags and companies if they're strings, or use them directly if they're arrays
+    const tags = typeof problem.Tags === 'string' ? 
+        JSON.parse(problem.Tags.replace(/'/g, '"')) : 
+        problem.Tags;
+    const companies = typeof problem.Companies === 'string' ? 
+        JSON.parse(problem.Companies.replace(/'/g, '"')) : 
+        problem.Companies;
     
     card.innerHTML = `
         <div class="problem-header">
@@ -59,8 +64,8 @@ function createProblemCard(problem) {
         </div>
         <div class="problem-task">${problem.task}</div>
         <div class="tags">
-            ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${companies.map(company => `<span class="tag">${company}</span>`).join('')}
+            ${Array.isArray(tags) ? tags.map(tag => `<span class="tag">${tag}</span>`).join('') : ''}
+            ${Array.isArray(companies) ? companies.map(company => `<span class="tag">${company}</span>`).join('') : ''}
         </div>
         <div class="spoiler">
             <button class="spoiler-button" data-type="Hint" onclick="toggleSpoiler(this)">Show Hint</button>
