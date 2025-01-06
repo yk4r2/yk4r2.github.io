@@ -211,9 +211,27 @@ select {
     text-decoration: none;
     font-size: 0.875rem;
     transition: color 0.2s;
+    white-space: nowrap;
 }
 
 .problem-link:hover {
     text-decoration: underline;
+}
+
+.problem-header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.problem-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0.5rem 0;
+}
+
+.problem-task {
+    margin-top: 1rem;
 }
 

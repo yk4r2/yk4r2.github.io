@@ -50,11 +50,14 @@ function createProblemCard(problem) {
         <div class="problem-header">
             <div class="problem-header-top">
                 <span class="topic">${problem.Topic}</span>
-                <span class="difficulty ${problem.Difficulty.toLowerCase()}">${problem.Difficulty}</span>
+                <div class="problem-header-right">
+                    <span class="difficulty ${problem.Difficulty.toLowerCase()}">${problem.Difficulty}</span>
+                    ${problem.url ? `<a href="${problem.url}" class="problem-link" target="_blank">Original Task</a>` : ''}
+                </div>
             </div>
-            ${problem.url ? `<a href="${problem.url}" class="problem-link" target="_blank">View Original Problem →</a>` : ''}
+            <h2 class="problem-title">${problem.title || ''}</h2>
         </div>
-        <div>${problem.task}</div>
+        <div class="problem-task">${problem.task}</div>
         <div class="tags">
             ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
             ${companies.map(company => `<span class="tag">${company}</span>`).join('')}
