@@ -132,23 +132,25 @@ async function filterProblems() {
     // Calculate pagination
     const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
     window.currentPage = window.currentPage || 1;
-    window.currentPage = Math.min(window.currentPage, totalPages); // Ensure current page is valid
+    window.currentPage = Math.min(window.currentPage, totalPages);
 
-    // Get current page items
     const startIndex = (window.currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentItems = filteredQuestions.slice(startIndex, endIndex);
 
-    // Clear and populate container
     problemsContainer.innerHTML = '';
-    
-    // Add problems
     currentItems.forEach(problem => {
         problemsContainer.appendChild(createProblemCard(problem));
     });
 
-    // Process MathJax for all new content
-    MathJax.typesetPromise([problemsContainer]);
+    // Only typeset if MathJax is loaded
+    if (window.MathJax) {
+        try {
+            await MathJax.typesetPromise([problemsContainer]);
+        } catch (error) {
+            console.error('MathJax typesetting failed:', error);
+        }
+    }
 
     // Update pagination
     const paginationContainer = document.getElementById('pagination');

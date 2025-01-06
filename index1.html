@@ -8,10 +8,17 @@
     <script>
         window.MathJax = {
             tex: {
-                inlineMath: [['$', '$']],
-                displayMath: [['$$', '$$']],
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
                 processEscapes: true,
                 packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initial typesetting completed');
+                    });
+                }
             },
             options: {
                 ignoreHtmlClass: 'tex2jax_ignore',
@@ -22,7 +29,7 @@
             }
         };
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script> -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -48,5 +55,28 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Lazy load MathJax
+        function loadMathJax() {
+            const script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js";
+            script.async = true;
+            document.head.appendChild(script);
+        }
+
+        // Load MathJax when the first batch of problems is rendered
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    loadMathJax();
+                    observer.disconnect();
+                }
+            });
+        });
+
+        // Start observing the problems container
+        observer.observe(document.getElementById('problems'));
+    </script>
+
 </body>
 </html>
