@@ -20,12 +20,14 @@ createApp({
 
     computed: {
         // Unique values for filters
-        uniqueCompanies() {
-            const companies = new Set();
+        uniqueTags() {
+            const tags = new Set();
             this.questions.forEach(q => {
-                q.companies.forEach(c => companies.add(c));
+                if (q.tags && Array.isArray(q.tags)) {
+                    q.tags.forEach(t => tags.add(t));
+                }
             });
-            return Array.from(companies).sort();
+            return Array.from(tags).sort();
         },
 
         uniqueTopics() {
@@ -58,7 +60,7 @@ createApp({
             return this.questions.filter(q => {
                 // Companies filter
                 if (this.selectedCompanies.length > 0) {
-                    if (!this.selectedCompanies.some(c => q.companies.includes(c))) {
+                    if (!q.companies || !q.companies.some(c => this.selectedCompanies.includes(c))) {
                         return false;
                     }
                 }
@@ -72,10 +74,12 @@ createApp({
                 }
 
                 // Tags filter (inclusion and exclusion)
-                if (this.includedTags.length > 0 && 
-                    !this.includedTags.some(t => q.tags.includes(t))) {
-                    return false;
+                if (this.includedTags.length > 0) {
+                    if (!q.tags || !this.includedTags.some(t => q.tags.includes(t))) {
+                        return false;
+                    }
                 }
+
                 if (this.excludedTags.length > 0 && 
                     this.excludedTags.some(t => q.tags.includes(t))) {
                     return false;
