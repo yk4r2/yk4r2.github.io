@@ -61,15 +61,18 @@
         border-bottom: 1px solid #e2e8f0;
     }
 
-    /* Content wrapper */
+    /* Content wrapper - 80/20 split */
     .content-wrapper {
         display: flex;
         gap: 24px;
+        width: 100%;
     }
 
-    /* Metadata sidebar */
+    /* Metadata sidebar - 20% */
     .metadata-sidebar {
-        flex: 0 0 250px;
+        flex: 0 0 20%;
+        min-width: 200px;
+        max-width: 300px;
     }
 
     /* Metadata sections */
@@ -98,7 +101,7 @@
         letter-spacing: 0.5px;
     }
 
-    /* Content area */
+    /* Content area - 80% */
     .content-area {
         flex: 1;
         min-width: 0;
@@ -107,13 +110,38 @@
         gap: 16px;
     }
 
+    /* Task group - consistent grouping */
+    .task-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        background: #f8fafc;
+        border-left: 3px solid #2563eb;
+        border-radius: 0 4px 4px 0;
+    }
+
     /* Task section */
     .task {
         position: relative;
         background: #f8fafc;
         padding: 16px;
-        border-left: 3px solid #2563eb;
-        border-radius: 0 4px 4px 0;
+    }
+
+    /* Remove borders for grouped elements */
+    .task-group .task,
+    .task-group details {
+        border-left: none;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .task-group details:last-child {
+        border-radius: 0 0 4px 0;
+    }
+
+    /* Separators between grouped elements */
+    .task-group > *:not(:last-child) {
+        border-bottom: 1px solid #e2e8f0;
     }
 
     /* Details/Summary sections */
@@ -162,7 +190,7 @@
         .content-wrapper {
             flex-direction: column;
         }
-        
+
         .metadata-sidebar {
             flex: none;
             width: 100%;
