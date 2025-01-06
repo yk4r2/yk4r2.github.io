@@ -102,6 +102,7 @@
     }
 
     /* Content area - 80% */
+=== MARKER ===
     .content-area {
         flex: 1;
         min-width: 0;
@@ -230,8 +231,8 @@
         <span>4</span>
     </div>
     </div>
-    </div></div>
-    <div class="content-area">
+</div></div>
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>You are playing a one-player game with two opaque boxes. At each turn, you can choose to either "place" or "take". "Place" places $\$$1 from a third party into one box randomly. "Take" empties out one box randomly and that money is yours. This game consists of 100 turns where you must either place or take. Assuming optimal play, what is the expected payoff of this game? Note that you do not know how much money you have taken until the end of the game.</p>
 <details>    <summary>Hint</summary><p>There are two aspects to this game that should be noted: the ordering of the places and takes, and the number of places and takes. We can tackle the former aspect first. Intuitively, no places should come after a take. Greedily so, you might as well put a take after all places such that you have a higher expected value of that take (considering a single take, every place you put after the take is $\$$1 less that could be taken); thus, all takes should be stacked at the end of the 100 turns. This can also be proved with induction, and this will be left as an exercise to the reader. The next aspect is regarding the number of places and takes.</p></details>
@@ -273,7 +274,7 @@
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Every box of cereal contains one toy from a group of $5$ distinct toys, each of which is mutually independent from the others and is equally likely to be within a given box. How many distinct toys can you expect to collect if you bought $7$ boxes?</p>
 <details>    <summary>Hint</summary><p>Try to define indicator random variables as a way to utilize the linearity of expectation. Notice that each toy follows the same distribution, despite mutual dependence.</p></details>
@@ -315,7 +316,7 @@
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>A chess tournament has 128 players, each with a distinct rating. Assume that the player with the higher rating always wins against a lower rated opponent and that the winner proceeds to the subsequent round. What is the probability that the highest rated and second-highest rated players will meet in the final?</p>
 <details>    <summary>Hint</summary><p>Consider visualizing this problem as two sets of 64 players that halves at each round until there is a finalist.</p></details>
@@ -357,7 +358,7 @@
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>A poker hand consists of five cards from a standard deck of $52$ cards. If $p$ is the probability that you have a four-of-a-kind (four of the five cards have the same rank), find the reciprocal of $p$.</p>
 <details>    <summary>Hint</summary><p>How many ways can you pick $4$ cards of the same rank?
@@ -400,7 +401,7 @@ $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to 
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>You are in line at an ice cream shop when the manager announces that she will give a free sundae to the first person in line whose birthday is the same as someone who has already bought an ice cream. Assuming that you do not know anyone else's birthday and that all birthdays are uniformly distributed across the 365 days in a normal year, what position in line will you choose to maximize your probability of receiving the free sundae?</p>
 <details>    <summary>Hint</summary><p>Think of this as an optimization problem. How can you define the function you are trying to optimize?</p></details>
@@ -442,7 +443,7 @@ $$\frac{13 \times 48}{{52 \choose 5}}=\frac{1}{4165}$$ Therefore, the answer to 
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>A $4 \times 4 \times 4$ Rubik's Cube is composed of $1 \times 1 \times 1$ mini-cubes. The Rubik's Cube has stickers on its outer layer to denote the colors of the cube. How many mini-cubes have at least one sticker on them?</p>
 <details>    <summary>Hint</summary><p>Instead of computing how many mini-cubes have stickers on them, an easier approach may be to calculate how many mini-cubes are unseen and thus do not have stickers on them.
@@ -485,7 +486,7 @@ $$4^3-2^3=56$$</p></div>
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Find the pair of positive integers $(a,b)$ that minimizes $a+b$ and satisfies $a^2 + b^2 +ab = c^2$ for an integer $c$. Find $c^2$.
     </div>
@@ -536,7 +537,7 @@ $m$ can be any integer greater than $1$, and $a$ is chosen to make $b$ an intege
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Find the smallest value of $n$ such that if we generate $n$ IID Unif$(0,1)$ random variables, the probability that at least one of them lies in the interval $(0.48,0.52)$ is at least $99\%$.</p>
 <details>    <summary>Hint</summary><p>Let $p_n$ be the probability in question when we have $n$ IID Unif$(0,1)$ random variables. You want to find the smallest $n$ such that $p_n \geq 0.99$. Consider the complement.
@@ -584,7 +585,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>You are in a river of unknown length and velocity. You know that if you are stationary on the river, then it takes you $6$ seconds for you to reach the other end. If you swim down the river at a rate of $3$ feet per second, then it takes you $4$ seconds to reach the other end. Find the length of the river (in feet).</p>
 <details>    <summary>Hint</summary><p>Let $v$ be the velocity of the river and $l$ be the length. Then we know that $l = 6v$ from the first part.</p></details>
@@ -626,7 +627,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Let $x$ be a $5$ digit integer in the form $37abc$ such that $37abc, 37bca,$ and $37cab$ are all divisible by $37$. How many possible values of $x$ are there?</p>
 <details>    <summary>Hint</summary><p>Note that $x = 37abc = 37000 + abc$, and thus you are finding integers $abc$ such that all of $abc, bca,$ and $cab$ are divisible by $37$. Consider $abc - bca$.</p></details>
@@ -668,7 +669,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Frank is shooting free throws. He makes his first free throw and misses his second free throw. For $n \geq 3$, the probability of making the $n$th free throw is equal to the proportion of free throws he made during his first $n-1$ attempts. How many free throws can Frank expect to make in 100 attempts?</p>
 <details>    <summary>Hint</summary><p>Write a recurrence relation for $E_n$, the expected number of free throws after $n$ total attempts.</p></details>
@@ -710,7 +711,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Let $X_1,X_2,\dots \sim \text{Unif}(0,1)$ IID. Let $N$ be the first index $n$ where $X_n \neq \text{max}\{X_1,\dots, X_n\}$. Find $\mathbb{E}[N]$. The answer will be in the form $a + be$ for integers $a$ and $b$. Note here that $e$ is Euler's constant. Find $a + b$.</p>
 <details>    <summary>Hint</summary><p>Use the tail-sum formula for non-negative integer-valued random variables $\mathbb{E}[N] = \displaystyle \sum_{n=0}^{\infty} \mathbb{P}[N &gt n]$. What does the event $\{N &gt n\}$ mean in terms of the $X_i$ random variables?</p></details>
@@ -752,7 +753,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>We have two candles of the same size and uniform density. One burns in $2$ hours, while the other burns in $1$ hour. At what time should we simultaneously light these candles in order to have one candle be double the length of the other at $4$ PM? Answer in military time. For example if the answer is $8:20$ PM, answer $2020$.</p>
 <details>    <summary>Hint</summary><p>After $x$ hours, a proportion of $1-\dfrac{x}{2}$ would be remaining from the $2$ hour candle, while $1-x$ would be remaining from the $1$ hour candle.</p></details>
@@ -794,7 +795,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>On average, how many times must a fair coin be flipped to obtain $10$ consecutive heads?</p>
 <details>    <summary>Hint</summary><p>Let $f_{k}$ be the expected number flips of the coin needed to obtain $10$ heads when you have $0 \leq k \leq 10$ heads consecutively obtained already. Use Law of Total Expectation to derive a recurrence for $f_k$ and notice a pattern.</p></details>
@@ -836,7 +837,7 @@ All of this work above has led us to finding the smallest $n$ such that $(0.96)^
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Suppose a coin is flipped $10$ times and the outcomes are recorded. Find the probability that any tails occur only in consecutive pairs. For example, with $4$ flips, $TTHH, TTTT,$ and $HHHH$ are both valid, but $HTHH$ and $TTTH$ are not valid.</p>
 <details>    <summary>Hint</summary><p>Consider this problem with $n$ coin flips. Let $t_n$ be the number of sequences of length $n$ where this is satisfied. For any such valid sequence of length $n$, it must end with either $H$ or $TT$. These subcases are both disjoint.
@@ -882,7 +883,7 @@ We now need some initial conditions. For $n = 1$, there is $1$ sequence satisfyi
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Amy has a bowl of $5$ red cherries and $8$ purple cherries. She takes out cherries one at a time until there are no cherries left. What is the probability that when the last red cherry is drawn, there are exactly $2$ purple cherries left?</p>
 <details>    <summary>Hint</summary><p>The only way for a bowl to have $k$ cherries left is if the remaining $k$ cherries are all purple and the $k+1$-th cherryâcounting backwardsâis red.
@@ -944,7 +945,7 @@ Alternatively, we know that the last three spots must be $RPP$, so the probabili
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>A deck of cards is shuffled well. The cards are dealt one-by-one, until the two of hearts appears. Find the probability that exactly one king, queen and jack appear before the two of hearts.</p>
 <details>    <summary>Hint</summary><p>How many cards are actually of interest in this scenario? Can we discard all uninteresting cards and therefore simplify the problem?
@@ -990,7 +991,7 @@ For a more combinatorial approach, there are $3!$ ways to arrange around the jac
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Let's consider a straddle on underlying $S$ with strike $K$ and expiry $T$. You have a put option on $S$, also with strike $K$ and expiry $T$. This put option has $\Delta = -0.31$. What is the $\Delta$ of the straddle? Assume Black-Scholes dynamics. </p>
 <details>    <summary>Hint</summary><p>How can we replicate a straddle of strike $K$ with a call and put option at the same strike $K$?
@@ -1035,7 +1036,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>You have a glass of orange juice and a glass of water with equal volumes. You pour some water into the orange juice glass and then pour some of the mixed fluids back into the water glass such that their volumes are again equal. Let $x$ be the percent concentration of water in the glass of diluted water, and $y$ be the percent concentration of orange juice in the glass of diluted orange juice. What is $x-y$?</p>
 <details>    <summary>Hint</summary><p>How can the idea of displacement be useful for this situation? In other words, if some volume of water is added to the orange juice, what happens to the now empty volume in the water glass?</p></details>
@@ -1077,7 +1078,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Jon loves cheese. He decides to make $100$ blocks of cheese. The distribution of the weight (in grams) of each block he makes follows IID Exp$\left(\dfrac{1}{250}\right)$ distribution. Let $W_i$ denote the weight of the $i$th block of cheese, and $T_{100}$ represent the total weight of the $100$ blocks of cheese. Using Chebyshev's Inequality, what is an upper bound on $\mathbb{P}[T_{100} &gt 30000]$?</p>
 <details>    <summary>Hint</summary><p>Chebyshev's Inequality states that for any random variable $X$ with mean $\mu$ and variance $\sigma^2$, $\mathbb{P}[|X - \mu| &gt c] \leq \dfrac{\sigma^2}{c^2}$.</p></details>
@@ -1118,7 +1119,7 @@ This is an interesting result: this straddle has positive delta, not $0$ delta a
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Bob is singing the traditional song, â$N$ Bottles of Beer.â With each verse, he counts down the number of bottles. The first verse contains the lyrics â$N$ bottles of beer,â the second verse contains the lyrics â$N-1$ bottles of beer,â and so on. The last verse contains the lyrics â1 bottle of beer.â Thereâs just one problem: Bob has early onset Alzheimer's. When completing any given verse, he has a tendency to forget which verse he's on. When this happens, he finishes the verse he is currently singing and then goes back to the beginning of the song (with $N$ bottles) on the next verse.
 
@@ -1219,7 +1220,7 @@ Our answer is $1^2 + 1^2 = 2$.</p></div>
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>$9$ children of distinct ages (in years) were born with a fixed interval of time between consecutive children. The sum of the squares of the ages of all the children is equal to the square of their father's age. Assuming that the father is aged at most $60$, what is the father's age?</p>
 <details>    <summary>Hint</summary><p>Let $m$ be the age of the middle child, $s$ be the spacing between the children's births, and $d$ be the age of the dad. Then our condition says that $(m-4s)^2 + (m-3s)^2 + \dots + m^2 + (m+s)^2  + \dots + (m+4s)^2 = d^2$. Try seeing what the dad's age must be divisible by.
@@ -1263,7 +1264,7 @@ For the youngest child to be born, we must have that $m - 4s \geq 0$, which mean
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>There is a flea being chased by a snake and it needs to get safety as fast as possible. The flea is sitting on one of the corners of a right parrallelpiped with side lengths of $2$, $2$, and $3$ and can run at a pace of $2.5$ units per second. It is trying to reach the safety of the direct opposite corner, how many seconds until it can reach the other corner?</p>
 <details>    <summary>Hint</summary><p>Turn the $3D$ object into a $2D$ one.
@@ -1306,7 +1307,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Given three data sets $X_1, X_2,$ and $Y$ , we run two linear regressions to obtain $y \sim \alpha_1 + \beta_1 x_1$ and $y \sim \alpha_2 + \beta_2 x_2$. The $R^2$ value for both regressions is $0.05$. Find the lowest upper bound on $R^2$ value of the regression $y \sim \alpha + \beta' x_1 + \beta'' x_2$.
 </p>
@@ -1347,7 +1348,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>A chess board consists of 2 inch by 2 inch squares. We toss a coin (diameter of 1 inch) that lands somewhere on the board randomly. What is the probability that the coin is completely within one of the 2 inch by 2 inch squares (not on more than 1 square)?
 </p>
@@ -1390,7 +1391,7 @@ Our shortest path of the two is $5$ units, meaning our flea can flee to the othe
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>$7$ orbs are labeled $1-7$ and are linked linearly in a vertical stack from the ceiling with orb 1 being a part of the ceiling and orb 7 being closest to the floor. Each orb is attached to adjacent orbs by a chain link. At each time step, one of the remaining links is going to be uniformly at random selected and cut. As a result, all the orbs below that link will fall and shatter. What is the expected number of cuts needed until orb 1 is the only remaining orb?</p>
 <details>    <summary>Hint</summary><p>Let $a_n$ be the expected number of cuts needed with $n$ links. Condition on the position of the first cut to derive a recurrence relation for $a_n$ and then consider the difference $a_n - a_{n-1}$.
@@ -1435,7 +1436,7 @@ With this initial condition, we can recurse and clearly see that $$a_n = a_{n-1}
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Find $\text{trace}(e^A)$ to 3 decimal points, where $A$ is defined as
 \[
@@ -1506,7 +1507,7 @@ In addition, note the following:
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Consider the set of 10 consecutive integers $\{1, 2, \ldots, 10\}$. How many subsets contain exactly 1 pair of consecutive integers? For example, $\{3, 5, 6, 9\}$ contains exactly 1 pair of consecutive integers. </p>
 <details>    <summary>Hint</summary><p>Suppose we have all 10 integers written out in order on paper. Our goal is to cover some of the integers with tiles such that only two tiles are side-by-side; covered integers belong in a subset of interest. Perhaps we can invent our own special tiles of different shapes that prevent some integers from being next to each other by design; then, we can simply find the number of arrangements of the tiles.
@@ -1560,7 +1561,7 @@ Adding it all up, we conclude there are $5 + 60 + 105 + 56 + 9 = 235$ possible s
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>You roll a fair $6-$sided die until the sum of all upfaces is a multiple of $6$. Find the expected number of rolls performed.</p>
 <details>    <summary>Hint</summary><p>On each roll, regardless of what was rolled prior, there is a $\dfrac{1}{6}$ probability that the sum will be divisible by $6$.</p></details>
@@ -1601,7 +1602,7 @@ Adding it all up, we conclude there are $5 + 60 + 105 + 56 + 9 = 235$ possible s
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Let the radius of a penny be $1$. Assume that the thickness of the penny is non-negligible so that a flipped penny can land on its side. Find the thickness of the penny that, when flipped, has a $\dfrac{1}{3}$ chance of landing on its side. The answer is in the form $\dfrac{1}{\sqrt{k}}$ for an integer $k$. Find $k$.
 
@@ -1648,7 +1649,7 @@ The question here is how thick is the sphere? Let's call the radius $R$. The Pyt
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>The arithmetic mean of 5, 6, 11, $x$, and $y$ is 20. What is the arithmetic mean of $x$ and $y$?</p>
 <details>    <summary>Hint</summary><p>The arithmetic mean of $n$ integers is $\sum_{i=1} ^n x_i$.
@@ -1693,7 +1694,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></div>
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>$10$ chords with uniformly randomly chosen endpoints are drawn on a circle. What is the expected number of intersections?</p>
 <details>    <summary>Hint</summary><p>Consider indicator random variables on each pair of chords.</p></details>
@@ -1735,7 +1736,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></div>
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Consider a particle that performs a random walk on the integers starting at position $0$. At each step, the particle moves from position $i$ to position $i+1$ with probability $p$, while the probability it moves from $i$ to $i-1$ is $1-p$. If $p = 1/3$, find the probability the particle ever reaches position $1$.</p>
 <details>    <summary>Hint</summary><p>Use Law of Total Probability to condition on what happens at the first step.</p></details>
@@ -1777,7 +1778,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></div>
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Let $W_t$ be a standard Brownian Motion. Let $X_t$ be a process satisfying the SDE $$dX_t = \kappa(\theta-X_t)dt - \sigma\sqrt{X_t}dW_t$$ with $X_0 = x &gt 0$. It can be shown (you do not need to do this) that if $\dfrac{2\kappa}{\theta} &gt \sigma^2$, $X_t &gt 0$ with probability $1$, so $\sqrt{X_t}$ is defined almost surely. For $T &gt 0$, $\mathbb{E}[X_T]$ can be written as a function of $x,\kappa,\theta,\sigma,$ and $T$. Evaluate this function when $T = 10, \kappa = 0.2, \theta = 2, x = 5,$ and $\sigma = 0.1$. The answer will be in the form $A + Be^C$ for integers $A,B,$ and $C$. Find $ABC$.</p>
 <details>    <summary>Hint</summary><p>Calculate $d(e^{\kappa t}X_t)$ via Ito's Formula. Afterwards, express $e^{\kappa T}X_T - X_0$ as a sum of Lebesgue and Ito integrals. A "sufficiently nice" integrand inside an Ito integral has mean $0$.</p></details>
@@ -1819,7 +1820,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></div>
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Suppose you are offered to play a game where you flip a fair coin until you obtain a heads for the first time. If the first heads occurs on the $n$th flip, you are paid out $\$2^n$. What is the fair value of this game? If your answer is infinite, enter $-1$.</p>
 <details>    <summary>Hint</summary><p>The number of flips needed to see the first heads is $N \sim \text{Geom}(1/2)$. We are looking for $\mathbb{E}[2^N]$, which is our expected payout.</p></details>
@@ -1861,7 +1862,7 @@ Thus, the arithmetic mean of $x$ and $y$ is  $ \frac{x+y}{2} = 39$.</p></div>
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Suppose that $X,Y,$ and $Z$ are three random variables. We know that Corr$(X,Y) = \dfrac{5}{13}$ and Corr$(Y,Z) = \dfrac{12}{13}$. The range of possible values for Corr$(X,Z)$ is an interval in the form $[0,b]$, where $b$ is a fraction in fully reduced form. Find $b$.</p>
 <details>    <summary>Hint</summary><p>The key idea here is that the correlation matrix for any collection of random variables must be positive semi-definite. A condition to show that a matrix is positive definite is that each of the sub-matrices of order $1 \times 1, 2 \times 2, \dots, n \times n$, where $n$ is a size of the matrix, originating from the top left corner have positive determinant. The case where you have determinant of $0$ can be individually analyzed.
@@ -1914,7 +1915,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Suppose that we have two datasets $X$ and $Y$ with $\text{Var}(X) = 10$ and $\text{Var}(Y) = 20$. We perform the linear regression $y \sim \alpha_x + \beta_x x$ and obtain $\beta_x = 1$. Suppose now that we perform the regression $x \sim \alpha_y + \beta_y y$. Find $\beta_y$. If the value can't be determined, enter $-100$. </p>
 <details>    <summary>Hint</summary><p>Let $\rho$ be the Pearson Correlation Coefficient of $X$ and $Y$. Then $\beta_x = r \dfrac{\sigma_y}{\sigma_x}$ and $\beta_y = r \dfrac{\sigma_x}{\sigma_y}$.</p></details>
@@ -1956,7 +1957,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>$10$ pairs of socks, each with a distinct color, are in a drawer. You draw out 2 socks at random. Find the probability that you obtain a matching pair.</p>
 <details>    <summary>Hint</summary><p>The first sock is arbitrary color. For the second draw, how many socks are left, and of those, how many match the first color?</p></details>
@@ -1998,7 +1999,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>A $50-$ft ladder is placed against a vertical wall of a large building. The base of the ladder is in oil, which makes the base slip and the tip of the ladder slide down the wall. The base of the ladder slips away from the wall at a constant rate of $4$ feet per minute. Find the rate at which the angle between the ladder and ground is decreasing (in radians per minute) when the base of the ladder is $30$ feet away from the wall.</p>
 <details>    <summary>Hint</summary><p>Use the result of Slippery Ladder I and also $\tan\theta = \dfrac{y}{x}$.</p></details>
@@ -2039,7 +2040,7 @@ Evaluating this determinant as a function of $\rho$, we obtain that it is $\dfra
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Consider the following asset $S$, with initial price $S_0 = 7$. In this bull call spread, you will long a call at strike $K = 5$ and short a call at strike $K = 10$. What is the maximum and minimum $\textit{payoff}$ of this contract?
 $$\\$$
@@ -2086,7 +2087,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>You roll a fair die until a value other than 1 appears and are paid the amount on the die that appears on the last roll. What is the fair value of this game?</p>
 <details>    <summary>Hint</summary><p>How does the sample space change and how does that affect the expected value calculation?</p></details>
@@ -2128,7 +2129,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Let $x_0 = 0$ and let $x_1,\dots,x_{10}$ satisfy that $|x_i - x_{i-1}| = 1$ for $1 \leq i \leq 10$ and $x_{10} = 4$. How many such sequences are there satisfying these conditions?</p>
 <details>    <summary>Hint</summary><p>Consider a walk where you move up $1$ for heads and move down $1$ for tails.</p></details>
@@ -2170,7 +2171,7 @@ So, in the worst case, we will gain $0$ and in the best case, we will gain $5$. 
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>How many digits are in 99 to the 99th power?</p>
 <details>    <summary>Hint</summary><p>$(1-\frac{1}{n})^n$ approaches $\frac{1}{e}$ as $n$ approaches infinity. How can you manipulate $99^{99}$ to achieve this form?
@@ -2214,7 +2215,7 @@ Thus, $99^{99}$ has 198 digits.</p></div>
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>There are three horses numbered $1,2,$ and $3$. You have $\$1$ to make bets. You may make bets in fractions of dollars. If horse $1$ wins, you get $\$2$ back for a $\$1$ bet. If horse $2$ wins, you receive $\$4$ back for a $\$1$ bet. If horse $3$ wins, you receive $\$6$ back for a $\$1$ bet. Note that you do not receive your initial bet back. There is an arbitrage here. Find the maximum guaranteed profit that can be made from this arbitrage.
 </p>
@@ -2258,7 +2259,7 @@ We obtain our proportions because the sum of the probabilities is $11/12$, so al
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>There are three ants each on their own side of an equilateral triangle. Each picks one adjacent vertex to move to with equal probability. What is the probability that no two ants will intersect at a corner?</p>
 <details>    <summary>Hint</summary><p>Will the ants ever meet if they travel in the same direction?</p></details>
@@ -2300,7 +2301,7 @@ We obtain our proportions because the sum of the probabilities is $11/12$, so al
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Lightning McQueen, Doc Hudson, and Chick Hicks all race in the Piston Cup to run it back. They race around an $1$ kilometer track. It turns out that Lightning McQueen is first, Doc Hudson is second, and Chick Hicks is third. Lightning McQueen finishes his lap $200$ meters ahead of Doc Hudson. Furthermore, Doc Hudson finishes his lap $200$ meters ahead of Chick Hicks. Assuming that each car moves with a constant speed, at the moment when Lightning McQueen finishes his lap, how many meters is Chick Hicks away from finishing his lap?</p>
 <details>    <summary>Hint</summary><p>To solve this, we must obtain the relative speed of Lightning McQueen to Chick Hicks. Let $s$ be the speed Chick Hicks. How fast does Doc Hudson move relative to Chick Hicks?
@@ -2343,7 +2344,7 @@ Since Lightning McQueen moves at a speed $\dfrac{25}{16}$ times as large as Chic
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>You have two assets. We will call them asset $1$ and asset $2$. Asset $1$ has an expected return of $4\%$ and a variance of $15\%$. Asset $2$ has an expected return of $2\%$ and a variance of $4\%$. They have a correlation $\rho = -1$.
 $$\\$$
@@ -2394,7 +2395,7 @@ We see that the expected returns do not matter. We can obtain a riskless portfol
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>On average, how many cards in a normal deck of 52 playing cards do you need to flip over to observe your first ace?</p>
 <details>    <summary>Hint</summary><p>How can you use the linearity of expectation to distribute expectation across a sum of random variables, regardless of independence?
@@ -2439,7 +2440,7 @@ We have found that the expected number of cards in the first section is $\frac{4
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>Calculate the probability that when we roll $4$ fair $6-$sided dice, the sum of their upfaces is 20.</p>
 <details>    <summary>Hint</summary><p>Count the different permutations that sum of $20$. Alternatively, condition on the sum of the first $2$ dice.</p></details>
@@ -2481,7 +2482,7 @@ We have found that the expected number of cards in the first section is $\frac{4
     </div>
     </div>
 </div></div>
-    <div class="content-area">
+<div class="content-area">
         <div class="task-group">
             <div class="task">    <p>$k \geq 2$ people play a game as follows: Each of the $k$ people go up one-at-a-time to draw $1 \leq r \leq n$ balls without replacement from an urn that contains $n$ balls labelled $1-n$. Once a given person has drawn their $r$ balls, they note them, and then put them back in the urn for the next player to draw. Let $p(k,n,r)$ be the probability that all $k$ of the people draw at least one ball in common under the specifications above. Find $p(4,17,5)$. Round your answer to three decimal places.</p>
 <details>    <summary>Hint</summary><p>Let $A_i$ be the event that ball $i$, $1 \leq i \leq r$, is selected in common between all $k$ people. We want $\mathbb{P}\left[\displaystyle\bigcup_{i=1}^r A_i\right]$. The events $A_i$ are not mutually exclusive, so we need to use inclusion-exclusion here to calculate this probability.
