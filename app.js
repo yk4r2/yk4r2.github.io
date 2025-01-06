@@ -45,14 +45,21 @@ createApp({
         },
 
         // Stats for topics
-        topicStats() {
+       topicStats() {
             const stats = {};
-            this.uniqueTopics.forEach(topic => {
-                const topicQuestions = this.questions.filter(q => q.topic === topic);
-                stats[topic] = {
-                    total: topicQuestions.length,
-                    unsolved: topicQuestions.filter(q => !q.solved).length
-                };
+            this.questions.forEach(topic => {
+                if (!topic) return;  // Skip if topic is undefined
+                const topicName = topic.topic || 'Unknown';  // Use 'Unknown' if topic is missing
+                if (!stats[topicName]) {
+                    stats[topicName] = {
+                        total: 0,
+                        unsolved: 0
+                    };
+                }
+                stats[topicName].total++;
+                if (!topic.solved) {
+                    stats[topicName].unsolved++;
+                }
             });
             return stats;
         },

@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuantGuide Questions</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link rel="preload" href="questions.json" as="fetch" crossorigin="anonymous">
 </head>
@@ -135,8 +135,8 @@
                     <p><strong>Topic:</strong> {{ question.topic }}</p>
                     <p><strong>Difficulty:</strong> {{ question.difficulty }}</p>
                     <p><strong>Internal Difficulty:</strong> {{ question.internal_difficulty }}</p>
-                    <p><strong>Companies:</strong> {{ question.companies.join(', ') }}</p>
-                    <p><strong>Tags:</strong> {{ question.tags.join(', ') }}</p>
+                    <p><strong>Companies:</strong> {{ question.companies ? question.companies.join(', ') : 'None' }}</p>
+                    <p><strong>Tags:</strong> {{ question.tags ? question.tags.join(', ') : 'None' }}</p>
                     <p><strong>Added:</strong> {{ formatDate(question.last_edited_at) }}</p>
                 </div>
             </div>
