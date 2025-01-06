@@ -20,14 +20,14 @@ createApp({
 
     computed: {
         // Unique values for filters
-        uniqueTags() {
-            const tags = new Set();
+        uniqueCompanies() {
+            const companies = new Set();
             this.questions.forEach(q => {
-                if (q.tags && Array.isArray(q.tags)) {
-                    q.tags.forEach(t => tags.add(t));
+                if (q.companies && Array.isArray(q.companies)) {
+                    q.companies.forEach(c => companies.add(c));
                 }
             });
-            return Array.from(tags).sort();
+            return Array.from(companies).sort();
         },
 
         uniqueTopics() {
