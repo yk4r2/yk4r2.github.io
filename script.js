@@ -114,13 +114,25 @@ function initializeDifficultyFilter() {
         const difficultyTag = e.target.closest('.difficulty-tag');
         if (!difficultyTag) return;
 
-        // Remove active class from all difficulties
-        document.querySelectorAll('.difficulty-tag').forEach(tag => {
-            tag.classList.remove('active');
-        });
+        const difficulty = difficultyTag.getAttribute('data-difficulty');
         
-        // Add active class to clicked difficulty
-        difficultyTag.classList.add('active');
+        if (difficulty === 'all') {
+            // Deactivate all other difficulties
+            document.querySelectorAll('.difficulty-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            difficultyTag.classList.add('active');
+        } else {
+            // Deactivate "All Difficulties" if another difficulty is selected
+            document.querySelector('.difficulty-tag[data-difficulty="all"]').classList.remove('active');
+            difficultyTag.classList.toggle('active');
+            
+            // If no difficulties are selected, activate "All Difficulties"
+            const activeDifficulties = document.querySelectorAll('.difficulty-tag.active:not([data-difficulty="all"])');
+            if (activeDifficulties.length === 0) {
+                document.querySelector('.difficulty-tag[data-difficulty="all"]').classList.add('active');
+            }
+        }
         
         window.currentPage = 1;
         filterProblems();
@@ -269,7 +281,8 @@ async function changePage(pageNum) {
 
 async function filterProblems() {
     const ITEMS_PER_PAGE = 10;
-    const selectedDifficulty = document.querySelector('.difficulty-tag.active')?.getAttribute('data-difficulty') || 'all';
+    const selectedDifficulties = Array.from(document.querySelectorAll('.difficulty-tag.active'))
+        .map(tag => tag.getAttribute('data-difficulty'));
     const selectedCompanies = Array.from(document.querySelectorAll('.company-tag.active'))
         .map(button => button.getAttribute('data-company'));
 
@@ -281,9 +294,9 @@ async function filterProblems() {
     }
     
     const filteredQuestions = window.questions.filter(problem => {
-        // Check difficulty
-        const difficultyMatch = selectedDifficulty === 'all' || 
-            problem.Difficulty.toLowerCase() === selectedDifficulty;
+        // Check difficulty - match if "all" is selected or if the problem's difficulty matches any selected difficulty
+        const difficultyMatch = selectedDifficulties.includes('all') || 
+            selectedDifficulties.some(d => problem.Difficulty.toLowerCase() === d);
                 
         // Check companies
         const companies = typeof problem.Companies === 'string'

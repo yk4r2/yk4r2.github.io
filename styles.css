@@ -34,6 +34,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    overflow-x: hidden;
 }
 
 select {
@@ -257,6 +258,7 @@ select {
 
 .filter-group {
     margin-bottom: 1rem;
+    width: 100%;
 }
 
 .filter-group:last-child {
@@ -276,6 +278,8 @@ select {
     border-radius: 4px;
     padding: 0.5rem;
     margin-top: 0.5rem;
+    overflow: hidden;
+    width: 100%;
 }
 
 .companies-scroll {
@@ -285,6 +289,7 @@ select {
     padding-bottom: 0.5rem;
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
+    width: 100%;
 }
 
 /* Scrollbar styling */
@@ -352,6 +357,8 @@ select {
     border-radius: 4px;
     padding: 0.5rem;
     margin-top: 0.5rem;
+    overflow: hidden;
+    width: 100%;
 }
 
 .difficulties-scroll {
@@ -361,6 +368,7 @@ select {
     padding-bottom: 0.5rem;
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
+    width: 100%;
 }
 
 .difficulties-scroll::-webkit-scrollbar {
