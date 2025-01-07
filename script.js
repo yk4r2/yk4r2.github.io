@@ -88,36 +88,60 @@ function createPagination(currentPage, totalPages) {
     const paginationContainer = document.createElement('div');
     paginationContainer.className = 'pagination';
 
-    let startPage = Math.max(1, currentPage - 5);
-    let endPage = Math.min(totalPages, currentPage + 5);
+    const isMobile = window.innerWidth <= 640;
+    
+    // Always show first page
+    paginationContainer.appendChild(createPageButton(1, currentPage));
 
-    // Adjust for first pages
-    if (currentPage <= 5) {
-        endPage = Math.min(totalPages, 10);
-    }
-    // Adjust for last pages
-    if (currentPage > totalPages - 5) {
-        startPage = Math.max(1, totalPages - 9);
-    }
+    if (isMobile) {
+        // Mobile layout: Show only key pages
+        if (currentPage > 2) {
+            paginationContainer.appendChild(createEllipsis());
+        }
+        
+        // Show 1-2 pages before current
+        if (currentPage > 1) {
+            const prevPage = createPageButton(currentPage - 1, currentPage);
+            prevPage.classList.add('mobile-visible');
+            paginationContainer.appendChild(prevPage);
+        }
+        
+        if (currentPage !== 1 && currentPage !== totalPages) {
+            const currentBtn = createPageButton(currentPage, currentPage);
+            currentBtn.classList.add('mobile-visible');
+            paginationContainer.appendChild(currentBtn);
+        }
+        
+        // Show 1-2 pages after current
+        if (currentPage < totalPages) {
+            const nextPage = createPageButton(currentPage + 1, currentPage);
+            nextPage.classList.add('mobile-visible');
+            paginationContainer.appendChild(nextPage);
+        }
+        
+        if (currentPage < totalPages - 1) {
+            paginationContainer.appendChild(createEllipsis());
+        }
+    } else {
+        // Desktop layout: Show more pages
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, currentPage + 2);
 
-    // First page
-    if (startPage > 1) {
-        paginationContainer.appendChild(createPageButton(1, currentPage));
-        if (startPage > 2) {
+        if (startPage > 1) {
+            paginationContainer.appendChild(createEllipsis());
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationContainer.appendChild(createPageButton(i, currentPage));
+        }
+
+        if (endPage < totalPages) {
             paginationContainer.appendChild(createEllipsis());
         }
     }
 
-    // Page numbers
-    for (let i = startPage; i <= endPage; i++) {
-        paginationContainer.appendChild(createPageButton(i, currentPage));
-    }
-
-    // Last page
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-            paginationContainer.appendChild(createEllipsis());
-        }
+    // Always show last page
+    if (totalPages > 1) {
         paginationContainer.appendChild(createPageButton(totalPages, currentPage));
     }
 
@@ -190,5 +214,11 @@ document.getElementById('difficulty').addEventListener('change', () => {
     filterProblems();
 });
 
+
 // Initial load
 filterProblems();
+
+window.addEventListener('resize', _.debounce(() => {
+    filterProblems();
+}, 250));
+

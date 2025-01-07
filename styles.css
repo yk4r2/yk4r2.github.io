@@ -45,7 +45,7 @@ select {
 .problems {
     display: grid;
     gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-template-columns: 1fr;
 }
 
 .problem-card {
@@ -233,5 +233,38 @@ select {
 
 .problem-task {
     margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .problems {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+    }
+}
+
+@media (min-width: 1200px) {
+    .problems {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
+    }
+}
+
+@media (max-width: 640px) {
+    .pagination {
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+    
+    .page-button {
+        padding: 0.5rem;
+        min-width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+    }
+
+    .pagination .page-button:not(.active):not(:first-child):not(:last-child):not(.mobile-visible) {
+        display: none;
+    }
 }
 
