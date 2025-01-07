@@ -1,5 +1,6 @@
 window.questions = [];
 window.currentPage = 1;
+let companies = new Set();
 
 async function loadQuestions() {
     try {
@@ -29,6 +30,35 @@ async function loadQuestions() {
         document.getElementById('problems').innerHTML = 
             '<div class="loading">Error loading problems. Please try again later.</div>';
     }
+
+    populateCompanyFilter();
+}
+
+function populateCompanyFilter() {
+    const companySelect = document.getElementById('companies');
+    companies = new Set();
+    
+    // Collect all unique companies
+    window.questions.forEach(question => {
+        const questionCompanies = typeof question.Companies === 'string' ?
+            JSON.parse(question.Companies.replace(/'/g, '"')) :
+            question.Companies;
+            
+        if (Array.isArray(questionCompanies)) {
+            questionCompanies.forEach(company => companies.add(company));
+        }
+    });
+
+    // Clear existing options except "All Companies"
+    while (companySelect.options.length > 1) {
+        companySelect.remove(1);
+    }
+
+    // Add company options
+    companies.forEach(company => {
+        const option = new Option(company, company);
+        companySelect.add(option);
+    });
 }
 
 function toggleSpoiler(element) {
@@ -88,36 +118,38 @@ function createPagination(currentPage, totalPages) {
     const paginationContainer = document.createElement('div');
     paginationContainer.className = 'pagination';
 
-    let startPage = Math.max(1, currentPage - 5);
-    let endPage = Math.min(totalPages, currentPage + 5);
-
-    // Adjust for first pages
-    if (currentPage <= 5) {
-        endPage = Math.min(totalPages, 10);
-    }
-    // Adjust for last pages
-    if (currentPage > totalPages - 5) {
-        startPage = Math.max(1, totalPages - 9);
-    }
-
-    // First page
-    if (startPage > 1) {
+    const isMobile = window.innerWidth < 768;
+    
+    // First page button
+    if (currentPage > 1) {
         paginationContainer.appendChild(createPageButton(1, currentPage));
-        if (startPage > 2) {
-            paginationContainer.appendChild(createEllipsis());
-        }
     }
 
-    // Page numbers
-    for (let i = startPage; i <= endPage; i++) {
-        paginationContainer.appendChild(createPageButton(i, currentPage));
+    if (isMobile) {
+        // Mobile layout: show current page and immediate neighbors
+        if (currentPage > 2) paginationContainer.appendChild(createEllipsis());
+        
+        if (currentPage > 1) paginationContainer.appendChild(createPageButton(currentPage - 1, currentPage));
+        paginationContainer.appendChild(createPageButton(currentPage, currentPage));
+        if (currentPage < totalPages) paginationContainer.appendChild(createPageButton(currentPage + 1, currentPage));
+        
+        if (currentPage < totalPages - 1) paginationContainer.appendChild(createEllipsis());
+    } else {
+        // Desktop layout: show more pages
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, currentPage + 2);
+
+        if (startPage > 1) paginationContainer.appendChild(createEllipsis());
+        
+        for (let i = startPage; i <= endPage; i++) {
+            paginationContainer.appendChild(createPageButton(i, currentPage));
+        }
+        
+        if (endPage < totalPages) paginationContainer.appendChild(createEllipsis());
     }
 
-    // Last page
-    if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-            paginationContainer.appendChild(createEllipsis());
-        }
+    // Last page button
+    if (currentPage < totalPages) {
         paginationContainer.appendChild(createPageButton(totalPages, currentPage));
     }
 
@@ -150,15 +182,27 @@ async function changePage(pageNum) {
 async function filterProblems() {
     const ITEMS_PER_PAGE = 10;
     const difficulty = document.getElementById('difficulty').value;
-    const problemsContainer = document.getElementById('problems');
+    const selectedCompanies = Array.from(document.getElementById('companies').selectedOptions)
+        .map(option => option.value);
     
     if (!window.questions || window.questions.length === 0) {
         await loadQuestions();
         return;
     }
     
-    const filteredQuestions = window.questions
-        .filter(problem => difficulty === 'all' || problem.Difficulty.toLowerCase() === difficulty);
+    const filteredQuestions = window.questions.filter(problem => {
+        const matchesDifficulty = difficulty === 'all' || problem.Difficulty.toLowerCase() === difficulty;
+        
+        const problemCompanies = typeof problem.Companies === 'string' ?
+            JSON.parse(problem.Companies.replace(/'/g, '"')) :
+            problem.Companies;
+            
+        const matchesCompany = selectedCompanies.includes('all') ||
+            selectedCompanies.some(company => 
+                Array.isArray(problemCompanies) && problemCompanies.includes(company));
+        
+        return matchesDifficulty && matchesCompany;
+    });
 
     const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
     window.currentPage = Math.min(window.currentPage, totalPages);
@@ -190,5 +234,9 @@ document.getElementById('difficulty').addEventListener('change', () => {
     filterProblems();
 });
 
-// Initial load
-filterProblems();
+document.getElementById('companies').addEventListener('change', () => {
+    window.currentPage = 1;
+    filterProblems();
+});
+
+

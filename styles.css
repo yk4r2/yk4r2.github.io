@@ -45,7 +45,7 @@ select {
 .problems {
     display: grid;
     gap: 1.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    grid-template-columns: 1fr;  /* Single column for mobile */
 }
 
 .problem-card {
@@ -233,5 +233,35 @@ select {
 
 .problem-task {
     margin-top: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+    .problems {
+        grid-template-columns: repeat(2, 1fr);  /* 2 columns for tablets */
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .problems {
+        grid-template-columns: repeat(3, 1fr);  /* 3 columns for desktop */
+    }
+}
+
+.company-filter {
+    margin-top: 1rem;
+}
+
+.company-filter select {
+    min-width: 200px;
+    max-width: 100%;
+    padding: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+    .filters {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+    }
 }
 
