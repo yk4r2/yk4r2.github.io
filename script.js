@@ -2,9 +2,9 @@ window.questions = [];
 window.currentPage = 1;
 window.companies = new Set();
 
+
 async function loadQuestions() {
     try {
-        // Try to fetch GZIP version
         let response = await fetch('questions.json.gz');
         if (response.ok) {
             const compressedData = await response.arrayBuffer();
@@ -13,28 +13,34 @@ async function loadQuestions() {
             const textDecoder = new TextDecoder();
             const jsonString = textDecoder.decode(decompressed);
             window.questions = JSON.parse(jsonString);
-            await filterProblems();
-            return;
+        } else {
+            response = await fetch('questions.json');
+            if (!response.ok) {
+                throw new Error('Failed to load questions');
+            }
+            window.questions = await response.json();
         }
 
-        // Fallback to uncompressed
-        response = await fetch('questions.json');
-        if (!response.ok) {
-            throw new Error('Failed to load questions');
-        }
-        window.questions = await response.json();
-
-        window.companies.clear();
+        window.companies = new Set();
         window.questions.forEach(question => {
-            const companies = typeof question.Companies === 'string' 
-                ? JSON.parse(question.Companies.replace(/'/g, '"')) 
-                : question.Companies;
-            
-            if (Array.isArray(companies)) {
-                companies.forEach(company => window.companies.add(company));
+            let companies;
+            try {
+                companies = typeof question.Companies === 'string' 
+                    ? JSON.parse(question.Companies.replace(/'/g, '"')) 
+                    : question.Companies;
+                
+                if (Array.isArray(companies)) {
+                    companies.forEach(company => {
+                        if (company && company !== '') {
+                            window.companies.add(company);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error parsing companies for question:', question);
             }
         });
-        
+
         // Populate company filter
         populateCompanyFilter();
         
