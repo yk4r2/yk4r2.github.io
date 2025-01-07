@@ -107,6 +107,26 @@ function populateCompanyFilter() {
     });
 }
 
+function initializeDifficultyFilter() {
+    const difficultiesList = document.getElementById('difficulties-list');
+    
+    difficultiesList.addEventListener('click', (e) => {
+        const difficultyTag = e.target.closest('.difficulty-tag');
+        if (!difficultyTag) return;
+
+        // Remove active class from all difficulties
+        document.querySelectorAll('.difficulty-tag').forEach(tag => {
+            tag.classList.remove('active');
+        });
+        
+        // Add active class to clicked difficulty
+        difficultyTag.classList.add('active');
+        
+        window.currentPage = 1;
+        filterProblems();
+    });
+}
+
 function toggleSpoiler(element) {
     const content = element.nextElementSibling;
     content.classList.toggle('visible');
@@ -261,10 +281,12 @@ async function filterProblems() {
     }
     
     const filteredQuestions = window.questions.filter(problem => {
-        // Check difficulty
-        const difficultyMatch = difficulty === 'all' || 
-            problem.Difficulty.toLowerCase() === difficulty;
-        
+        const selectedDifficulty = document.querySelector('.difficulty-tag.active')
+            .getAttribute('data-difficulty');
+
+        const difficultyMatch = selectedDifficulty === 'all' || 
+            problem.Difficulty.toLowerCase() === selectedDifficulty;
+                
         // Check companies
         const companies = typeof problem.Companies === 'string'
             ? JSON.parse(problem.Companies.replace(/'/g, '"'))
@@ -307,11 +329,6 @@ document.getElementById('difficulty').addEventListener('change', () => {
     filterProblems();
 });
 
-document.getElementById('companies').addEventListener('change', () => {
-    window.currentPage = 1; // Reset to first page on filter change
-    filterProblems();
-});
-
 
 // Initial load
 filterProblems();
@@ -319,4 +336,8 @@ filterProblems();
 window.addEventListener('resize', _.debounce(() => {
     filterProblems();
 }, 250));
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeDifficultyFilter();
+});
 

@@ -70,28 +70,6 @@ select {
     margin-bottom: 1rem;
 }
 
-.difficulty {
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.difficulty.easy {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.difficulty.medium {
-    background: #fef9c3;
-    color: #854d0e;
-}
-
-.difficulty.hard {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
 .topic {
     font-size: 0.875rem;
     color: var(--primary);
@@ -366,3 +344,63 @@ select {
 .company-tag:not(.active) .remove-company {
     background: rgba(0, 0, 0, 0.1);
 }
+
+.difficulties-container {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.difficulties-scroll {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+}
+
+.difficulties-scroll::-webkit-scrollbar {
+    height: 4px;
+}
+
+.difficulties-scroll::-webkit-scrollbar-track {
+    background: var(--border);
+    border-radius: 2px;
+}
+
+.difficulties-scroll::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.difficulty-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    color: var(--text);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.difficulty-tag:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.difficulty-tag.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+

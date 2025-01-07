@@ -41,13 +41,25 @@
         </div>
         
         <div class="filters">
-            <label for="difficulty">Filter by difficulty: </label>
-            <select id="difficulty">
-                <option value="all">All Difficulties</option>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-            </select>
+            <div class="filter-group">
+                <label>Difficulty:</label>
+                <div class="difficulties-container">
+                    <div class="difficulties-scroll" id="difficulties-list">
+                        <button class="difficulty-tag active" data-difficulty="all">
+                            All Difficulties
+                        </button>
+                        <button class="difficulty-tag" data-difficulty="easy">
+                            Easy
+                        </button>
+                        <button class="difficulty-tag" data-difficulty="medium">
+                            Medium
+                        </button>
+                        <button class="difficulty-tag" data-difficulty="hard">
+                            Hard
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div class="filter-group">
                 <label>Companies:</label>
                 <div class="companies-container">
