@@ -412,51 +412,75 @@ select {
     border-color: var(--primary);
 }
 
-.dashboard {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 2rem;
-    margin-bottom: 2rem;
+.solved-counter {
+    background: var(--card);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    overflow-x: auto;
 }
 
 .solved-stats {
-    background: var(--card);
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    height: fit-content;
-}
-
-.stats-grid {
-    display: grid;
+    display: flex;
     gap: 1rem;
-    margin-top: 1rem;
+    align-items: center;
 }
 
 .stat-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0.5rem;
-    background: var(--background);
-    border-radius: 4px;
+    color: var(--text);
+    font-size: 0.875rem;
 }
 
-.solved-checkbox {
+.stat-item:not(:last-child)::after {
+    content: '|';
+    margin-left: 1rem;
+    color: var(--border);
+}
+
+.solved-filter-container {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    overflow: hidden;
+    width: 100%;
+}
+
+.solved-filter-scroll {
     display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+}
+
+.solved-filter-tag {
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    color: var(--text);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.solved-checkbox input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-}
-
-@media (max-width: 768px) {
-    .dashboard {
-        grid-template-columns: 1fr;
-    }
+.solved-filter-tag:hover,
+.solved-filter-tag.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
 }
 

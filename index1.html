@@ -72,11 +72,28 @@
             </div>
         </div>
         
-        <div class="solved-stats">
-            <h2>Solved Problems</h2>
-                <div class="stats-grid" id="solved-stats">
-                    <!-- Will be populated by JavaScript -->
+        <div class="solved-counter">
+            <span>Solved:</span>
+            <div class="solved-stats" id="solved-stats">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <label>Show:</label>
+            <div class="solved-filter-container">
+                <div class="solved-filter-scroll" id="solved-filter">
+                    <button class="solved-filter-tag active" data-solved="unsolved">
+                        Unsolved
+                    </button>
+                    <button class="solved-filter-tag" data-solved="solved">
+                        Solved
+                    </button>
+                    <button class="solved-filter-tag" data-solved="all">
+                        All Problems
+                    </button>
                 </div>
+            </div>
         </div>
 
         <div id="problems" class="problems">

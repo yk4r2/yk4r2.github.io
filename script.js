@@ -38,15 +38,28 @@ function updateSolvedStats() {
         .sort()
         .map(difficulty => `
             <div class="stat-item">
-                <span>${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}</span>
-                <span>${solvedByDifficulty[difficulty] || 0} / ${totalProblems[difficulty]}</span>
+                ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}: 
+                ${solvedByDifficulty[difficulty] || 0}/${totalProblems[difficulty]}
             </div>
         `)
-        .join('') + `
-        <div class="stat-item">
-            <strong>Total</strong>
-            <strong>${window.solvedProblems.size} / ${window.questions.length}</strong>
-        </div>`;
+        .join('');
+}
+
+function initializeSolvedFilter() {
+    const solvedFilter = document.getElementById('solved-filter');
+    
+    solvedFilter.addEventListener('click', (e) => {
+        const filterTag = e.target.closest('.solved-filter-tag');
+        if (!filterTag) return;
+
+        document.querySelectorAll('.solved-filter-tag').forEach(tag => {
+            tag.classList.remove('active');
+        });
+        filterTag.classList.add('active');
+        
+        window.currentPage = 1;
+        filterProblems();
+    });
 }
 
 async function loadQuestions() {
@@ -338,21 +351,16 @@ async function changePage(pageNum) {
 }
 
 async function filterProblems() {
-    const ITEMS_PER_PAGE = 10;
+    const ITEMS_PER_PAGE = 12;
     const selectedDifficulties = Array.from(document.querySelectorAll('.difficulty-tag.active'))
         .map(tag => tag.getAttribute('data-difficulty'));
     const selectedCompanies = Array.from(document.querySelectorAll('.company-tag.active'))
         .map(button => button.getAttribute('data-company'));
+    const solvedFilter = document.querySelector('.solved-filter-tag.active')
+        .getAttribute('data-solved');
 
-    const problemsContainer = document.getElementById('problems');
-    
-    if (!window.questions || window.questions.length === 0) {
-        await loadQuestions();
-        return;
-    }
-    
     const filteredQuestions = window.questions.filter(problem => {
-        // Check difficulty - match if "all" is selected or if the problem's difficulty matches any selected difficulty
+        // Check difficulty
         const difficultyMatch = selectedDifficulties.includes('all') || 
             selectedDifficulties.some(d => problem.Difficulty.toLowerCase() === d);
                 
@@ -364,8 +372,14 @@ async function filterProblems() {
         const companiesMatch = selectedCompanies.includes('all') ||
             (Array.isArray(companies) && companies.some(company => 
                 selectedCompanies.includes(company)));
+        
+        // Check solved status
+        const isSolved = window.solvedProblems.has(problem.url);
+        const solvedMatch = solvedFilter === 'all' || 
+            (solvedFilter === 'solved' && isSolved) ||
+            (solvedFilter === 'unsolved' && !isSolved);
        
-        return difficultyMatch && companiesMatch;
+        return difficultyMatch && companiesMatch && solvedMatch;
     });
 
     const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
@@ -397,11 +411,9 @@ async function filterProblems() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeDifficultyFilter();
-    
-    // Initial load
+    initializeSolvedFilter();
     filterProblems();
 
-    // Add resize handler
     window.addEventListener('resize', _.debounce(() => {
         filterProblems();
     }, 250));
