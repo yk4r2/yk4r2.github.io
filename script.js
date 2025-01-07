@@ -1,5 +1,6 @@
 window.questions = [];
 window.currentPage = 1;
+window.companies = new Set();
 
 async function loadQuestions() {
     try {
@@ -22,13 +23,42 @@ async function loadQuestions() {
             throw new Error('Failed to load questions');
         }
         window.questions = await response.json();
-        await filterProblems();
+
+        window.companies.clear();
+        window.questions.forEach(question => {
+            const companies = typeof question.Companies === 'string' 
+                ? JSON.parse(question.Companies.replace(/'/g, '"')) 
+                : question.Companies;
+            
+            if (Array.isArray(companies)) {
+                companies.forEach(company => window.companies.add(company));
+            }
+        });
         
+        // Populate company filter
+        populateCompanyFilter();
+        
+        await filterProblems();
     } catch (error) {
         console.error('Error loading questions:', error);
         document.getElementById('problems').innerHTML = 
             '<div class="loading">Error loading problems. Please try again later.</div>';
     }
+}
+
+function populateCompanyFilter() {
+    const companiesSelect = document.getElementById('companies');
+    companiesSelect.innerHTML = '<option value="all">All Companies</option>';
+    
+    // Sort companies alphabetically
+    const sortedCompanies = Array.from(window.companies).sort();
+    
+    sortedCompanies.forEach(company => {
+        const option = document.createElement('option');
+        option.value = company;
+        option.textContent = company;
+        companiesSelect.appendChild(option);
+    });
 }
 
 function toggleSpoiler(element) {
@@ -174,6 +204,8 @@ async function changePage(pageNum) {
 async function filterProblems() {
     const ITEMS_PER_PAGE = 10;
     const difficulty = document.getElementById('difficulty').value;
+    const selectedCompanies = Array.from(document.getElementById('companies').selectedOptions)
+        .map(option => option.value);
     const problemsContainer = document.getElementById('problems');
     
     if (!window.questions || window.questions.length === 0) {
@@ -181,8 +213,23 @@ async function filterProblems() {
         return;
     }
     
-    const filteredQuestions = window.questions
-        .filter(problem => difficulty === 'all' || problem.Difficulty.toLowerCase() === difficulty);
+    const filteredQuestions = window.questions.filter(problem => {
+        // Check difficulty
+        const difficultyMatch = difficulty === 'all' || 
+            problem.Difficulty.toLowerCase() === difficulty;
+        
+        // Check companies
+        const companies = typeof problem.Companies === 'string'
+            ? JSON.parse(problem.Companies.replace(/'/g, '"'))
+            : problem.Companies;
+            
+        const companiesMatch = selectedCompanies.includes('all') ||
+            selectedCompanies.length === 0 ||
+            (Array.isArray(companies) && companies.some(company => 
+                selectedCompanies.includes(company)));
+        
+        return difficultyMatch && companiesMatch;
+    });
 
     const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
     window.currentPage = Math.min(window.currentPage, totalPages);
@@ -210,6 +257,11 @@ async function filterProblems() {
 }
 
 document.getElementById('difficulty').addEventListener('change', () => {
+    window.currentPage = 1; // Reset to first page on filter change
+    filterProblems();
+});
+
+document.getElementById('companies').addEventListener('change', () => {
     window.currentPage = 1; // Reset to first page on filter change
     filterProblems();
 });
