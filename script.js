@@ -1,3 +1,14 @@
+window.MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+    },
+    options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+};
+
 window.questions = [];
 window.currentPage = 1;
 window.companies = new Set();
@@ -218,6 +229,7 @@ function toggleSpoiler(element) {
         : `Show ${element.dataset.type}`;
 }
 
+function createProblemCard(problem) {
     const card = document.createElement('div');
     card.className = 'problem-card';
     
@@ -424,9 +436,9 @@ async function filterProblems() {
         problemsContainer.appendChild(createProblemCard(problem));
     });
 
-    if (window.MathJax) {
+    if (window.MathJax && window.MathJax.typesetPromise) {
         try {
-            await MathJax.typesetPromise([problemsContainer]);
+            await window.MathJax.typesetPromise([problemsContainer]);
         } catch (error) {
             console.error('MathJax typesetting failed:', error);
         }
@@ -447,5 +459,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', debounce(() => {
         filterProblems();
     }, 250));
+
+    if ('serviceWorker' in navigator) {
+        try {
+            const registration = await navigator.serviceWorker.register('/sw.js', {
+                scope: '/'
+            });
+            console.log('ServiceWorker registration successful with scope:', registration.scope);
+        } catch (error) {
+            console.error('ServiceWorker registration failed:', error);
+        }
+    }
 });
 
