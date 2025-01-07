@@ -1,7 +1,53 @@
 window.questions = [];
 window.currentPage = 1;
 window.companies = new Set();
+window.solvedProblems = new Set(JSON.parse(localStorage.getItem('solvedProblems') || '[]'));
 
+
+function toggleSolved(problemId, checkbox) {
+    if (checkbox.checked) {
+        window.solvedProblems.add(problemId);
+    } else {
+        window.solvedProblems.delete(problemId);
+    }
+    localStorage.setItem('solvedProblems', JSON.stringify([...window.solvedProblems]));
+    updateSolvedStats();
+}
+
+function updateSolvedStats() {
+    const statsContainer = document.getElementById('solved-stats');
+    const solvedByDifficulty = {};
+    const totalProblems = {};
+    
+    // Count total problems by difficulty
+    window.questions.forEach(problem => {
+        const difficulty = problem.Difficulty.toLowerCase();
+        totalProblems[difficulty] = (totalProblems[difficulty] || 0) + 1;
+    });
+    
+    // Count solved problems by difficulty
+    window.questions.forEach(problem => {
+        if (window.solvedProblems.has(problem.url)) {
+            const difficulty = problem.Difficulty.toLowerCase();
+            solvedByDifficulty[difficulty] = (solvedByDifficulty[difficulty] || 0) + 1;
+        }
+    });
+    
+    // Update stats display
+    statsContainer.innerHTML = Object.keys(totalProblems)
+        .sort()
+        .map(difficulty => `
+            <div class="stat-item">
+                <span>${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}</span>
+                <span>${solvedByDifficulty[difficulty] || 0} / ${totalProblems[difficulty]}</span>
+            </div>
+        `)
+        .join('') + `
+        <div class="stat-item">
+            <strong>Total</strong>
+            <strong>${window.solvedProblems.size} / ${window.questions.length}</strong>
+        </div>`;
+}
 
 async function loadQuestions() {
     try {
@@ -188,7 +234,19 @@ function createProblemCard(problem) {
             <div class="spoiler-content">${problem.answers.join(', ')}</div>
         </div>
     `;
-    
+
+    const solvedCheckbox = document.createElement('div');
+    solvedCheckbox.className = 'solved-checkbox';
+    solvedCheckbox.innerHTML = `
+        <label>
+            <input type="checkbox" 
+                   ${window.solvedProblems.has(problem.url) ? 'checked' : ''} 
+                   onchange="toggleSolved('${problem.url}', this)">
+            Mark as solved
+        </label>
+    `;
+    card.appendChild(solvedCheckbox);
+        
     return card;
 }
 
@@ -333,6 +391,8 @@ async function filterProblems() {
     const paginationContainer = document.getElementById('pagination');
     paginationContainer.innerHTML = '';
     paginationContainer.appendChild(createPagination(window.currentPage, totalPages));
+
+    updateSolvedStats();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
