@@ -53,17 +53,57 @@ async function loadQuestions() {
 }
 
 function populateCompanyFilter() {
-    const companiesSelect = document.getElementById('companies');
-    companiesSelect.innerHTML = '<option value="all">All Companies</option>';
+    const companiesList = document.getElementById('companies-list');
+    companiesList.innerHTML = `
+        <button class="company-tag all-companies active" data-company="all">
+            All Companies
+            <span class="remove-company">×</span>
+        </button>
+    `;
     
     // Sort companies alphabetically
     const sortedCompanies = Array.from(window.companies).sort();
     
     sortedCompanies.forEach(company => {
-        const option = document.createElement('option');
-        option.value = company;
-        option.textContent = company;
-        companiesSelect.appendChild(option);
+        if (company && company.trim()) {
+            const button = document.createElement('button');
+            button.className = 'company-tag';
+            button.setAttribute('data-company', company);
+            button.innerHTML = `
+                ${company}
+                <span class="remove-company">×</span>
+            `;
+            companiesList.appendChild(button);
+        }
+    });
+
+    // Add click handlers
+    companiesList.addEventListener('click', (e) => {
+        const companyTag = e.target.closest('.company-tag');
+        if (!companyTag) return;
+
+        const company = companyTag.getAttribute('data-company');
+        
+        if (company === 'all') {
+            // Deactivate all other companies
+            document.querySelectorAll('.company-tag').forEach(tag => {
+                tag.classList.remove('active');
+            });
+            companyTag.classList.add('active');
+        } else {
+            // Deactivate "All Companies" if another company is selected
+            document.querySelector('.all-companies').classList.remove('active');
+            companyTag.classList.toggle('active');
+            
+            // If no companies are selected, activate "All Companies"
+            const activeCompanies = document.querySelectorAll('.company-tag.active:not(.all-companies)');
+            if (activeCompanies.length === 0) {
+                document.querySelector('.all-companies').classList.add('active');
+            }
+        }
+        
+        window.currentPage = 1;
+        filterProblems();
     });
 }
 
@@ -210,8 +250,9 @@ async function changePage(pageNum) {
 async function filterProblems() {
     const ITEMS_PER_PAGE = 10;
     const difficulty = document.getElementById('difficulty').value;
-    const selectedCompanies = Array.from(document.getElementById('companies').selectedOptions)
-        .map(option => option.value);
+    const selectedCompanies = Array.from(document.querySelectorAll('.company-tag.active'))
+        .map(button => button.getAttribute('data-company'));
+
     const problemsContainer = document.getElementById('problems');
     
     if (!window.questions || window.questions.length === 0) {
@@ -230,10 +271,9 @@ async function filterProblems() {
             : problem.Companies;
             
         const companiesMatch = selectedCompanies.includes('all') ||
-            selectedCompanies.length === 0 ||
             (Array.isArray(companies) && companies.some(company => 
                 selectedCompanies.includes(company)));
-        
+       
         return difficultyMatch && companiesMatch;
     });
 

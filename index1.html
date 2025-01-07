@@ -49,12 +49,17 @@
                 <option value="hard">Hard</option>
             </select>
             <div class="filter-group">
-                <label for="companies">Filter by companies: </label>
-                <select id="companies" multiple class="companies-select">
-                    <option value="all">All Companies</option>
-                </select>
+                <label>Companies:</label>
+                <div class="companies-container">
+                    <div class="companies-scroll" id="companies-list">
+                        <button class="company-tag all-companies active" data-company="all">
+                            All Companies
+                            <span class="remove-company">×</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
+       </div>
 
         <div id="problems" class="problems">
             <div class="loading">Loading problems...</div>
