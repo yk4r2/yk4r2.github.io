@@ -4,6 +4,18 @@ window.companies = new Set();
 window.solvedProblems = new Set(JSON.parse(localStorage.getItem('solvedProblems') || '[]'));
 
 
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 function toggleSolved(problemId, checkbox) {
     if (checkbox.checked) {
         window.solvedProblems.add(problemId);
@@ -352,12 +364,23 @@ async function changePage(pageNum) {
 
 async function filterProblems() {
     const ITEMS_PER_PAGE = 12;
+    const problemsContainer = document.getElementById('problems'); // Add this line
+    
+    if (!problemsContainer) {
+        console.error('Problems container not found');
+        return;
+    }
+    
     const selectedDifficulties = Array.from(document.querySelectorAll('.difficulty-tag.active'))
         .map(tag => tag.getAttribute('data-difficulty'));
     const selectedCompanies = Array.from(document.querySelectorAll('.company-tag.active'))
         .map(button => button.getAttribute('data-company'));
-    const solvedFilter = document.querySelector('.solved-filter-tag.active')
-        .getAttribute('data-solved');
+    const solvedFilter = document.querySelector('.solved-filter-tag.active')?.getAttribute('data-solved') || 'unsolved';
+
+    if (!window.questions || window.questions.length === 0) {
+        await loadQuestions();
+        return;
+    }
 
     const filteredQuestions = window.questions.filter(problem => {
         // Check difficulty
@@ -414,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSolvedFilter();
     filterProblems();
 
-    window.addEventListener('resize', _.debounce(() => {
+    window.addEventListener('resize', debounce(() => {
         filterProblems();
     }, 250));
 });
