@@ -218,11 +218,9 @@ function toggleSpoiler(element) {
         : `Show ${element.dataset.type}`;
 }
 
-function createProblemCard(problem) {
     const card = document.createElement('div');
     card.className = 'problem-card';
     
-    // Safely parse tags and companies if they're strings, or use them directly if they're arrays
     const tags = typeof problem.Tags === 'string' ? 
         JSON.parse(problem.Tags.replace(/'/g, '"')) : 
         problem.Tags;
@@ -239,39 +237,48 @@ function createProblemCard(problem) {
                     ${problem.url ? `<a href="${problem.url}" class="problem-link" target="_blank">Original Task</a>` : ''}
                 </div>
             </div>
-            <h2 class="problem-title">${problem.title || ''}</h2>
         </div>
+        
         <div class="problem-task">${problem.task}</div>
-        <div class="tags">
-            ${Array.isArray(tags) ? tags.map(tag => `<span class="tag">${tag}</span>`).join('') : ''}
-            ${Array.isArray(companies) ? companies.map(company => `<span class="tag">${company}</span>`).join('') : ''}
+        
+        <div class="tags-section">
+            ${Array.isArray(tags) && tags.length > 0 ? `
+                <div class="tags-row">
+                    ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+            ` : ''}
+            ${Array.isArray(companies) && companies.length > 0 ? `
+                <div class="tags-row">
+                    ${companies.map(company => `<span class="tag company-tag-card">${company}</span>`).join('')}
+                </div>
+            ` : ''}
         </div>
+        
         <div class="spoiler">
             <button class="spoiler-button" data-type="Hint" onclick="toggleSpoiler(this)">Show Hint</button>
             <div class="spoiler-content">${problem.hint}</div>
         </div>
+        
         <div class="spoiler">
             <button class="spoiler-button" data-type="Solution" onclick="toggleSpoiler(this)">Show Solution</button>
             <div class="spoiler-content">${problem.solution}</div>
         </div>
+        
         <div class="spoiler">
             <button class="spoiler-button" data-type="Answer" onclick="toggleSpoiler(this)">Show Answer</button>
             <div class="spoiler-content">${problem.answers.join(', ')}</div>
         </div>
-    `;
-
-    const solvedCheckbox = document.createElement('div');
-    solvedCheckbox.className = 'solved-checkbox';
-    solvedCheckbox.innerHTML = `
-        <label>
-            <input type="checkbox" 
-                   ${window.solvedProblems.has(problem.url) ? 'checked' : ''} 
-                   onchange="toggleSolved('${problem.url}', this)">
-            Mark as solved
-        </label>
-    `;
-    card.appendChild(solvedCheckbox);
         
+        <div class="solved-checkbox">
+            <label>
+                <input type="checkbox" 
+                       ${window.solvedProblems.has(problem.url) ? 'checked' : ''} 
+                       onchange="toggleSolved('${problem.url}', this)">
+                Mark as solved
+            </label>
+        </div>
+    `;
+    
     return card;
 }
 

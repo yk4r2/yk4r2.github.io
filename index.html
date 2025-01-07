@@ -3,63 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quant Prep Questions</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <style>
-        .question-button {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .question-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
-        }
-        
-        .question-button:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.6s;
-        }
-        
-        .question-button:hover:before {
-            left: 100%;
-        }
-
-        .container {
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
-</head>
-<body class="bg-gray-100 min-h-screen py-12">
-    <div class="container mx-auto px-4 max-w-4xl">
-        <h1 class="text-4xl font-bold text-center mb-12 text-gray-800">Quant Prep Questions</h1>
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <!-- Question buttons dynamically generated -->
-            <script>
-                const container = document.querySelector('.grid');
-                for (let i = 1; i <= 25; i++) {
-                    const button = document.createElement('a');
-                    button.href = `https://yk4r2.github.io/questions_${i}.html`;
-                    button.className = 'question-button text-white py-4 px-6 rounded-lg text-center font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center';
-                    button.innerHTML = `Question Set ${i}`;
-                    button.style.animationDelay = `${i * 0.05}s`;
-                    container.appendChild(button);
+    <title>Math Problems Collection</title>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initial typesetting completed');
+                    });
                 }
-            </script>
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Math Problems Collection</h1>
         </div>
+        
+        <div class="filters">
+            <div class="filter-section">
+                <div class="difficulties-container">
+                    <div class="difficulties-scroll" id="difficulties-list">
+                        <button class="difficulty-tag active" data-difficulty="all">
+                            All Difficulties
+                        </button>
+                        <button class="difficulty-tag" data-difficulty="easy">
+                            Easy
+                        </button>
+                        <button class="difficulty-tag" data-difficulty="medium">
+                            Medium
+                        </button>
+                        <button class="difficulty-tag" data-difficulty="hard">
+                            Hard
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="solved-filter-container">
+                    <div class="solved-filter-scroll" id="solved-filter">
+                        <button class="solved-filter-tag active" data-solved="unsolved">
+                            Unsolved
+                        </button>
+                        <button class="solved-filter-tag" data-solved="solved">
+                            Solved
+                        </button>
+                        <button class="solved-filter-tag" data-solved="all">
+                            All Problems
+                        </button>
+                    </div>
+                </div>
+
+                <div class="solved-counter">
+                    <div class="solved-stats" id="solved-stats">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="companies-container">
+                <div class="companies-scroll" id="companies-list">
+                    <button class="company-tag all-companies active" data-company="all">
+                        All Companies
+                        <span class="remove-company">×</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="problems" class="problems">
+            <div class="loading">Loading problems...</div>
+        </div>
+        <div id="pagination" class="pagination-container"></div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="script.js"></script>
+    <script>
+        // Lazy load MathJax
+        function loadMathJax() {
+            const script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js";
+            script.async = true;
+            document.head.appendChild(script);
+        }
+
+        // Load MathJax when the first batch of problems is rendered
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    loadMathJax();
+                    observer.disconnect();
+                }
+            });
+        });
+
+        // Start observing the problems container
+        observer.observe(document.getElementById('problems'));
+
+        // Add this new code for Service Worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(error) {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
+
