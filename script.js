@@ -459,16 +459,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', debounce(() => {
         filterProblems();
     }, 250));
-
-    if ('serviceWorker' in navigator) {
-        try {
-            const registration = await navigator.serviceWorker.register('/sw.js', {
-                scope: '/'
-            });
-            console.log('ServiceWorker registration successful with scope:', registration.scope);
-        } catch (error) {
-            console.error('ServiceWorker registration failed:', error);
-        }
-    }
 });
 
