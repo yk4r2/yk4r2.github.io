@@ -269,7 +269,7 @@ async function changePage(pageNum) {
 
 async function filterProblems() {
     const ITEMS_PER_PAGE = 10;
-    const difficulty = document.getElementById('difficulty').value;
+    const selectedDifficulty = document.querySelector('.difficulty-tag.active')?.getAttribute('data-difficulty') || 'all';
     const selectedCompanies = Array.from(document.querySelectorAll('.company-tag.active'))
         .map(button => button.getAttribute('data-company'));
 
@@ -281,9 +281,7 @@ async function filterProblems() {
     }
     
     const filteredQuestions = window.questions.filter(problem => {
-        const selectedDifficulty = document.querySelector('.difficulty-tag.active')
-            .getAttribute('data-difficulty');
-
+        // Check difficulty
         const difficultyMatch = selectedDifficulty === 'all' || 
             problem.Difficulty.toLowerCase() === selectedDifficulty;
                 
@@ -324,14 +322,15 @@ async function filterProblems() {
     paginationContainer.appendChild(createPagination(window.currentPage, totalPages));
 }
 
-// Initial load
-filterProblems();
-
-window.addEventListener('resize', _.debounce(() => {
-    filterProblems();
-}, 250));
-
 document.addEventListener('DOMContentLoaded', () => {
     initializeDifficultyFilter();
+    
+    // Initial load
+    filterProblems();
+
+    // Add resize handler
+    window.addEventListener('resize', _.debounce(() => {
+        filterProblems();
+    }, 250));
 });
 
