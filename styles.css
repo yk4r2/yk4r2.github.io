@@ -511,8 +511,8 @@ select {
 .difficulty.hard { color: var(--hard); }
 
 .solved-counter {
-    background: transparent; /* Remove different background */
-    padding: 0.5rem;
+    background: transparent;
+    padding: 0.25rem;
     border: 1px solid var(--border);
     border-radius: 4px;
     margin: 0;
@@ -614,11 +614,6 @@ select {
     flex-direction: column;
 }
 
-.solved-counter {
-    width: 300px;
-    margin: 0;
-}
-
 @media (max-width: 768px) {
     .filter-row {
         flex-direction: column;
@@ -646,9 +641,9 @@ select {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.15rem 0.5rem;
     border-bottom: 1px solid var(--border);
-    height: 40px; /* Reduced height */
+    height: 30px; /* Reduced height */
 }
 
 .search-toggle {
