@@ -324,12 +324,6 @@ async function filterProblems() {
     paginationContainer.appendChild(createPagination(window.currentPage, totalPages));
 }
 
-document.getElementById('difficulty').addEventListener('change', () => {
-    window.currentPage = 1; // Reset to first page on filter change
-    filterProblems();
-});
-
-
 // Initial load
 filterProblems();
 
