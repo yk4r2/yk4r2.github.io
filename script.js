@@ -189,6 +189,25 @@ function populateCompanyFilter() {
     });
 }
 
+function initializeCompanySearch() {
+    const searchInput = document.getElementById('company-search');
+    const companiesList = document.getElementById('companies-list');
+    
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const companyTags = companiesList.querySelectorAll('.company-tag:not(.all-companies)');
+        
+        companyTags.forEach(tag => {
+            const companyName = tag.getAttribute('data-company').toLowerCase();
+            if (searchTerm === '') {
+                tag.style.display = '';
+            } else {
+                tag.style.display = companyName.includes(searchTerm) ? '' : 'none';
+            }
+        });
+    });
+}
+
 function initializeDifficultyFilter() {
     const difficultiesList = document.getElementById('difficulties-list');
     
@@ -454,6 +473,7 @@ async function filterProblems() {
 document.addEventListener('DOMContentLoaded', () => {
     initializeDifficultyFilter();
     initializeSolvedFilter();
+    initializeCompanySearch(); // Add this line
     filterProblems();
 
     window.addEventListener('resize', debounce(() => {

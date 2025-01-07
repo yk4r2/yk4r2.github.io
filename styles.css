@@ -371,6 +371,25 @@ select {
     border-radius: 2px;
 }
 
+.company-search {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.company-search-input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    outline: none;
+}
+
+.company-search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
 .company-tag {
     display: inline-flex;
     align-items: center;
@@ -586,5 +605,49 @@ select {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.filter-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.filter-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.difficulties-container,
+.solved-filter-container,
+.companies-container,
+.solved-counter {
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+.solved-counter {
+    width: 300px;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .filter-row {
+        flex-direction: column;
+    }
+    
+    .solved-counter {
+        width: 100%;
+    }
 }
 

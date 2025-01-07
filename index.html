@@ -41,50 +41,54 @@
         
         <div class="filters">
             <div class="filter-section">
-                <div class="difficulties-container">
-                    <div class="difficulties-scroll" id="difficulties-list">
-                        <button class="difficulty-tag active" data-difficulty="all">
-                            All Difficulties
-                        </button>
-                        <button class="difficulty-tag" data-difficulty="easy">
-                            Easy
-                        </button>
-                        <button class="difficulty-tag" data-difficulty="medium">
-                            Medium
-                        </button>
-                        <button class="difficulty-tag" data-difficulty="hard">
-                            Hard
-                        </button>
+                <div class="filter-row">
+                    <div class="filter-column">
+                        <div class="difficulties-container">
+                            <div class="difficulties-scroll" id="difficulties-list">
+                                <button class="difficulty-tag active" data-difficulty="all">
+                                    All Difficulties
+                                </button>
+                                <button class="difficulty-tag" data-difficulty="easy">
+                                    Easy
+                                </button>
+                                <button class="difficulty-tag" data-difficulty="medium">
+                                    Medium
+                                </button>
+                                <button class="difficulty-tag" data-difficulty="hard">
+                                    Hard
+                                </button>
+                            </div>
+                        </div>
+                        <div class="solved-filter-container">
+                            <div class="solved-filter-scroll" id="solved-filter">
+                                <button class="solved-filter-tag active" data-solved="unsolved">
+                                    Unsolved
+                                </button>
+                                <button class="solved-filter-tag" data-solved="solved">
+                                    Solved
+                                </button>
+                                <button class="solved-filter-tag" data-solved="all">
+                                    All Problems
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="solved-counter">
+                        <div class="solved-stats" id="solved-stats">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
                     </div>
                 </div>
-                
-                <div class="solved-filter-container">
-                    <div class="solved-filter-scroll" id="solved-filter">
-                        <button class="solved-filter-tag active" data-solved="unsolved">
-                            Unsolved
-                        </button>
-                        <button class="solved-filter-tag" data-solved="solved">
-                            Solved
-                        </button>
-                        <button class="solved-filter-tag" data-solved="all">
-                            All Problems
+                <div class="companies-container">
+                    <div class="company-search">
+                        <input type="text" id="company-search" placeholder="Search companies..." class="company-search-input">
+                    </div>
+                    <div class="companies-scroll" id="companies-list">
+                        <button class="company-tag all-companies active" data-company="all">
+                            All Companies
+                            <span class="remove-company">×</span>
                         </button>
                     </div>
-                </div>
-
-                <div class="solved-counter">
-                    <div class="solved-stats" id="solved-stats">
-                        <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <div class="companies-container">
-                <div class="companies-scroll" id="companies-list">
-                    <button class="company-tag all-companies active" data-company="all">
-                        All Companies
-                        <span class="remove-company">×</span>
-                    </button>
                 </div>
             </div>
         </div>
