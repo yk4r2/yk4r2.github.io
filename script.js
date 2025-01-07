@@ -30,6 +30,25 @@ function debounce(func, wait) {
 function toggleSolved(problemId, checkbox) {
     if (checkbox.checked) {
         window.solvedProblems.add(problemId);
+        // Trigger confetti effect
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.8 }, // Start from near the checkbox
+            colors: ['#4ade80', '#2563eb', '#fbbf24'], // Use our theme colors
+            disableForReducedMotion: true // Accessibility consideration
+        });
+        
+        // Fire another burst for more festivity
+        setTimeout(() => {
+            confetti({
+                particleCount: 50,
+                spread: 50,
+                origin: { y: 0.8 },
+                colors: ['#4ade80', '#2563eb', '#fbbf24'],
+                disableForReducedMotion: true
+            });
+        }, 150);
     } else {
         window.solvedProblems.delete(problemId);
     }
