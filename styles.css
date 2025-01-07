@@ -517,25 +517,16 @@ select {
     border-radius: 4px;
     margin: 0;
     width: 300px;
-    height: 38px; /* Add fixed height */
-    display: flex;
-    align-items: center; /* Center content vertically */
 }
 
 .solved-stats {
     display: flex;
     gap: 1rem;
     align-items: center;
-    height: 28px; /* Add fixed height to match other containers */
-    padding: 0 0.25rem; /* Add minimal padding */
 }
 
 .stat-item {
     font-size: 0.875rem;
-    line-height: 1; /* Add this to reduce height */
-    padding: 0.15rem 0; /* Add this for minimal vertical spacing */
-    display: flex;
-    align-items: center; /* Add this to center content vertically */
 }
 
 .stat-item:not(:last-child)::after {
