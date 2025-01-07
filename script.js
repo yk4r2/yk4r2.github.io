@@ -190,9 +190,26 @@ function populateCompanyFilter() {
 }
 
 function initializeCompanySearch() {
+    const searchToggle = document.getElementById('search-toggle');
+    const searchContainer = document.getElementById('company-search-container');
     const searchInput = document.getElementById('company-search');
     const companiesList = document.getElementById('companies-list');
     
+    // Toggle search visibility
+    searchToggle.addEventListener('click', () => {
+        searchContainer.classList.toggle('visible');
+        if (searchContainer.classList.contains('visible')) {
+            searchInput.focus();
+        } else {
+            searchInput.value = '';
+            // Reset company visibility
+            companiesList.querySelectorAll('.company-tag').forEach(tag => {
+                tag.style.display = '';
+            });
+        }
+    });
+
+    // Handle search functionality
     searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
         const companyTags = companiesList.querySelectorAll('.company-tag:not(.all-companies)');

@@ -42,7 +42,7 @@
         <div class="filters">
             <div class="filter-section">
                 <div class="filter-row">
-                    <div class="filter-column">
+                    <div class="filter-controls">
                         <div class="difficulties-container">
                             <div class="difficulties-scroll" id="difficulties-list">
                                 <button class="difficulty-tag active" data-difficulty="all">
@@ -72,19 +72,27 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="solved-counter">
-                        <div class="solved-stats" id="solved-stats">
-                            <!-- Will be populated by JavaScript -->
+                        <div class="solved-counter">
+                            <div class="solved-stats" id="solved-stats">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="companies-container">
-                    <div class="company-search">
-                        <input type="text" id="company-search" placeholder="Search companies..." class="company-search-input">
+                    <div class="company-search-wrapper">
+                        <button class="search-toggle" id="search-toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                        <div class="company-search" id="company-search-container">
+                            <input type="text" id="company-search" placeholder="Search companies..." class="company-search-input">
+                        </div>
                     </div>
                     <div class="companies-scroll" id="companies-list">
-                        <button class="company-tag all-companies active" data-company="all">
+                       <button class="company-tag all-companies active" data-company="all">
                             All Companies
                             <span class="remove-company">×</span>
                         </button>
