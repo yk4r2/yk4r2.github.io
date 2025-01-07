@@ -511,15 +511,12 @@ select {
 .difficulty.hard { color: var(--hard); }
 
 .solved-counter {
-    background: var(--card);
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    overflow-x: auto;
+    background: transparent; /* Remove different background */
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin: 0;
+    width: 300px;
 }
 
 .solved-stats {
@@ -529,9 +526,6 @@ select {
 }
 
 .stat-item {
-    display: flex;
-    align-items: center;
-    color: var(--text);
     font-size: 0.875rem;
 }
 
@@ -540,6 +534,9 @@ select {
     margin-left: 1rem;
     color: var(--border);
 }
+.stat-item:has(.easy) { color: var(--easy); }
+.stat-item:has(.medium) { color: var(--medium); }
+.stat-item:has(.hard) { color: var(--hard); }
 
 .stat-item {
     &:contains("Easy") { color: var(--easy); }
@@ -648,18 +645,21 @@ select {
 .company-search-wrapper {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.5rem;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
     border-bottom: 1px solid var(--border);
+    height: 40px; /* Reduced height */
 }
 
 .search-toggle {
     background: none;
     border: none;
-    padding: 0.5rem;
+    padding: 0.25rem;
     cursor: pointer;
     color: var(--text);
     transition: color 0.2s;
+    height: 28px;
+    width: 28px;
 }
 
 .search-toggle:hover {
@@ -668,7 +668,7 @@ select {
 
 .company-search {
     display: none;
-    width: 50%;
+    width: 200px;
 }
 
 .company-search.visible {
