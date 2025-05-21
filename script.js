@@ -13,6 +13,7 @@ window.questions = [];
 window.currentPage = 1;
 window.companies = new Set();
 window.solvedProblems = new Set(JSON.parse(localStorage.getItem('solvedProblems') || '[]'));
+let activeTimers = {};
 
 
 function debounce(func, wait) {
@@ -28,20 +29,55 @@ function debounce(func, wait) {
 }
 
 function toggleSolved(problemId, checkbox) {
+    const cardElement = checkbox.closest('.problem-card');
+    if (!cardElement) return;
+
+    const timerDisplayEl = cardElement.querySelector('.problem-timer-display');
+    const solveTimeEl = cardElement.querySelector('.problem-solve-time');
+    const startBtn = cardElement.querySelector('.start-timer-btn');
+    const stopBtn = cardElement.querySelector('.stop-timer-btn');
+    const resetBtn = cardElement.querySelector('.reset-timer-btn');
+
     if (checkbox.checked) {
         window.solvedProblems.add(problemId);
 
-        // Timer logic: Start
-        const currentTime = Date.now();
+        // Clear Active Timer
+        if (activeTimers[problemId]) {
+            clearInterval(activeTimers[problemId]);
+            delete activeTimers[problemId];
+        }
+
+        // Calculate and Store Solve Time
         const startTimeKey = 'startTime_' + problemId;
         const startTime = localStorage.getItem(startTimeKey);
 
         if (startTime) {
-            const solveTime = currentTime - parseInt(startTime, 10);
+            const solveTime = Date.now() - parseInt(startTime, 10);
             localStorage.setItem('solveTime_' + problemId, solveTime.toString());
-            localStorage.removeItem(startTimeKey); 
+            if (solveTimeEl) solveTimeEl.textContent = `Solved in: ${formatTime(solveTime)}`;
+            if (timerDisplayEl) timerDisplayEl.style.display = 'none';
+            localStorage.removeItem(startTimeKey); // Remove start time as this session is complete
+        } else {
+            // No start time, so no solve time to record. Clear display.
+            if (solveTimeEl) solveTimeEl.textContent = '';
+            // Timer display might already be visible or hidden depending on prior state,
+            // but if solved without start, ensure it's hidden if solveTime isn't shown.
+            // Or, ensure timer display is visible with 0s if no solve time.
+            // For consistency with createProblemCard, if solvedTime is set, timerDisplay is hidden.
+            // If no solveTime, we should consider what to display.
+            // For now, if no startTime, we show no "Solved in" and timer display can be visible (or hidden by default logic in createProblemCard if that's desired)
+            // Let's ensure timer display is hidden if we are marking as solved.
+            if (timerDisplayEl) timerDisplayEl.style.display = 'none';
+            if (solveTimeEl && !solveTimeEl.textContent) { // If no "Solved in" text, show placeholder or specific message
+                 solveTimeEl.textContent = 'Solved (no time recorded)'; // Placeholder
+            }
         }
-        // Timer logic: End
+
+        // Update Button States
+        if (startBtn) startBtn.disabled = true;
+        if (stopBtn) stopBtn.disabled = true;
+        if (resetBtn) resetBtn.disabled = true;
+
 
         // Trigger confetti effect
         confetti({
@@ -52,7 +88,6 @@ function toggleSolved(problemId, checkbox) {
             disableForReducedMotion: true // Accessibility consideration
         });
         
-        // Fire another burst for more festivity
         setTimeout(() => {
             confetti({
                 particleCount: 50,
@@ -62,14 +97,33 @@ function toggleSolved(problemId, checkbox) {
                 disableForReducedMotion: true
             });
         }, 150);
-    } else {
+
+    } else { // Marking as Unsolved
         window.solvedProblems.delete(problemId);
 
-        // Timer logic: Start - When un-solving, remove stored times
+        // Clear Active Timer
+        if (activeTimers[problemId]) {
+            clearInterval(activeTimers[problemId]);
+            delete activeTimers[problemId];
+        }
+
+        // Remove Timer Data
         localStorage.removeItem('solveTime_' + problemId);
-        localStorage.removeItem('startTime_' + problemId); // Also remove start time if it exists
-        // Timer logic: End
+        localStorage.removeItem('startTime_' + problemId);
+
+        // Update UI on Card
+        if (solveTimeEl) solveTimeEl.textContent = '';
+        if (timerDisplayEl) {
+            timerDisplayEl.textContent = 'Timer: 0s';
+            timerDisplayEl.style.display = 'block'; // Or 'flex' if that's its default
+        }
+
+        // Update Button States
+        if (startBtn) startBtn.disabled = false;
+        if (stopBtn) stopBtn.disabled = true;
+        if (resetBtn) resetBtn.disabled = false; // Reset should be enabled to allow clearing any implicit start time
     }
+
     localStorage.setItem('solvedProblems', JSON.stringify([...window.solvedProblems]));
     updateSolvedStats();
 }
@@ -413,9 +467,59 @@ function createProblemCard(problem) {
                 Mark as solved
             </label>
         </div>
+
+        <div class="problem-timer-container">
+            <div class="problem-timer-display">Timer: 0s</div>
+            <div class="problem-solve-time"></div>
+            <div class="timer-controls">
+                <button class="timer-btn start-timer-btn" data-problem-id="${problem.url}">Start</button>
+                <button class="timer-btn stop-timer-btn" data-problem-id="${problem.url}" disabled>Stop</button>
+                <button class="timer-btn reset-timer-btn" data-problem-id="${problem.url}">Reset</button>
+            </div>
+        </div>
     `;
+
+    const solveTime = localStorage.getItem('solveTime_' + problem.url);
+    if (solveTime) {
+        const solveTimeMs = parseInt(solveTime, 10);
+        if (!isNaN(solveTimeMs)) {
+            const formattedTime = formatTime(solveTimeMs);
+            const problemSolveTimeEl = card.querySelector('.problem-solve-time');
+            if (problemSolveTimeEl) {
+                problemSolveTimeEl.textContent = `Solved in: ${formattedTime}`;
+            }
+
+            const timerDisplayEl = card.querySelector('.problem-timer-display');
+            if (timerDisplayEl) {
+                timerDisplayEl.style.display = 'none';
+            }
+
+            const startBtn = card.querySelector('.start-timer-btn');
+            const stopBtn = card.querySelector('.stop-timer-btn');
+            const resetBtn = card.querySelector('.reset-timer-btn');
+
+            if (startBtn) startBtn.disabled = true;
+            if (stopBtn) stopBtn.disabled = true;
+            if (resetBtn) resetBtn.disabled = true;
+        }
+    }
     
     return card;
+}
+
+function formatTime(milliseconds) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+        return `${hours}h ${minutes}m ${seconds}s`;
+    } else if (minutes > 0) {
+        return `${minutes}m ${seconds}s`;
+    } else {
+        return `${seconds}s`;
+    }
 }
 
 function createPagination(currentPage, totalPages) {
@@ -555,6 +659,16 @@ async function filterProblems() {
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentItems = filteredQuestions.slice(startIndex, endIndex);
 
+    // Manage active timers: Clear timers for problems no longer visible
+    const visibleProblemIds = new Set(currentItems.map(p => p.url));
+    Object.keys(activeTimers).forEach(problemId => {
+        if (!visibleProblemIds.has(problemId)) {
+            clearInterval(activeTimers[problemId]);
+            delete activeTimers[problemId];
+            // console.log(`Cleared timer for problemId ${problemId} as it's no longer visible.`); // Optional debug
+        }
+    });
+
     problemsContainer.innerHTML = '';
     currentItems.forEach(problem => {
         problemsContainer.appendChild(createProblemCard(problem));
@@ -584,5 +698,113 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', debounce(() => {
         filterProblems();
     }, 250));
+
+    const problemsContainer = document.getElementById('problems');
+    if (problemsContainer) {
+        problemsContainer.addEventListener('click', (event) => {
+            const target = event.target;
+            const problemCard = target.closest('.problem-card');
+            if (!problemCard) return;
+
+            const problemId = target.dataset.problemId;
+            if (!problemId) return;
+
+            const timerDisplayEl = problemCard.querySelector('.problem-timer-display');
+            const solveTimeEl = problemCard.querySelector('.problem-solve-time');
+            const startBtn = problemCard.querySelector('.start-timer-btn');
+            const stopBtn = problemCard.querySelector('.stop-timer-btn');
+            const resetBtn = problemCard.querySelector('.reset-timer-btn');
+
+            if (target.classList.contains('start-timer-btn')) {
+                if (activeTimers[problemId]) {
+                    clearInterval(activeTimers[problemId]);
+                }
+                localStorage.setItem('startTime_' + problemId, Date.now().toString());
+                
+                if (timerDisplayEl) timerDisplayEl.style.display = 'block';
+                if (solveTimeEl) solveTimeEl.textContent = '';
+
+
+                const intervalId = setInterval(() => {
+                    const startTime = localStorage.getItem('startTime_' + problemId);
+                    if (startTime && timerDisplayEl) {
+                        const elapsedTime = Date.now() - parseInt(startTime, 10);
+                        timerDisplayEl.textContent = `Timer: ${formatTime(elapsedTime)}`;
+                    } else if (!startTime && timerDisplayEl) {
+                        // If startTime was removed (e.g. by reset), clear interval and reset display
+                        clearInterval(activeTimers[problemId]);
+                        delete activeTimers[problemId];
+                        timerDisplayEl.textContent = 'Timer: 0s';
+                        if(startBtn) startBtn.disabled = false;
+                        if(stopBtn) stopBtn.disabled = true;
+                    }
+                }, 1000);
+                activeTimers[problemId] = intervalId;
+
+                if (startBtn) startBtn.disabled = true;
+                if (stopBtn) stopBtn.disabled = false;
+                if (resetBtn) resetBtn.disabled = false; // Reset should be enabled when timer starts
+
+            } else if (target.classList.contains('stop-timer-btn')) {
+                if (activeTimers[problemId]) {
+                    clearInterval(activeTimers[problemId]);
+                    delete activeTimers[problemId];
+                }
+                // When stopping, we can calculate the current duration and store it as solveTime
+                // This is optional, as checking the box will also do this.
+                // For now, let's keep it simple and not store solveTime here.
+                // The timer display will just pause.
+
+                if (startBtn) startBtn.disabled = false;
+                if (stopBtn) stopBtn.disabled = true;
+                // Reset button remains enabled
+
+            } else if (target.classList.contains('reset-timer-btn')) {
+                if (activeTimers[problemId]) {
+                    clearInterval(activeTimers[problemId]);
+                    delete activeTimers[problemId];
+                }
+                localStorage.removeItem('startTime_' + problemId);
+                localStorage.removeItem('solveTime_' + problemId);
+
+                if (timerDisplayEl) {
+                    timerDisplayEl.textContent = 'Timer: 0s';
+                    timerDisplayEl.style.display = 'block';
+                }
+                if (solveTimeEl) solveTimeEl.textContent = '';
+
+                if (startBtn) startBtn.disabled = false;
+                if (stopBtn) stopBtn.disabled = true;
+                // Reset button typically remains enabled, or could be disabled if timer is 0s and no solveTime
+
+                // Uncheck "Mark as solved" if it was checked
+                const solvedCheckbox = problemCard.querySelector('.solved-checkbox input[type="checkbox"]');
+                if (solvedCheckbox && solvedCheckbox.checked) {
+                    solvedCheckbox.checked = false;
+                    // Manually trigger the logic from toggleSolved for unchecking
+                    window.solvedProblems.delete(problemId);
+                    localStorage.setItem('solvedProblems', JSON.stringify([...window.solvedProblems]));
+                    // Note: toggleSolved also removes 'solveTime_' and 'startTime_', which we already did.
+                    updateSolvedStats();
+                }
+                 // After reset, ensure the "Start" button is enabled and "Stop" is disabled.
+                if(startBtn) startBtn.disabled = false;
+                if(stopBtn) stopBtn.disabled = true;
+                if(resetBtn) resetBtn.disabled = false; // Or true if you prefer to disable reset when timer is at 0s
+
+                // Refresh the card to reflect the cleared solveTime
+                // This is a bit heavy, but ensures consistency if createProblemCard has other logic
+                // A lighter approach would be to just manipulate the specific elements
+                const problemData = window.questions.find(q => q.url === problemId);
+                if (problemData) {
+                    const newCard = createProblemCard(problemData);
+                    problemCard.parentNode.replaceChild(newCard, problemCard);
+                     if (window.MathJax && window.MathJax.typesetPromise) {
+                        window.MathJax.typesetPromise([newCard]).catch(console.error);
+                    }
+                }
+            }
+        });
+    }
 });
 

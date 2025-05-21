@@ -624,6 +624,72 @@ select {
     }
 }
 
+/* Timer Styles */
+.problem-timer-container {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: #f0f0f0; /* Light background to group timer elements */
+    border-radius: 4px;
+    font-family: sans-serif;
+}
+
+.problem-timer-display {
+    font-size: 0.9em;
+    color: #333;
+    padding: 5px 0;
+}
+
+.problem-solve-time {
+    font-size: 0.9em;
+    color: #28a745; /* Green to indicate success */
+    font-weight: bold;
+    padding: 5px 0;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 8px; /* Spacing between buttons */
+}
+
+.timer-btn {
+    padding: 6px 12px;
+    font-size: 0.85em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.timer-btn:hover {
+    background-color: #f8f8f8;
+}
+
+.timer-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    background-color: #e9ecef;
+}
+
+/* Specific button styling (optional, for color-coding) */
+.start-timer-btn {
+    /* color: #1a73e8; */
+    /* border-color: #1a73e8; */
+}
+/* Example: .start-timer-btn:not(:disabled) { color: #28a745; border-color: #28a745; } */
+
+.stop-timer-btn {
+    /* color: #d93025; */
+    /* border-color: #d93025; */
+}
+ /* Example: .stop-timer-btn:not(:disabled) { color: #dc3545; border-color: #dc3545; } */
+
+.reset-timer-btn {
+    /* color: #5f6368; */
+    /* border-color: #5f6368; */
+}
+/* Example: .reset-timer-btn:not(:disabled) { color: #007bff; border-color: #007bff; } */
+
 .filter-controls {
     display: flex;
     gap: 1rem;
