@@ -297,6 +297,7 @@ function createProblemCard(problem) {
     
     card.innerHTML = `
         <div class="problem-header">
+            <h2>${problem.title}</h2>
             <div class="problem-header-top">
                 <span class="topic">${problem.Topic}</span>
                 <div class="problem-header-right">
