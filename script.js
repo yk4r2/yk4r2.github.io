@@ -30,6 +30,19 @@ function debounce(func, wait) {
 function toggleSolved(problemId, checkbox) {
     if (checkbox.checked) {
         window.solvedProblems.add(problemId);
+
+        // Timer logic: Start
+        const currentTime = Date.now();
+        const startTimeKey = 'startTime_' + problemId;
+        const startTime = localStorage.getItem(startTimeKey);
+
+        if (startTime) {
+            const solveTime = currentTime - parseInt(startTime, 10);
+            localStorage.setItem('solveTime_' + problemId, solveTime.toString());
+            localStorage.removeItem(startTimeKey); 
+        }
+        // Timer logic: End
+
         // Trigger confetti effect
         confetti({
             particleCount: 100,
@@ -51,6 +64,11 @@ function toggleSolved(problemId, checkbox) {
         }, 150);
     } else {
         window.solvedProblems.delete(problemId);
+
+        // Timer logic: Start - When un-solving, remove stored times
+        localStorage.removeItem('solveTime_' + problemId);
+        localStorage.removeItem('startTime_' + problemId); // Also remove start time if it exists
+        // Timer logic: End
     }
     localStorage.setItem('solvedProblems', JSON.stringify([...window.solvedProblems]));
     updateSolvedStats();
@@ -85,6 +103,44 @@ function updateSolvedStats() {
             </div>
         `)
         .join('');
+
+    // Calculate and display average solve time
+    let totalSolveTime = 0;
+    let solvedProblemsCount = 0;
+
+    window.questions.forEach(problem => {
+        const solveTime = localStorage.getItem('solveTime_' + problem.url);
+        if (solveTime) {
+            const solveTimeMs = parseInt(solveTime, 10);
+            if (!isNaN(solveTimeMs)) {
+                totalSolveTime += solveTimeMs;
+                solvedProblemsCount++;
+            }
+        }
+    });
+
+    const averageTimeDisplay = document.getElementById('average-solve-time');
+    if (averageTimeDisplay) {
+        if (solvedProblemsCount > 0) {
+            const averageTime = totalSolveTime / solvedProblemsCount;
+
+            const seconds = Math.floor((averageTime / 1000) % 60);
+            const minutes = Math.floor((averageTime / (1000 * 60)) % 60);
+            const hours = Math.floor((averageTime / (1000 * 60 * 60)) % 24);
+
+            let timeString = "Avg. Time: ";
+            if (hours > 0) {
+                timeString += `${hours}h ${minutes}m ${seconds}s`;
+            } else if (minutes > 0) {
+                timeString += `${minutes}m ${seconds}s`;
+            } else {
+                timeString += `${seconds}s`;
+            }
+            averageTimeDisplay.innerHTML = `<div class="stat-item">${timeString}</div>`;
+        } else {
+            averageTimeDisplay.innerHTML = `<div class="stat-item">Avg. Time: N/A</div>`;
+        }
+    }
 }
 
 function initializeSolvedFilter() {
@@ -276,12 +332,24 @@ function initializeDifficultyFilter() {
     });
 }
 
-function toggleSpoiler(element) {
+function toggleSpoiler(element, problemId) { // Modified signature
     const content = element.nextElementSibling;
     content.classList.toggle('visible');
     element.textContent = content.classList.contains('visible') 
         ? `Hide ${element.dataset.type}` 
         : `Show ${element.dataset.type}`;
+
+    // Timer logic: Start timer when first spoiler is revealed
+    if (content.classList.contains('visible') && problemId) {
+        const startTimeKey = 'startTime_' + problemId;
+        if (!localStorage.getItem(startTimeKey)) {
+            // Only set startTime if it's not already set for this problem
+            const isSolved = window.solvedProblems.has(problemId);
+            if (!isSolved) { // Only set startTime if the problem isn't already solved
+                localStorage.setItem(startTimeKey, Date.now().toString());
+            }
+        }
+    }
 }
 
 function createProblemCard(problem) {
@@ -323,17 +391,17 @@ function createProblemCard(problem) {
         </div>
         
         <div class="spoiler">
-            <button class="spoiler-button" data-type="Hint" onclick="toggleSpoiler(this)">Show Hint</button>
+            <button class="spoiler-button" data-type="Hint" onclick="toggleSpoiler(this, '${problem.url}')">Show Hint</button>
             <div class="spoiler-content">${problem.hint}</div>
         </div>
         
         <div class="spoiler">
-            <button class="spoiler-button" data-type="Solution" onclick="toggleSpoiler(this)">Show Solution</button>
+            <button class="spoiler-button" data-type="Solution" onclick="toggleSpoiler(this, '${problem.url}')">Show Solution</button>
             <div class="spoiler-content">${problem.solution}</div>
         </div>
         
         <div class="spoiler">
-            <button class="spoiler-button" data-type="Answer" onclick="toggleSpoiler(this)">Show Answer</button>
+            <button class="spoiler-button" data-type="Answer" onclick="toggleSpoiler(this, '${problem.url}')">Show Answer</button>
             <div class="spoiler-content">${problem.answers.join(', ')}</div>
         </div>
         
