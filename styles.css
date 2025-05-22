@@ -624,71 +624,106 @@ select {
     }
 }
 
-/* Timer Styles */
-.problem-timer-container {
-    margin-top: 10px;
-    padding: 8px;
-    background-color: #f0f0f0; /* Light background to group timer elements */
-    border-radius: 4px;
-    font-family: sans-serif;
+/* Task Visibility Style */
+.task-hidden {
+    display: none;
 }
 
-.problem-timer-display {
-    font-size: 0.9em;
-    color: #333;
-    padding: 5px 0;
+/* Timer Icon Style */
+.timer-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+    stroke: currentColor; /* Inherit color from parent, can be overridden */
+    width: 1em; /* Relative to font size */
+    height: 1em; /* Relative to font size */
+}
+
+/* Updated Timer Styles - aiming for consistency with .solved-filter-tag */
+.problem-timer-container {
+    margin-top: 12px;
+    padding: 10px;
+    background-color: var(--card); /* Match overall card background for subtle grouping */
+    border: 1px solid var(--border); /* Consistent border */
+    border-radius: 6px; /* Consistent rounded corners, slightly less than pill shape for container */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.problem-timer-display,
+.problem-solve-time {
+    font-size: 0.875rem; /* Match filter tag font size */
+    color: var(--text); /* Match filter tag text color */
+    display: flex;
+    align-items: center;
 }
 
 .problem-solve-time {
-    font-size: 0.9em;
-    color: #28a745; /* Green to indicate success */
-    font-weight: bold;
-    padding: 5px 0;
+    color: var(--easy); /* Use --easy green for solved time for positive feedback */
+    font-weight: bold; /* Make solved time stand out a bit */
+}
+
+.problem-solve-time .timer-icon { /* If icon used here too */
+    stroke: var(--easy); /* Match text color */
 }
 
 .timer-controls {
     display: flex;
-    gap: 8px; /* Spacing between buttons */
+    gap: 0.5rem; /* Match filter tag gap */
 }
 
 .timer-btn {
-    padding: 6px 12px;
-    font-size: 0.85em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    background: var(--background); /* Match .solved-filter-tag background */
+    border: 1px solid var(--border); /* Match .solved-filter-tag border */
+    color: var(--text); /* Match .solved-filter-tag color */
+    border-radius: 9999px; /* Match .solved-filter-tag pill shape */
+    padding: 0.5rem 1rem; /* Match .solved-filter-tag padding */
+    font-size: 0.875rem; /* Match .solved-filter-tag font-size */
+    font-weight: normal; /* Default from .solved-filter-tag */
     cursor: pointer;
-    background-color: #fff;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
+    transition: all 0.2s; /* Match .solved-filter-tag transition */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
 }
 
-.timer-btn:hover {
-    background-color: #f8f8f8;
+.timer-btn:hover:not(:disabled) {
+    background: var(--primary); /* Match .solved-filter-tag:hover */
+    color: white; /* Match .solved-filter-tag:hover */
+    border-color: var(--primary); /* Match .solved-filter-tag:hover */
+}
+
+.timer-btn:hover:not(:disabled) .timer-icon {
+    stroke: white; /* Ensure icon color matches text on hover */
 }
 
 .timer-btn:disabled {
     cursor: not-allowed;
-    opacity: 0.6;
-    background-color: #e9ecef;
+    opacity: 0.65;
+    background: var(--background); /* Keep background light but distinct */
+    border-color: var(--border);
+    color: #94a3b8; /* Lighter text color for disabled state */
 }
 
-/* Specific button styling (optional, for color-coding) */
-.start-timer-btn {
-    /* color: #1a73e8; */
-    /* border-color: #1a73e8; */
+.timer-btn:disabled .timer-icon {
+    stroke: #94a3b8; /* Match disabled text color */
 }
-/* Example: .start-timer-btn:not(:disabled) { color: #28a745; border-color: #28a745; } */
 
-.stop-timer-btn {
-    /* color: #d93025; */
-    /* border-color: #d93025; */
+/* Optional: Specific styling for an "active" timer state, e.g., for Pause/Resume button */
+/* This would require JS to add a class like 'timer-active' to the button */
+.timer-btn.timer-active {
+   background: var(--primary);
+   color: white;
+   border-color: var(--primary);
 }
- /* Example: .stop-timer-btn:not(:disabled) { color: #dc3545; border-color: #dc3545; } */
 
-.reset-timer-btn {
-    /* color: #5f6368; */
-    /* border-color: #5f6368; */
+.timer-btn.timer-active .timer-icon {
+   stroke: white;
 }
-/* Example: .reset-timer-btn:not(:disabled) { color: #007bff; border-color: #007bff; } */
+
+
+/* The old .stop-timer-btn specific styles are removed as .timer-btn now covers all buttons */
 
 .filter-controls {
     display: flex;

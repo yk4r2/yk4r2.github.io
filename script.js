@@ -15,6 +15,8 @@ window.companies = new Set();
 window.solvedProblems = new Set(JSON.parse(localStorage.getItem('solvedProblems') || '[]'));
 let activeTimers = {};
 
+const timerIconSVG = `<svg class="timer-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+
 
 function debounce(func, wait) {
     let timeout;
@@ -41,38 +43,40 @@ function toggleSolved(problemId, checkbox) {
     if (checkbox.checked) {
         window.solvedProblems.add(problemId);
 
-        // Clear Active Timer
+        // Clear Active Timer if it exists
         if (activeTimers[problemId]) {
             clearInterval(activeTimers[problemId]);
             delete activeTimers[problemId];
         }
 
         // Calculate and Store Solve Time
+        const pausedTimeKey = 'pausedTime_' + problemId;
+        const pausedTime = localStorage.getItem(pausedTimeKey);
         const startTimeKey = 'startTime_' + problemId;
         const startTime = localStorage.getItem(startTimeKey);
+        let solveTimeMs = 0;
 
-        if (startTime) {
-            const solveTime = Date.now() - parseInt(startTime, 10);
-            localStorage.setItem('solveTime_' + problemId, solveTime.toString());
-            if (solveTimeEl) solveTimeEl.textContent = `Solved in: ${formatTime(solveTime)}`;
-            if (timerDisplayEl) timerDisplayEl.style.display = 'none';
-            localStorage.removeItem(startTimeKey); // Remove start time as this session is complete
-        } else {
-            // No start time, so no solve time to record. Clear display.
-            if (solveTimeEl) solveTimeEl.textContent = '';
-            // Timer display might already be visible or hidden depending on prior state,
-            // but if solved without start, ensure it's hidden if solveTime isn't shown.
-            // Or, ensure timer display is visible with 0s if no solve time.
-            // For consistency with createProblemCard, if solvedTime is set, timerDisplay is hidden.
-            // If no solveTime, we should consider what to display.
-            // For now, if no startTime, we show no "Solved in" and timer display can be visible (or hidden by default logic in createProblemCard if that's desired)
-            // Let's ensure timer display is hidden if we are marking as solved.
-            if (timerDisplayEl) timerDisplayEl.style.display = 'none';
-            if (solveTimeEl && !solveTimeEl.textContent) { // If no "Solved in" text, show placeholder or specific message
-                 solveTimeEl.textContent = 'Solved (no time recorded)'; // Placeholder
-            }
+        if (pausedTime) {
+            solveTimeMs = parseInt(pausedTime, 10);
+            localStorage.removeItem(pausedTimeKey); // Clear paused time
+            localStorage.removeItem(startTimeKey); // Also clear any original start time, as pausedTime is the final elapsed time
+        } else if (startTime) {
+            solveTimeMs = Date.now() - parseInt(startTime, 10);
+            localStorage.removeItem(startTimeKey); // Clear start time
         }
 
+        if (solveTimeMs > 0) {
+            localStorage.setItem('solveTime_' + problemId, solveTimeMs.toString());
+            if (solveTimeEl) solveTimeEl.textContent = `Solved in: ${formatTime(solveTimeMs)}`;
+            if (timerDisplayEl) timerDisplayEl.style.display = 'none';
+        } else {
+            // No timer activity or already reset, or time is zero
+            if (solveTimeEl) solveTimeEl.textContent = 'Solved (no time recorded)';
+            if (timerDisplayEl) timerDisplayEl.style.display = 'none'; // Hide timer if solved
+            // Ensure solveTime_ is removed if it was 0 or not set, to prevent issues with avg calculation
+            localStorage.removeItem('solveTime_' + problemId); 
+        }
+        
         // Update Button States
         if (startBtn) startBtn.disabled = true;
         if (stopBtn) stopBtn.disabled = true;
@@ -403,6 +407,15 @@ function toggleSpoiler(element, problemId) { // Modified signature
                 localStorage.setItem(startTimeKey, Date.now().toString());
             }
         }
+        // Reveal task if spoiler is shown
+        const cardElement = element.closest('.problem-card');
+        if (cardElement) {
+            const taskElement = cardElement.querySelector('.problem-task');
+            if (taskElement && taskElement.classList.contains('task-hidden')) {
+                taskElement.classList.remove('task-hidden');
+                localStorage.setItem('taskRevealed_' + problemId, 'true');
+            }
+        }
     }
 }
 
@@ -416,6 +429,8 @@ function createProblemCard(problem) {
     const companies = typeof problem.Companies === 'string' ? 
         JSON.parse(problem.Companies.replace(/'/g, '"')) : 
         problem.Companies;
+
+    const isTaskRevealed = localStorage.getItem('taskRevealed_' + problem.url) === 'true';
     
     card.innerHTML = `
         <div class="problem-header">
@@ -429,7 +444,7 @@ function createProblemCard(problem) {
             </div>
         </div>
         
-        <div class="problem-task">${problem.task}</div>
+        <div class="problem-task ${isTaskRevealed ? '' : 'task-hidden'}">${problem.task}</div>
         
         <div class="tags-section">
             ${Array.isArray(tags) && tags.length > 0 ? `
@@ -469,38 +484,83 @@ function createProblemCard(problem) {
         </div>
 
         <div class="problem-timer-container">
-            <div class="problem-timer-display">Timer: 0s</div>
+            <div class="problem-timer-display">${timerIconSVG} Timer: 0s</div>
             <div class="problem-solve-time"></div>
             <div class="timer-controls">
                 <button class="timer-btn start-timer-btn" data-problem-id="${problem.url}">Start</button>
-                <button class="timer-btn stop-timer-btn" data-problem-id="${problem.url}" disabled>Stop</button>
+                <button class="timer-btn pause-resume-btn" data-problem-id="${problem.url}" disabled>Pause</button>
                 <button class="timer-btn reset-timer-btn" data-problem-id="${problem.url}">Reset</button>
             </div>
         </div>
     `;
 
-    const solveTime = localStorage.getItem('solveTime_' + problem.url);
+    // Post-innerHTML setup for dynamic content and states
+    const timerDisplayEl = card.querySelector('.problem-timer-display');
+    const problemSolveTimeEl = card.querySelector('.problem-solve-time');
+    const startBtn = card.querySelector('.start-timer-btn');
+    const pauseResumeBtn = card.querySelector('.pause-resume-btn');
+    const resetBtn = card.querySelector('.reset-timer-btn');
+    const taskElement = card.querySelector('.problem-task'); // Already used for task-hidden
+
+    const problemId = problem.url; // Use problem.url for clarity with keys
+    const solveTime = localStorage.getItem('solveTime_' + problemId);
+    const startTime = localStorage.getItem('startTime_' + problemId);
+    const pausedTime = localStorage.getItem('pausedTime_' + problemId);
+
+    // Scenario 1: Problem already solved
     if (solveTime) {
         const solveTimeMs = parseInt(solveTime, 10);
         if (!isNaN(solveTimeMs)) {
-            const formattedTime = formatTime(solveTimeMs);
-            const problemSolveTimeEl = card.querySelector('.problem-solve-time');
-            if (problemSolveTimeEl) {
-                problemSolveTimeEl.textContent = `Solved in: ${formattedTime}`;
-            }
-
-            const timerDisplayEl = card.querySelector('.problem-timer-display');
-            if (timerDisplayEl) {
-                timerDisplayEl.style.display = 'none';
-            }
-
-            const startBtn = card.querySelector('.start-timer-btn');
-            const stopBtn = card.querySelector('.stop-timer-btn');
-            const resetBtn = card.querySelector('.reset-timer-btn');
-
+            if (problemSolveTimeEl) problemSolveTimeEl.innerHTML = `${timerIconSVG} Solved in: ${formatTime(solveTimeMs)}`;
+            if (timerDisplayEl) timerDisplayEl.style.display = 'none';
             if (startBtn) startBtn.disabled = true;
-            if (stopBtn) stopBtn.disabled = true;
+            if (pauseResumeBtn) {
+                pauseResumeBtn.disabled = true;
+                pauseResumeBtn.textContent = 'Pause';
+            }
             if (resetBtn) resetBtn.disabled = true;
+            if (taskElement && taskElement.classList.contains('task-hidden')) { // Ensure task is visible if solved
+                taskElement.classList.remove('task-hidden');
+            }
+        }
+    } 
+    // Scenarios 2, 3, 4: Not solved yet
+    else {
+        if (timerDisplayEl) timerDisplayEl.style.display = 'flex'; // Ensure display is visible (flex due to icon)
+        if (problemSolveTimeEl) problemSolveTimeEl.innerHTML = ''; // Clear solve time
+
+        // Scenario 2: Timer is actively running
+        if (activeTimers[problemId] && startTime) {
+            // The live update is handled by setInterval, here we set initial state for re-render
+            const elapsedSinceStart = Date.now() - parseInt(startTime, 10);
+            if (timerDisplayEl) timerDisplayEl.innerHTML = `${timerIconSVG} ${formatTime(elapsedSinceStart)}`;
+            if (startBtn) startBtn.disabled = true;
+            if (pauseResumeBtn) {
+                pauseResumeBtn.textContent = 'Pause';
+                pauseResumeBtn.disabled = false;
+            }
+            if (resetBtn) resetBtn.disabled = false;
+        }
+        // Scenario 3: Timer is paused
+        else if (pausedTime && startTime) { // startTime check helps confirm it was a valid pause
+            const pausedTimeMs = parseInt(pausedTime, 10);
+            if (timerDisplayEl) timerDisplayEl.innerHTML = `${timerIconSVG} ${formatTime(pausedTimeMs)}`;
+            if (startBtn) startBtn.disabled = true;
+            if (pauseResumeBtn) {
+                pauseResumeBtn.textContent = 'Resume';
+                pauseResumeBtn.disabled = false;
+            }
+            if (resetBtn) resetBtn.disabled = false;
+        }
+        // Scenario 4: Timer has never run, or was reset (and not solved)
+        else {
+            if (timerDisplayEl) timerDisplayEl.innerHTML = `${timerIconSVG} Timer: 0s`;
+            if (startBtn) startBtn.disabled = false;
+            if (pauseResumeBtn) {
+                pauseResumeBtn.textContent = 'Pause';
+                pauseResumeBtn.disabled = true;
+            }
+            if (resetBtn) resetBtn.disabled = false; // Or true if preferred initial state until first interaction
         }
     }
     
@@ -712,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const timerDisplayEl = problemCard.querySelector('.problem-timer-display');
             const solveTimeEl = problemCard.querySelector('.problem-solve-time');
             const startBtn = problemCard.querySelector('.start-timer-btn');
-            const stopBtn = problemCard.querySelector('.stop-timer-btn');
+            const pauseResumeBtn = problemCard.querySelector('.pause-resume-btn');
             const resetBtn = problemCard.querySelector('.reset-timer-btn');
 
             if (target.classList.contains('start-timer-btn')) {
@@ -720,6 +780,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearInterval(activeTimers[problemId]);
                 }
                 localStorage.setItem('startTime_' + problemId, Date.now().toString());
+                
+                // Reveal task on start
+                const taskElement = problemCard.querySelector('.problem-task');
+                if (taskElement && taskElement.classList.contains('task-hidden')) {
+                    taskElement.classList.remove('task-hidden');
+                    localStorage.setItem('taskRevealed_' + problemId, 'true');
+                }
                 
                 if (timerDisplayEl) timerDisplayEl.style.display = 'block';
                 if (solveTimeEl) solveTimeEl.textContent = '';
@@ -736,28 +803,67 @@ document.addEventListener('DOMContentLoaded', () => {
                         delete activeTimers[problemId];
                         timerDisplayEl.textContent = 'Timer: 0s';
                         if(startBtn) startBtn.disabled = false;
-                        if(stopBtn) stopBtn.disabled = true;
+                        if(pauseResumeBtn) {
+                            pauseResumeBtn.disabled = true;
+                            pauseResumeBtn.textContent = 'Pause';
+                        }
                     }
                 }, 1000);
                 activeTimers[problemId] = intervalId;
 
                 if (startBtn) startBtn.disabled = true;
-                if (stopBtn) stopBtn.disabled = false;
-                if (resetBtn) resetBtn.disabled = false; // Reset should be enabled when timer starts
+                if (pauseResumeBtn) {
+                    pauseResumeBtn.disabled = false;
+                    pauseResumeBtn.textContent = 'Pause';
+                }
+                if (resetBtn) resetBtn.disabled = false;
 
-            } else if (target.classList.contains('stop-timer-btn')) {
-                if (activeTimers[problemId]) {
+            } else if (target.classList.contains('pause-resume-btn')) {
+                const isTimerRunning = activeTimers[problemId] !== undefined;
+                
+                if (isTimerRunning) { // PAUSE logic
                     clearInterval(activeTimers[problemId]);
                     delete activeTimers[problemId];
-                }
-                // When stopping, we can calculate the current duration and store it as solveTime
-                // This is optional, as checking the box will also do this.
-                // For now, let's keep it simple and not store solveTime here.
-                // The timer display will just pause.
+                    const currentStartTime = localStorage.getItem('startTime_' + problemId); // Renamed from startTime to avoid conflict
+                    if (currentStartTime) {
+                        const elapsedTime = Date.now() - parseInt(currentStartTime, 10);
+                        localStorage.setItem('pausedTime_' + problemId, elapsedTime.toString());
+                        if (timerDisplayEl) timerDisplayEl.innerHTML = `${timerIconSVG} ${formatTime(elapsedTime)}`; // Update display
+                    }
+                    if (pauseResumeBtn) pauseResumeBtn.textContent = 'Resume';
+                    if (startBtn) startBtn.disabled = true; 
+                
+                } else { // RESUME logic
+                    const currentPausedTime = localStorage.getItem('pausedTime_' + problemId); // Renamed to avoid conflict
+                    if (currentPausedTime) {
+                        const parsedPausedTime = parseInt(currentPausedTime, 10);
+                        const newStartTime = Date.now() - parsedPausedTime;
+                        localStorage.setItem('startTime_' + problemId, newStartTime.toString());
+                        localStorage.removeItem('pausedTime_' + problemId);
 
-                if (startBtn) startBtn.disabled = false;
-                if (stopBtn) stopBtn.disabled = true;
-                // Reset button remains enabled
+                        const intervalId = setInterval(() => {
+                            const latestStartTime = localStorage.getItem('startTime_' + problemId); // Renamed
+                            if (latestStartTime && timerDisplayEl) {
+                                const elapsedTime = Date.now() - parseInt(latestStartTime, 10);
+                                timerDisplayEl.innerHTML = `${timerIconSVG} ${formatTime(elapsedTime)}`;
+                            } else if (!latestStartTime && timerDisplayEl) { 
+                                clearInterval(activeTimers[problemId]);
+                                delete activeTimers[problemId];
+                                timerDisplayEl.innerHTML = `${timerIconSVG} Timer: 0s`;
+                                if(startBtn) startBtn.disabled = false;
+                                if(pauseResumeBtn) {
+                                    pauseResumeBtn.disabled = true;
+                                    pauseResumeBtn.textContent = 'Pause';
+                                }
+                            }
+                        }, 1000);
+                        activeTimers[problemId] = intervalId;
+                        if (pauseResumeBtn) pauseResumeBtn.textContent = 'Pause';
+                    }
+                }
+                 if (startBtn) startBtn.disabled = true; 
+                 if (resetBtn) resetBtn.disabled = false;
+
 
             } else if (target.classList.contains('reset-timer-btn')) {
                 if (activeTimers[problemId]) {
@@ -766,15 +872,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 localStorage.removeItem('startTime_' + problemId);
                 localStorage.removeItem('solveTime_' + problemId);
+                localStorage.removeItem('pausedTime_' + problemId); 
 
                 if (timerDisplayEl) {
-                    timerDisplayEl.textContent = 'Timer: 0s';
-                    timerDisplayEl.style.display = 'block';
+                    timerDisplayEl.innerHTML = `${timerIconSVG} Timer: 0s`;
+                    timerDisplayEl.style.display = 'flex'; // Ensure display is flex for icon
                 }
                 if (solveTimeEl) solveTimeEl.textContent = '';
 
                 if (startBtn) startBtn.disabled = false;
-                if (stopBtn) stopBtn.disabled = true;
+                if (pauseResumeBtn) {
+                    pauseResumeBtn.disabled = true;
+                    pauseResumeBtn.textContent = 'Pause';
+                }
                 // Reset button typically remains enabled, or could be disabled if timer is 0s and no solveTime
 
                 // Uncheck "Mark as solved" if it was checked
@@ -787,10 +897,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Note: toggleSolved also removes 'solveTime_' and 'startTime_', which we already did.
                     updateSolvedStats();
                 }
-                 // After reset, ensure the "Start" button is enabled and "Stop" is disabled.
+                 // After reset, ensure the "Start" button is enabled and "Pause/Resume" is disabled.
                 if(startBtn) startBtn.disabled = false;
-                if(stopBtn) stopBtn.disabled = true;
-                if(resetBtn) resetBtn.disabled = false; // Or true if you prefer to disable reset when timer is at 0s
+                if(pauseResumeBtn) {
+                     pauseResumeBtn.disabled = true;
+                     pauseResumeBtn.textContent = 'Pause';
+                }
+                if(resetBtn) resetBtn.disabled = false; 
 
                 // Refresh the card to reflect the cleared solveTime
                 // This is a bit heavy, but ensures consistency if createProblemCard has other logic
