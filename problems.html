@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems Collection — yk4r2</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="assets/manifest/site.webmanifest">
+
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                packages: ['base', 'ams', 'noerrors', 'noundefined']
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initial typesetting completed');
+                    });
+                }
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/noundefined']
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <link rel="stylesheet" href="assets/site.css?v=2">
+    <link rel="stylesheet" href="styles.css?v=2">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+      .problems-intro{padding:34px 0 4px}
+      .problems-intro .qt-eyebrow{margin-bottom:12px}
+      .problems-intro h1{margin:0 0 8px;font-family:var(--qt-serif);font-size:32px;font-weight:700;letter-spacing:-.2px;color:var(--qt-txt)}
+      .problems-intro p{margin:0;max-width:620px;color:var(--qt-mut);font-size:14.5px}
+    </style>
+</head>
+<body class="qt">
+    <div class="container">
+        <div class="problems-intro">
+            <p class="qt-eyebrow">Practice · quant interview math</p>
+            <h1>Problems Collection</h1>
+            <p>A filterable deck of probability, brainteaser and combinatorics problems by difficulty,
+               topic and firm. Reveal hints &amp; solutions, and tick problems off — your progress is
+               saved locally in your browser.</p>
+        </div>
+
+        <div class="filters">
+            <div class="filter-section">
+                <div class="filter-row">
+                    <div class="filter-controls">
+                        <div class="difficulties-container">
+                            <div class="difficulties-scroll" id="difficulties-list">
+                                <button class="difficulty-tag active" data-difficulty="all">
+                                    All Difficulties
+                                </button>
+                                <button class="difficulty-tag" data-difficulty="easy">
+                                    Easy
+                                </button>
+                                <button class="difficulty-tag" data-difficulty="medium">
+                                    Medium
+                                </button>
+                                <button class="difficulty-tag" data-difficulty="hard">
+                                    Hard
+                                </button>
+                            </div>
+                        </div>
+                        <div class="solved-filter-container">
+                            <div class="solved-filter-scroll" id="solved-filter">
+                                <button class="solved-filter-tag active" data-solved="unsolved">
+                                    Unsolved
+                                </button>
+                                <button class="solved-filter-tag" data-solved="solved">
+                                    Solved
+                                </button>
+                                <button class="solved-filter-tag" data-solved="all">
+                                    All Problems
+                                </button>
+                            </div>
+                        </div>
+                        <div class="solved-counter">
+                            <div class="solved-stats" id="solved-stats">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="companies-container">
+                    <div class="company-search-wrapper">
+                        <button class="search-toggle" id="search-toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                        <div class="company-search" id="company-search-container">
+                            <input type="text" id="company-search" placeholder="Search companies..." class="company-search-input">
+                        </div>
+                    </div>
+                    <div class="companies-scroll" id="companies-list">
+                       <button class="company-tag all-companies active" data-company="all">
+                            All Companies
+                            <span class="remove-company">×</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="problems" class="problems">
+            <div class="loading">Loading problems...</div>
+        </div>
+        <div id="pagination" class="pagination-container"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash/4.17.21/lodash.min.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+    <script src="assets/site.js" data-base=""></script>
+    <script>
+        // Lazy load MathJax when problems scroll into view
+        function loadMathJax() {
+            const script = document.createElement('script');
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js";
+            script.async = true;
+            document.head.appendChild(script);
+        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    loadMathJax();
+                    observer.disconnect();
+                }
+            });
+        });
+        observer.observe(document.getElementById('problems'));
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js').catch(function () {});
+            });
+        }
+    </script>
+</body>
+</html>

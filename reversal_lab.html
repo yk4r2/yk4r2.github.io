@@ -1,0 +1,719 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reversal Lab — lead/lag exit detectors · yk4r2</title>
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+<link rel="manifest" href="assets/manifest/site.webmanifest">
+<link rel="stylesheet" href="assets/site.css?v=2">
+<style>
+  :root{
+    --ink:#f6f3ec; --panel:#fffefb; --panel2:#f3efe6; --line:#e2ddd1;
+    --txt:#23262c; --mut:#5c626d; --faint:#8b8f99;
+    --leader:#b5613f; --follower:#2f5d8a; --star:#b88a2c;
+    --c1a:#b5613f; --c1b:#c77d3e; --c1c:#b88a2c; --c2a:#4f7a4d; --c2b:#3f8a86;
+    --c3a:#2f5d8a; --c3b:#6a5a9c; --c4a:#7a6b53; --c4b:#a8454c;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ink);color:var(--txt);font-family:var(--sans)}
+  body{padding:0;min-height:100vh}
+  .wrap{max-width:1240px;margin:0 auto;padding:18px}
+
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+    flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px}
+  h1{font-size:19px;font-weight:650;margin:0;letter-spacing:.2px}
+  h1 .dim{color:var(--mut);font-weight:500}
+  .thesis{color:var(--mut);font-size:12.5px;margin-top:5px;max-width:760px;line-height:1.5}
+  .gen{display:flex;align-items:center;gap:10px}
+  button.primary{background:var(--follower);color:#fff;border:0;border-radius:8px;
+    font-family:var(--sans);font-weight:650;font-size:13px;padding:10px 16px;cursor:pointer;
+    box-shadow:0 1px 0 #0006; transition:filter .12s}
+  button.primary:hover{filter:brightness(1.08)}
+  button.primary:active{transform:translateY(1px)}
+  .seedtag{font-family:var(--mono);font-size:11px;color:var(--faint)}
+
+  .grid{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .panel + .panel{margin-top:14px}
+  .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--faint);margin:0 0 10px}
+
+  .ctrl{margin:11px 0}
+  .ctrl label{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-bottom:5px}
+  .ctrl label b{font-family:var(--mono);color:var(--txt);font-weight:600}
+  input[type=range]{-webkit-appearance:none;width:100%;height:3px;border-radius:3px;
+    background:var(--line);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;
+    border-radius:50%;background:var(--follower);cursor:pointer;border:2px solid #fff}
+  input[type=range]::-moz-range-thumb{width:13px;height:13px;border-radius:50%;
+    background:var(--follower);cursor:pointer;border:2px solid #fff}
+
+  .det{border-top:1px solid var(--line);padding:10px 0 4px}
+  .det:first-of-type{border-top:0}
+  .det-head{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+  .sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+  .det-head .nm{font-size:12.5px;font-weight:600;flex:1}
+  .det-head .nm small{color:var(--faint);font-weight:400;font-family:var(--mono);font-size:10.5px}
+  .switch{position:relative;width:34px;height:18px;flex:0 0 auto;cursor:pointer}
+  .switch input{display:none}
+  .slider{position:absolute;inset:0;background:var(--line);border-radius:18px;transition:.15s}
+  .slider:before{content:"";position:absolute;width:14px;height:14px;left:2px;top:2px;
+    background:#9fb0c7;border-radius:50%;transition:.15s}
+  .switch input:checked + .slider{background:#2c4a63}
+  .switch input:checked + .slider:before{transform:translateX(16px);background:var(--follower)}
+  .det .ctrl{margin:8px 0 2px}
+  .det.off{opacity:.42}
+
+  .chartcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:12px 12px 6px;overflow:hidden}
+  canvas{width:100%;display:block;border-radius:6px}
+  .budget{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;
+    color:var(--mut);padding:8px 4px 2px}
+  .budget b{color:var(--txt)}
+  .budget .k{color:var(--star)}
+
+  .results{margin-top:14px}
+  table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px;table-layout:fixed}
+  th,td{text-align:right;padding:7px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  th{color:var(--faint);font-weight:500;font-size:10px;letter-spacing:.06em;
+    text-transform:uppercase;padding:0 8px 9px;border-bottom:1px solid var(--line)}
+  td{border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  tr.best td{background:#eef3ec}
+  tr.dim td{color:var(--faint)}
+  .name-cell{display:flex;align-items:center;gap:7px;min-width:0}
+  .name-cell .txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pnlnum{font-weight:700}
+  .pbar{height:4px;border-radius:2px;margin:3px 0 0 auto}
+  .lagpill{font-weight:600}
+  .lag-neg{color:#b5613f}.lag-pos{color:#4f7a4d}.lag-zero{color:var(--star)}
+  .forced{color:#b5613f}
+  .badge{font-family:var(--sans);font-size:9px;background:#e7efe6;color:#4f7a4d;
+    padding:1px 5px;border-radius:5px;margin-left:5px;font-weight:600}
+  .note{color:var(--faint);font-size:11px;line-height:1.5;margin-top:10px}
+  .legend{display:flex;gap:13px;flex-wrap:wrap;font-size:11px;color:var(--mut);padding:6px 4px 0}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+  button.ghost{background:transparent;border:1px solid var(--line);color:var(--txt);
+    border-radius:8px;font-family:var(--sans);font-weight:600;font-size:12px;padding:8px 14px;
+    cursor:pointer;transition:.12s}
+  button.ghost:hover{border-color:var(--follower);color:var(--follower)}
+  button.ghost:disabled{opacity:.5;cursor:default}
+  .mcbar{height:7px;border-radius:4px;margin:3px 0 0 auto;position:relative}
+</style>
+
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Reversal Lab <span class="dim">— ловим разворот: сигнал с leader, сделка на follower</span></h1>
+      <div class="thesis">Шорт на follower. Детектор читает быстрый рынок (leader), исполнение — на медленном (follower).
+        Звезда = дно follower'а (идеал выхода). Скобка сверху = бюджет опережения между дном leader и дном follower:
+        задержка детектора, попавшая в эту скобку, гасится лагом → выход садится у дна.</div>
+    </div>
+    <div class="gen">
+      <span class="seedtag" id="seedtag">seed —</span>
+      <button class="primary" id="gen">Сгенерировать ряды</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT: controls -->
+    <div>
+      <div class="panel">
+        <p class="eyebrow">Данные</p>
+        <div class="ctrl">
+          <label>Запаздывание follower (лаг L) <b id="vL">6</b></label>
+          <input type="range" id="L" min="1" max="15" step="1" value="6">
+        </div>
+        <div class="ctrl">
+          <label>Шум σ <b id="vSig">0.13</b></label>
+          <input type="range" id="sig" min="0.04" max="0.30" step="0.01" value="0.13">
+        </div>
+        <div class="note">Лаг меняет только follower (шум фиксирован сидом) — двигай и смотри, как уезжает дно и выходы.</div>
+      </div>
+
+      <div class="panel">
+        <p class="eyebrow">Исполнение / PnL</p>
+        <div class="ctrl">
+          <label>Подтверждение: доп. ход выше триггера <b id="vBuf">500 bps</b></label>
+          <input type="range" id="buf" min="0" max="2000" step="25" value="500">
+        </div>
+        <div class="ctrl">
+          <label>Комиссия за филл (ед. цены) <b id="vComm">0.03</b></label>
+          <input type="range" id="comm" min="0" max="0.30" step="0.01" value="0.03">
+        </div>
+        <div class="note">После триггера ждём, пока leader пройдёт ещё на столько <i>выше</i> минимального триггера — тогда выходим
+          (bps от цены входа). Больше → меньше ложных, но больше лага; слишком много → подтверждения нет, остаток форс-закрывается.</div>
+      </div>
+
+      <div class="panel">
+        <p class="eyebrow">Детекторы — параметры и показ</p>
+        <div id="dets"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: chart + results -->
+    <div>
+      <div class="chartcard">
+        <canvas id="cv" height="430"></canvas>
+        <div class="legend">
+          <span><i style="background:var(--leader)"></i>leader A (сигнал)</span>
+          <span><i style="background:var(--follower)"></i>follower B (торгуем)</span>
+          <span><i style="background:var(--star)"></i>дно follower = x2</span>
+          <span style="color:var(--leader)">▿ дно leader</span>
+          <span>тонкая линия = триггер</span>
+          <span>✕ = выход &nbsp; ▢ = форс</span>
+          <span>▭ = CI 5–95 выхода (после МК)</span>
+        </div>
+        <div class="budget" id="budget"></div>
+      </div>
+
+      <div class="panel results">
+        <p class="eyebrow">Сделки — отсортировано по realized PnL (выше = лучше)</p>
+        <table>
+          <colgroup><col style="width:38%"><col style="width:17%"><col style="width:14%"><col style="width:13%"><col style="width:18%"></colgroup>
+          <thead><tr><th>детектор</th><th>триггеров</th><th>lag к дну</th><th>цена B</th><th>PnL</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <div class="note" id="footnote"></div>
+      </div>
+
+      <div class="panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <p class="eyebrow" style="margin:0">Монте-Карло — устойчивость по случайным рядам</p>
+          <div style="display:flex;align-items:center;gap:12px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mut);cursor:pointer">
+              <input type="checkbox" id="mcci" checked disabled> CI 5–95 на графике</label>
+            <button class="ghost" id="mcrun">Прогнать ×100</button>
+          </div>
+        </div>
+        <table id="mctable" style="display:none;margin-top:12px">
+          <colgroup><col style="width:34%"><col style="width:22%"><col style="width:14%"><col style="width:15%"><col style="width:15%"></colgroup>
+          <thead><tr><th>детектор</th><th>μ PnL ± σ</th><th>μ lag</th><th>% лучший</th><th>% форс</th></tr></thead>
+          <tbody id="mcrows"></tbody>
+        </table>
+        <div class="note" id="mcnote">Параметры фиксируются, гоняем 100 случайных сидов → средний PnL ± разброс по каждому
+          показанному детектору. Считаются только включённые детекторы.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   Math helpers
+   ============================================================ */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function makeNormals(seed,n){const r=mulberry32(seed);const out=new Float64Array(n);
+  for(let i=0;i<n;i++){let u=0,v=0;while(u===0)u=r();while(v===0)v=r();
+    out[i]=Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}return out;}
+function interp(xs,ys,X){ // piecewise-linear at integer grid X (array)
+  const out=new Float64Array(X.length);let j=0;
+  for(let i=0;i<X.length;i++){const x=X[i];
+    while(j<xs.length-2 && x>xs[j+1])j++;
+    const t=(x-xs[j])/(xs[j+1]-xs[j]);out[i]=ys[j]+t*(ys[j+1]-ys[j]);}
+  return out;}
+function argmin(a,lo,hi){let mi=lo,mv=a[lo];for(let i=lo+1;i<hi;i++)if(a[i]<mv){mv=a[i];mi=i;}return mi;}
+function median(a){const b=Array.from(a).sort((x,y)=>x-y);const n=b.length;
+  return n%2?b[(n-1)/2]:0.5*(b[n/2-1]+b[n/2]);}
+function std(a){const m=a.reduce((s,x)=>s+x,0)/a.length;
+  return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/a.length);}
+
+/* ============================================================
+   Fixed synthetic shape (same as the python study)
+   ============================================================ */
+const CP_T=[0,12,20,35,50,60,68,74,80,88,98,104,112,118,128,140,150,160];
+const CP_V=[3.1,3.2,3.0,2.4,1.0,0.2,-0.6,-1.6,-0.9,-1.5,-2.3,-1.6,0.2,0.6,0.3,0.1,-0.4,-0.9];
+const T=CP_T[CP_T.length-1]+1;
+const TT=Array.from({length:T},(_,i)=>i);
+const MEAN=interp(CP_T,CP_V,TT);
+const PHI=0.55;            // AR(1) of micro-noise
+const X0=20;              // entry (short follower)
+const SEARCH_END=131;     // detectors search window end
+
+/* AR(1) noise from raw normals, scaled by sigma */
+function arNoise(raw,sigma){const o=new Float64Array(T);o[0]=0;
+  for(let i=1;i<T;i++)o[i]=PHI*o[i-1]+sigma*raw[i];return o;}
+
+/* ============================================================
+   Detectors  (all read the LEADER series s; exec on follower)
+   ============================================================ */
+function ema(x,N){const a=2/(N+1);const e=new Float64Array(x.length);e[0]=x[0];
+  for(let i=1;i<x.length;i++)e[i]=a*x[i]+(1-a)*e[i-1];return e;}
+function ewMeanVar(x,beta){const m=new Float64Array(x.length),v=new Float64Array(x.length);
+  m[0]=x[0];v[0]=1e-6;
+  for(let i=1;i<x.length;i++){m[i]=(1-beta)*m[i-1]+beta*x[i];
+    v[i]=(1-beta)*v[i-1]+beta*(x[i]-m[i])*(x[i]-m[i]);}
+  return {m,sd:Float64Array.from(v,z=>Math.sqrt(z))};}
+function firstExit(flag){for(let i=X0+1;i<SEARCH_END;i++)if(flag[i])return i;return null;}
+
+function det_1a(s,P){const e=ema(s,P.emaN);const flag=new Uint8Array(T);
+  for(let i=2;i<T;i++){const g=e[i]-e[i-1],gp=e[i-1]-e[i-2];if(gp<0&&g>=0)flag[i]=1;}
+  return {flag,sig:e};}
+function det_1b(s,P){const e=ema(s,P.emaN);const flag=new Uint8Array(T);
+  for(let i=1;i<T;i++)if(s[i-1]<=e[i-1]&&s[i]>e[i])flag[i]=1;
+  return {flag,sig:e};}
+function det_1c(s,P){const ef=ema(s,P.fast),es=ema(s,P.slow);const flag=new Uint8Array(T);
+  for(let i=1;i<T;i++)if((ef[i-1]-es[i-1])<=0&&(ef[i]-es[i])>0)flag[i]=1;
+  return {flag,sig:ef,sig2:es};}
+function det_2a(s,P){const {m,sd}=ewMeanVar(s,P.beta);const z=new Float64Array(T);
+  for(let i=0;i<T;i++)z[i]=(s[i]-m[i])/sd[i];const k=P.k;const flag=new Uint8Array(T);
+  for(let i=k;i<T;i++){let c=true;for(let j=0;j<k;j++)if(!(z[i-j]>z[i-j-1])){c=false;break;}
+    if(z[i-1]<=0&&z[i]>0&&c)flag[i]=1;}
+  return {flag,sig:m};}
+function det_2b(s,P){const {sd}=ewMeanVar(s,0.06);const flag=new Uint8Array(T);let rm=s[X0];
+  for(let i=X0;i<T;i++){if(s[i]<rm)rm=s[i];if(i>X0&&(s[i]-rm)>=P.c*sd[i])flag[i]=1;}
+  return {flag,sig:null};}
+function det_3a(s,P){ // Kalman local-linear-trend, exit on velocity t-stat crossing TAU
+  const ewsd=ewMeanVar(s,0.06).sd;
+  const R=Math.pow(median(ewsd.slice(X0,SEARCH_END)),2);
+  const qL=1e-3,qV=P.qvel*1e-3;
+  let xl=s[0],xv=0; let P00=1,P01=0,P10=0,P11=1;
+  const lvl=new Float64Array(T),tstat=new Float64Array(T);
+  for(let i=0;i<T;i++){
+    // predict  x=[xl+xv, xv]
+    xl=xl+xv;
+    // P_pred = F P F^T + Q   (F=[[1,1],[0,1]])
+    const a=P00,b=P01,c=P10,d=P11;
+    let p00=a+b+c+d+qL, p01=b+d, p10=c+d, p11=d+qV;
+    // update
+    const nu=s[i]-xl, S=p00+R;
+    const K0=p00/S, K1=p10/S;
+    xl=xl+K0*nu; xv=xv+K1*nu;
+    // P=(I-K H)P, H=[1,0]
+    const n00=(1-K0)*p00, n01=(1-K0)*p01, n10=p10-K1*p00, n11=p11-K1*p01;
+    P00=n00;P01=n01;P10=n10;P11=n11;
+    lvl[i]=xl; tstat[i]=xv/Math.sqrt(Math.max(P11,1e-12));
+  }
+  let ex=null;const flag=new Uint8Array(T);
+  for(let i=1;i<T;i++)if(tstat[i-1]<P.tau && tstat[i]>=P.tau)flag[i]=1;
+  return {flag,sig:lvl};}
+function det_3b(s,P){ // BOCPD: run-length collapse + upturn
+  const {m:ewm,sd:ewsd}=ewMeanVar(s,0.06);const sdb=median(ewsd);
+  const lam=P.lam,haz=1/lam,Rm=200;
+  let rl=new Float64Array(Rm+1);rl[0]=1;
+  let mu=new Float64Array(Rm+1),nn=new Float64Array(Rm+1);
+  let prevMap=0;const flag=new Uint8Array(T);
+  for(let i=0;i<T;i++){
+    const pred=new Float64Array(Rm+1);
+    for(let r=0;r<=Rm;r++){const dz=(s[i]-mu[r])/sdb;pred[r]=Math.exp(-0.5*dz*dz);}
+    {const dz=(s[i]-ewm[i])/sdb;pred[0]=Math.exp(-0.5*dz*dz);}
+    let cp=0;for(let r=0;r<=Rm;r++)cp+=rl[r]*pred[r]*haz;
+    const nw=new Float64Array(Rm+1);
+    for(let r=1;r<=Rm;r++)nw[r]=rl[r-1]*pred[r-1]*(1-haz);
+    nw[0]=cp;let ssum=0;for(let r=0;r<=Rm;r++)ssum+=nw[r];
+    for(let r=0;r<=Rm;r++)nw[r]/=(ssum+1e-300);
+    const nm=new Float64Array(Rm+1),nc=new Float64Array(Rm+1);
+    for(let r=1;r<=Rm;r++){nm[r]=(mu[r-1]*nn[r-1]+s[i])/(nn[r-1]+1);nc[r]=nn[r-1]+1;}
+    nm[0]=s[i];nc[0]=1; mu=nm;nn=nc;rl=nw;
+    let cur=0,mv=rl[0];for(let r=1;r<=Rm;r++)if(rl[r]>mv){mv=rl[r];cur=r;}
+    if(i>X0){
+      const collapse=prevMap>=8 && cur<=0.4*prevMap;
+      let mn=Infinity;for(let j=Math.max(X0,i-12);j<=i;j++)mn=Math.min(mn,s[j]);
+      if(collapse && s[i]>mn+0.3*sdb)flag[i]=1;
+    }
+    prevMap=cur;
+  }
+  return {flag,sig:null};}
+function det_4a(s,P){ // CUSUM for upward drift
+  const ds=new Float64Array(T);for(let i=1;i<T;i++)ds[i]=s[i]-s[i-1];
+  const sdd=std(Array.from(ds).slice(X0,SEARCH_END))+1e-9;
+  const k=2*P.delta/(sdd*sdd);
+  let g=0;const flag=new Uint8Array(T);
+  for(let i=1;i<T;i++){g=Math.max(0,g+k*ds[i]);if(g>=P.h)flag[i]=1;}
+  return {flag,sig:null};}
+function ouFit(s){ // OLS s_{t+1}=cst+phi s_t on trade window
+  const xp=[],xn=[];for(let i=X0;i<SEARCH_END-1;i++){xp.push(s[i]);xn.push(s[i+1]);}
+  const mx=xp.reduce((a,b)=>a+b,0)/xp.length, my=xn.reduce((a,b)=>a+b,0)/xn.length;
+  let cov=0,vx=0;for(let i=0;i<xp.length;i++){cov+=(xp[i]-mx)*(xn[i]-my);vx+=(xp[i]-mx)**2;}
+  let phi=cov/vx; phi=Math.min(Math.max(phi,0.05),0.999);
+  const cst=my-phi*mx;
+  const kappa=-Math.log(phi), theta=cst/(1-phi);
+  let res=[];for(let i=0;i<xp.length;i++)res.push(xn[i]-(cst+phi*xp[i]));
+  return {phi,kappa,theta,sig:std(res)};}
+function det_4b(s,P){ // OU optimal stopping (cover short = stop low) via value iteration
+  const f=ouFit(s);const K=s[X0],r=P.r;
+  const N=121; let lo=Math.min.apply(null,s)-1, hi=Math.max.apply(null,s)+1;
+  const grid=new Float64Array(N);for(let i=0;i<N;i++)grid[i]=lo+(hi-lo)*i/(N-1);
+  const payoff=Float64Array.from(grid,x=>K-x);
+  const ek=Math.exp(-f.kappa);
+  const v=f.kappa>1e-6 ? f.sig*f.sig*(1-Math.exp(-2*f.kappa))/(2*f.kappa) : f.sig*f.sig;
+  const sdn=Math.sqrt(Math.max(v,1e-9));
+  // transition rows
+  const W=[];for(let i=0;i<N;i++){const mn=f.theta+(grid[i]-f.theta)*ek;const row=new Float64Array(N);
+    let z=0;for(let j=0;j<N;j++){const d=(grid[j]-mn)/sdn;row[j]=Math.exp(-0.5*d*d);z+=row[j];}
+    for(let j=0;j<N;j++)row[j]/=z; W.push(row);}
+  let V=Float64Array.from(payoff);const disc=Math.exp(-r);
+  let cont=new Float64Array(N);
+  for(let it=0;it<500;it++){let mx=0;
+    for(let i=0;i<N;i++){let c=0;const row=W[i];for(let j=0;j<N;j++)c+=row[j]*V[j];cont[i]=disc*c;}
+    let nd=0;const Vn=new Float64Array(N);
+    for(let i=0;i<N;i++){Vn[i]=Math.max(payoff[i],cont[i]);nd=Math.max(nd,Math.abs(Vn[i]-V[i]));}
+    V=Vn;if(nd<1e-6)break;}
+  let aIdx=0;for(let i=0;i<N;i++)if(payoff[i]>=cont[i])aIdx=i;
+  const aStar=grid[aIdx];
+  const flag=new Uint8Array(T);for(let i=0;i<T;i++)if(s[i]<=aStar)flag[i]=1;
+  return {flag,sig:null,aStar};}
+
+/* registry */
+const DETS=[
+ {id:"1a",name:"EMA slope flip",sub:"наклон EMA ↑",col:"--c1a",fn:det_1a,
+   params:[["emaN","EMA N",5,40,1,15]]},
+ {id:"1b",name:"price × EMA",sub:"цена пересекает EMA",col:"--c1b",fn:det_1b,
+   params:[["emaN","EMA N",5,40,1,15]]},
+ {id:"1c",name:"fast × slow EMA",sub:"кросс двух EMA",col:"--c1c",fn:det_1c,
+   params:[["fast","fast N",3,20,1,8],["slow","slow N",10,60,1,21]]},
+ {id:"2a",name:"z-score + hyst",sub:"возврат z через 0",col:"--c2a",fn:det_2a,
+   params:[["beta","EW β",0.02,0.20,0.01,0.06],["k","подтвержд. k",1,5,1,2]]},
+ {id:"2b",name:"ZigZag vol",sub:"рост c·σ от мин",col:"--c2b",fn:det_2b,
+   params:[["c","порог c",1.0,4.0,0.1,2.2]]},
+ {id:"3a",name:"Kalman vel t-stat",sub:"скорость значимо ↑",col:"--c3a",fn:det_3a,
+   params:[["tau","порог τ",0.3,3.0,0.1,1.0],["qvel",">q скорости×1e-3",1,20,1,5]]},
+ {id:"3b",name:"BOCPD",sub:"коллапс run-length",col:"--c3b",fn:det_3b,
+   params:[["lam","hazard λ",15,120,5,40]]},
+ {id:"4a",name:"CUSUM (Shiryaev)",sub:"накопл. LLR ≥ h",col:"--c4a",fn:det_4a,
+   params:[["delta","дрейф δ",0.05,0.30,0.01,0.12],["h","порог h",2,20,0.5,10]]},
+ {id:"4b",name:"OU optimal a*",sub:"стоп на оптим. уровне",col:"--c4b",fn:det_4b,
+   params:[["r","дисконт r",0.001,0.05,0.001,0.01]]},
+];
+
+/* ============================================================
+   State
+   ============================================================ */
+const state={seed:Math.floor(Math.random()*1e9),sigma:0.13,L:6,
+  show:{},params:{},
+  exec:{bufferBps:500, comm:0.03}};   // bufferBps = extra move (bps of entry) above lowest trigger before exit
+DETS.forEach(d=>{state.show[d.id]=!(d.id==="4b");      // 4b off by default (degenerate)
+  d.params.forEach(p=>state.params[p[0]]=p[5]);});
+let RAW={};                                            // raw normals (per seed)
+function regen(){RAW.a=makeNormals(state.seed,T);RAW.b=makeNormals(state.seed^0x9e3779b9,T);
+  document.getElementById("seedtag").textContent="seed "+state.seed;}
+regen();
+
+/* OU cache (signal depends only on leader = seed,sigma,r) */
+let ouCache={key:null,res:null};
+
+/* ============================================================
+   Compute everything
+   ============================================================ */
+function compute(){
+  const noiseA=arNoise(RAW.a,state.sigma);
+  const noiseB=arNoise(RAW.b,state.sigma*1.15);
+  const legA=new Float64Array(T),legB=new Float64Array(T);
+  for(let i=0;i<T;i++){legA[i]=MEAN[i]+noiseA[i];
+    const mi=i-state.L>=0?i-state.L:0; legB[i]=MEAN[mi]+noiseB[i];}
+  const x2A=argmin(legA,X0,132);
+  const x2 =argmin(legB,X0,132);
+  const bottom=legB[x2];
+
+  // confirmation buffer in bps of entry price (1 bp = 1/10000)
+  const E=state.exec, P0=legB[X0], buf=E.bufferBps/10000*Math.abs(P0);
+  const results=[];
+  for(const d of DETS){
+    let out;
+    if(d.id==="4b"){const key=state.seed+"|"+state.sigma+"|"+state.params.r;
+      if(ouCache.key===key)out=ouCache.res; else {out=det_4b(legA,state.params);ouCache={key,res:out};}}
+    else out=d.fn(legA,state.params);
+    const flag=out.flag;
+    // every trigger (rising edge of the detector condition) in the window
+    const trig=[];
+    for(let i=X0+1;i<SEARCH_END;i++)if(flag[i] && !flag[i-1])trig.push(i);
+    // EXIT when leader recovers `buf` above the LOWEST trigger seen so far
+    // (i.e. the signal must overshoot by `buf` more before we act)
+    let armMin=Infinity, exitBar=null, ti=0;
+    for(let i=X0+1;i<SEARCH_END;i++){
+      while(ti<trig.length && trig[ti]===i){if(legA[i]<armMin)armMin=legA[i];ti++;}
+      if(armMin<Infinity && legA[i]>=armMin+buf){exitBar=i;break;}
+    }
+    const forced=(exitBar===null);
+    if(forced)exitBar=SEARCH_END-1;                 // no confirmation -> close at horizon
+    const exitPrice=legB[exitBar];
+    const pnl=(P0-exitPrice)-E.comm*2;              // short cover: entry fill + exit fill
+    results.push({d,trig,exitBar,forced,pnl,total:trig.length,
+      vwap:exitPrice, lag:exitBar-x2,
+      sig:out.sig,sig2:out.sig2,aStar:out.aStar});
+  }
+  return {legA,legB,x2A,x2,bottom,P0,results};
+}
+
+/* ============================================================
+   Draw
+   ============================================================ */
+const cv=document.getElementById("cv");
+function draw(C){
+  const ctx=cv.getContext("2d");
+  const cssW=cv.clientWidth, cssH=430, dpr=window.devicePixelRatio||1;
+  cv.width=cssW*dpr;cv.height=cssH*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cssW,cssH);
+  const padL=8,padR=12,padT=34,padB=20;
+  const W=cssW-padL-padR, H=cssH-padT-padB;
+  // y-range over both legs
+  let ymin=Infinity,ymax=-Infinity;
+  for(let i=0;i<T;i++){ymin=Math.min(ymin,C.legA[i],C.legB[i]);ymax=Math.max(ymax,C.legA[i],C.legB[i]);}
+  ymin-=0.3;ymax+=0.3;
+  const X=t=>padL+W*t/(T-1);
+  const Y=v=>padT+H*(1-(v-ymin)/(ymax-ymin));
+  // grid
+  ctx.strokeStyle="#e7e2d6";ctx.lineWidth=1;ctx.font="10px ui-monospace,monospace";
+  ctx.fillStyle="#9aa0aa";
+  for(let g=Math.ceil(ymin);g<=Math.floor(ymax);g++){const y=Y(g);
+    ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+W,y);ctx.stroke();
+    ctx.fillText(g.toFixed(0),padL+2,y-2);}
+  for(let tx=0;tx<=160;tx+=20){const x=X(tx);
+    ctx.strokeStyle="#efeae0";ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,padT+H);ctx.stroke();
+    ctx.fillStyle="#9aa0aa";ctx.fillText(tx,x+2,padT+H+13);}
+  // lead-time budget bracket (signature)
+  const xa=X(C.x2A), xb=X(C.x2);
+  ctx.strokeStyle="#cfc8ba";ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(xa,padT);ctx.lineTo(xa,padT+H);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(xb,padT);ctx.lineTo(xb,padT+H);ctx.stroke();
+  ctx.setLineDash([]);
+  const yBr=padT-18;
+  ctx.strokeStyle="#b3a89a";ctx.beginPath();
+  ctx.moveTo(xa,yBr+10);ctx.lineTo(xa,yBr+4);ctx.lineTo(xb,yBr+4);ctx.lineTo(xb,yBr+10);ctx.stroke();
+  ctx.fillStyle="#5c626d";ctx.textAlign="center";
+  ctx.fillText("lead-time "+(C.x2-C.x2A)+" бар",(xa+xb)/2,yBr+1);ctx.textAlign="left";
+  // legA (leader)
+  ctx.strokeStyle="rgba(181,97,63,0.75)";ctx.lineWidth=1.3;ctx.beginPath();
+  for(let i=0;i<T;i++){const x=X(i),y=Y(C.legA[i]);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
+  // legB (follower)
+  ctx.strokeStyle="#2f5d8a";ctx.lineWidth=2;ctx.beginPath();
+  for(let i=0;i<T;i++){const x=X(i),y=Y(C.legB[i]);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.stroke();
+  // leader bottom marker
+  ctx.fillStyle="rgba(181,97,63,0.9)";ctx.beginPath();
+  ctx.moveTo(xa-5,Y(C.legA[C.x2A])-9);ctx.lineTo(xa+5,Y(C.legA[C.x2A])-9);ctx.lineTo(xa,Y(C.legA[C.x2A])-2);
+  ctx.closePath();ctx.fill();
+  // x0 entry on follower
+  ctx.strokeStyle="#5c626d";ctx.lineWidth=1.6;ctx.beginPath();
+  ctx.arc(X(X0),Y(C.legB[X0]),5,0,7);ctx.stroke();
+  ctx.fillStyle="#8b8f99";ctx.fillText("x0",X(X0)-4,Y(C.legB[X0])-9);
+  // star at follower bottom
+  drawStar(ctx,xb,Y(C.bottom),7,"#b88a2c");
+  ctx.fillStyle="#b88a2c";ctx.fillText("x2",xb+8,Y(C.bottom)+4);
+  // MC CI(5–95) of the exit (time × price) per detector — only if run & params unchanged
+  if(ciActive()){
+    for(const r of C.results){if(!state.show[r.d.id])continue;
+      const ci=mcCI.perDet[r.d.id];if(!ci||ci.p5b==null)continue;
+      const col=getComputedStyle(document.documentElement).getPropertyValue(r.d.col).trim();
+      const rgb=hexToRgb(col);
+      const x1=X(ci.p5b),x2=X(ci.p95b),yT=Y(ci.p95p),yB=Y(ci.p5p);
+      ctx.fillStyle=`rgba(${rgb},0.07)`;ctx.fillRect(x1,yT,x2-x1,yB-yT);
+      ctx.strokeStyle=`rgba(${rgb},0.4)`;ctx.lineWidth=1;ctx.strokeRect(x1,yT,x2-x1,yB-yT);
+      ctx.fillStyle=col;ctx.beginPath();ctx.arc(X(ci.p50b),Y(ci.p50p),2.6,0,7);ctx.fill(); // median
+    }
+  }
+  // every trigger = faint full-height vertical line (top→bottom); exit = bold X
+  for(const r of C.results){if(!state.show[r.d.id])continue;
+    const col=getComputedStyle(document.documentElement).getPropertyValue(r.d.col).trim();
+    const rgb=hexToRgb(col);
+    // all triggers, very transparent, spanning the whole plot height
+    ctx.strokeStyle=`rgba(${rgb},0.13)`;ctx.lineWidth=1;
+    for(const b of r.trig){const x=X(b);
+      ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,padT+H);ctx.stroke();
+      // tiny color ticks at very top and very bottom so each trigger is countable
+      ctx.fillStyle=`rgba(${rgb},0.6)`;
+      ctx.fillRect(x-1,padT,2,4);ctx.fillRect(x-1,padT+H-4,2,4);}
+    // executed exit on follower
+    const x=X(r.exitBar),y=Y(r.vwap);
+    if(r.forced){ctx.strokeStyle=col;ctx.lineWidth=1.8;ctx.strokeRect(x-5,y-5,10,10);}
+    else{ctx.strokeStyle=col;ctx.lineWidth=2.6;
+      ctx.beginPath();ctx.moveTo(x-6,y-6);ctx.lineTo(x+6,y+6);
+      ctx.moveTo(x+6,y-6);ctx.lineTo(x-6,y+6);ctx.stroke();}
+    // signal tick on leader at the exit bar + label
+    ctx.strokeStyle="rgba(181,97,63,0.6)";ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x-3,Y(C.legA[r.exitBar])-3);ctx.lineTo(x+3,Y(C.legA[r.exitBar])+3);
+    ctx.moveTo(x+3,Y(C.legA[r.exitBar])-3);ctx.lineTo(x-3,Y(C.legA[r.exitBar])+3);ctx.stroke();
+    ctx.fillStyle=col;ctx.font="9px ui-monospace,monospace";
+    ctx.fillText(r.d.id,x+8,y+3);ctx.font="10px ui-monospace,monospace";
+  }
+  // 4b a* line
+  const r4=C.results.find(r=>r.d.id==="4b");
+  if(state.show["4b"]&&r4&&r4.aStar!=null){const y=Y(r4.aStar);
+    ctx.strokeStyle="rgba(247,143,208,0.5)";ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+W,y);ctx.stroke();ctx.setLineDash([]);}
+}
+function drawStar(ctx,cx,cy,R,col){ctx.fillStyle=col;ctx.beginPath();
+  for(let i=0;i<10;i++){const r=i%2?R*0.45:R;const a=-Math.PI/2+i*Math.PI/5;
+    const x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+  ctx.closePath();ctx.fill();}
+function hexToRgb(h){h=h.replace('#','').trim();if(h.length===3)h=h.split('').map(c=>c+c).join('');
+  const n=parseInt(h,16);return ((n>>16)&255)+","+((n>>8)&255)+","+(n&255);}
+
+/* ============================================================
+   Render tables / budget
+   ============================================================ */
+function render(){
+  const C=compute();
+  draw(C);
+  // budget line
+  document.getElementById("budget").innerHTML=
+    `структурный лаг <b>L=${state.L}</b> &nbsp;|&nbsp; дно leader <b>t${C.x2A}</b> → дно follower <b>t${C.x2}</b> `+
+    `(реализ. lead-time <span class="k">${C.x2-C.x2A} бар</span>) `+
+    `&nbsp;|&nbsp; идеал. цена выхода <b>${C.bottom.toFixed(2)}</b>`;
+  // results rows sorted by realized PnL (higher = better)
+  const rows=[...C.results].filter(r=>state.show[r.d.id]);
+  const pnls=rows.map(r=>r.pnl).filter(v=>v!=null);
+  const pmin=Math.min(0,...pnls), pmax=Math.max(0.001,...pnls);
+  rows.sort((a,b)=>(b.pnl==null?-1e9:b.pnl)-(a.pnl==null?-1e9:a.pnl));
+  const body=document.getElementById("rows");body.innerHTML="";
+  rows.forEach((r,idx)=>{
+    const col=getComputedStyle(document.documentElement).getPropertyValue(r.d.col).trim();
+    const tr=document.createElement("tr");
+    if(idx===0 && !r.forced)tr.className="best";
+    const lagTxt=r.lag>0?"+"+r.lag:""+r.lag;
+    const lagCls=r.lag===0?"lag-zero":(r.lag<0?"lag-neg":"lag-pos");
+    const trg=`${r.total}`+(r.forced?' <span class="forced">форс</span>':'');
+    const frac=(pmax>pmin)?(r.pnl-pmin)/(pmax-pmin):0;
+    const pct=Math.max(0,Math.min(100,frac*100));
+    const bg=`linear-gradient(to right, ${col}30 ${pct}%, transparent ${pct}%)`;
+    tr.innerHTML=
+      `<td><span class="name-cell"><span class="sw" style="background:${col}"></span>`+
+        `<span class="txt"><b>${r.d.id}</b> ${r.d.name}`+(idx===0&&!r.forced?'<span class="badge">лучший</span>':'')+`</span></span></td>`+
+      `<td>${trg}</td>`+
+      `<td class="lagpill ${lagCls}">${lagTxt}</td>`+
+      `<td>${r.vwap.toFixed(2)}</td>`+
+      `<td class="pnlcell" style="background:${bg}"><b>${r.pnl.toFixed(2)}</b></td>`;
+    body.appendChild(tr);
+  });
+  document.getElementById("footnote").innerHTML=
+    "Тонкие вертикали (сверху донизу) — <b>все триггеры</b> детектора; жирный <b>×</b> — исполненный выход; "+
+    "<b>▢</b> — форс-закрытие в конце окна (подтверждения не было). "+
+    "<b>Подтверждение (bps)</b>: после триггера ждём, пока leader не пройдёт ещё на столько <i>выше</i> минимального триггера — тогда выходим (фильтр ложных, ценой лага). "+
+    "<b>PnL</b> = (вход − выход) на follower − комиссия×2.";
+}
+
+/* ============================================================
+   Build controls
+   ============================================================ */
+function buildControls(){
+  const host=document.getElementById("dets");
+  DETS.forEach(d=>{
+    const col=getComputedStyle(document.documentElement).getPropertyValue(d.col).trim();
+    const wrap=document.createElement("div");wrap.className="det"+(state.show[d.id]?"":" off");
+    wrap.id="det-"+d.id;
+    let html=`<div class="det-head"><span class="sw" style="background:${col}"></span>`+
+      `<span class="nm">${d.id} ${d.name} <small>${d.sub}</small></span>`+
+      `<label class="switch"><input type="checkbox" data-show="${d.id}" ${state.show[d.id]?"checked":""}>`+
+      `<span class="slider"></span></label></div>`;
+    d.params.forEach(p=>{const[key,label,mn,mx,st,df]=p;
+      const val=state.params[key];
+      const disp=key==="qvel"?val:(st<1?val.toFixed(st<0.1?3:2):val);
+      html+=`<div class="ctrl"><label>${label} <b id="v-${key}">${disp}</b></label>`+
+        `<input type="range" data-p="${key}" min="${mn}" max="${mx}" step="${st}" value="${val}"></div>`;});
+    wrap.innerHTML=html;host.appendChild(wrap);
+  });
+  // listeners
+  host.querySelectorAll('input[data-show]').forEach(cb=>cb.addEventListener('change',e=>{
+    const id=e.target.dataset.show;state.show[id]=e.target.checked;
+    document.getElementById("det-"+id).classList.toggle("off",!e.target.checked);schedule();}));
+  host.querySelectorAll('input[data-p]').forEach(sl=>sl.addEventListener('input',e=>{
+    const key=e.target.dataset.p;let v=parseFloat(e.target.value);state.params[key]=v;
+    const disp=key==="qvel"?v:(e.target.step<1?v.toFixed(e.target.step<0.1?3:2):v);
+    document.getElementById("v-"+key).textContent=disp;schedule();}));
+}
+
+/* global controls */
+document.getElementById("L").addEventListener("input",e=>{state.L=+e.target.value;
+  document.getElementById("vL").textContent=state.L;schedule();});
+document.getElementById("sig").addEventListener("input",e=>{state.sigma=+e.target.value;
+  document.getElementById("vSig").textContent=state.sigma.toFixed(2);ouCache.key=null;schedule();});
+document.getElementById("gen").addEventListener("click",()=>{
+  state.seed=Math.floor(Math.random()*1e9);regen();ouCache.key=null;schedule();});
+document.getElementById("buf").addEventListener("input",e=>{state.exec.bufferBps=+e.target.value;
+  document.getElementById("vBuf").textContent=state.exec.bufferBps+" bps";schedule();});
+document.getElementById("comm").addEventListener("input",e=>{state.exec.comm=+e.target.value;
+  document.getElementById("vComm").textContent=state.exec.comm.toFixed(2);schedule();});
+
+/* ---- Monte-Carlo: fix params, run N random series, aggregate per detector ---- */
+const MC_N=200;
+let mcBusy=false, mcCI=null;                 // mcCI = {sig, perDet:{id:{p5b,p50b,p95b,p5p,p50p,p95p}}}
+function pctl(sorted,q){if(!sorted.length)return null;const i=(sorted.length-1)*q,
+  lo=Math.floor(i),hi=Math.ceil(i);return sorted[lo]+(sorted[hi]-sorted[lo])*(i-lo);}
+function ciSig(){return JSON.stringify({b:state.exec.bufferBps,L:state.L,s:state.sigma,p:state.params});}
+function ciActive(){const cb=document.getElementById("mcci");
+  return cb&&cb.checked&&mcCI&&mcCI.sig===ciSig();}
+function runMC(){
+  if(mcBusy)return; mcBusy=true;
+  const btn=document.getElementById("mcrun");
+  const acc={}; DETS.forEach(d=>acc[d.id]={sum:0,sum2:0,forced:0,best:0,lag:0,n:0,bars:[],prices:[]});
+  const savedSeed=state.seed, savedRAW=RAW, savedCache=ouCache;
+  let done=0;
+  function chunk(){
+    const end=Math.min(done+20,MC_N);
+    for(;done<end;done++){
+      const sd=((done+1)*2654435761)>>>0;            // fixed seed set -> MC reproducible, Gen-independent
+      state.seed=sd; RAW={a:makeNormals(sd,T),b:makeNormals(sd^0x9e3779b9,T)};
+      ouCache={key:null,res:null};
+      const C=compute();
+      let bestPnl=-1e9,bestId=null;
+      for(const r of C.results){if(!state.show[r.d.id])continue;
+        if(r.pnl>bestPnl){bestPnl=r.pnl;bestId=r.d.id;}}
+      for(const r of C.results){const a=acc[r.d.id];
+        a.sum+=r.pnl;a.sum2+=r.pnl*r.pnl;a.lag+=r.lag;a.n++;
+        a.bars.push(r.exitBar);a.prices.push(r.vwap);
+        if(r.forced)a.forced++; if(r.d.id===bestId)a.best++;}
+    }
+    btn.textContent=`Считаю… ${done}/${MC_N}`;
+    if(done<MC_N){requestAnimationFrame(chunk);}
+    else{
+      state.seed=savedSeed; RAW=savedRAW; ouCache=savedCache;
+      btn.textContent="Прогнать ×"+MC_N; mcBusy=false;
+      // percentiles per detector
+      const perDet={};
+      for(const d of DETS){const a=acc[d.id];
+        const bs=a.bars.slice().sort((x,y)=>x-y), ps=a.prices.slice().sort((x,y)=>x-y);
+        perDet[d.id]={p5b:pctl(bs,0.05),p50b:pctl(bs,0.5),p95b:pctl(bs,0.95),
+                      p5p:pctl(ps,0.05),p50p:pctl(ps,0.5),p95p:pctl(ps,0.95)};}
+      mcCI={sig:ciSig(),perDet};
+      const cb=document.getElementById("mcci");cb.disabled=false;
+      renderMC(acc); render();
+    }
+  }
+  chunk();
+}
+function renderMC(acc){
+  const rows=DETS.filter(d=>state.show[d.id]).map(d=>{const a=acc[d.id];
+    const mean=a.sum/a.n, sd=Math.sqrt(Math.max(0,a.sum2/a.n-mean*mean));
+    return {d,mean,sd,lag:a.lag/a.n,forced:a.forced/a.n,best:a.best/a.n};});
+  rows.sort((x,y)=>y.mean-x.mean);
+  const mx=Math.max(...rows.map(r=>r.mean)), mn=Math.min(0,...rows.map(r=>r.mean));
+  const body=document.getElementById("mcrows");body.innerHTML="";
+  rows.forEach((r,i)=>{
+    const col=getComputedStyle(document.documentElement).getPropertyValue(r.d.col).trim();
+    const pct=Math.max(0,Math.min(100,(mx>mn)?(r.mean-mn)/(mx-mn)*100:0));
+    const bg=`linear-gradient(to right, ${col}30 ${pct}%, transparent ${pct}%)`;
+    const tr=document.createElement("tr");if(i===0)tr.className="best";
+    tr.innerHTML=
+      `<td><span class="name-cell"><span class="sw" style="background:${col}"></span>`+
+        `<span class="txt"><b>${r.d.id}</b> ${r.d.name}</span></span></td>`+
+      `<td class="pnlcell" style="background:${bg}"><b>${r.mean.toFixed(2)}</b> ±${r.sd.toFixed(2)}</td>`+
+      `<td class="lagpill ${r.lag<0?'lag-neg':'lag-pos'}">${r.lag>0?'+':''}${r.lag.toFixed(1)}</td>`+
+      `<td>${(r.best*100).toFixed(0)}%</td>`+
+      `<td class="${r.forced>0.3?'forced':''}">${(r.forced*100).toFixed(0)}%</td>`;
+    body.appendChild(tr);
+  });
+  document.getElementById("mctable").style.display="table";
+  document.getElementById("mcnote").innerHTML=
+    `Параметры фиксированы, ${MC_N} случайных сидов. μ PnL ± σ; «% лучший» = доля сидов с максимальным PnL; «% форс» = доля без подтверждения. `+
+    `На графике <b>▭</b> = область, куда выход попадает в 5–95% случаев (время × цена), точка = медиана. Сменишь параметры — CI скроется до повторного прогона.`;
+}
+document.getElementById("mcrun").addEventListener("click",runMC);
+document.getElementById("mcrun").textContent="Прогнать ×"+MC_N;
+document.getElementById("mcci").addEventListener("change",schedule);
+
+/* throttle */
+let pending=false;
+function schedule(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;render();});}
+window.addEventListener("resize",schedule);
+
+buildControls();
+render();
+</script>
+<script src="assets/site.js" data-base=""></script>

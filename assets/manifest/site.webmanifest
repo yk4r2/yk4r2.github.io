@@ -1,6 +1,6 @@
 {
-    "name": "Math Problems Collection",
-    "short_name": "Math Problems",
+    "name": "yk4r2 — quant lab",
+    "short_name": "yk4r2",
     "icons": [
         {
             "src": "/assets/icons/android-chrome-192x192.png",
@@ -13,9 +13,8 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#2563eb",
-    "background_color": "#f8fafc",
+    "theme_color": "#0e141d",
+    "background_color": "#0e141d",
     "display": "standalone",
     "start_url": "/"
 }
-

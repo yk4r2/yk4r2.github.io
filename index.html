@@ -1,156 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Problems Collection</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yk4r2 — quant lab</title>
+<meta name="description" content="Interactive toy models, derivations and practice problems on signal processing, change-point detection and optimal stopping.">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
-    <link rel="manifest" href="assets/manifest/site.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+<link rel="manifest" href="assets/manifest/site.webmanifest">
+<link rel="stylesheet" href="assets/site.css?v=2">
 
-    <!-- MathJax Configuration -->
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true,
-                packages: ['base', 'ams', 'noerrors', 'noundefined']
-            },
-            startup: {
-                pageReady: () => {
-                    return MathJax.startup.defaultPageReady().then(() => {
-                        console.log('MathJax initial typesetting completed');
-                    });
-                }
-            },
-            options: {
-                ignoreHtmlClass: 'tex2jax_ignore',
-                processHtmlClass: 'tex2jax_process'
-            },
-            loader: {
-                load: ['[tex]/noerrors', '[tex]/noundefined']
-            }
-        };
-    </script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<style>
+  /* ---- page-local: hero + grid ---- */
+  .hero{padding:64px 0 16px}
+  .hero__inner{display:flex;align-items:center;gap:44px;flex-wrap:wrap}
+  .hero__copy{flex:1 1 420px;min-width:300px}
+  .hero__copy .qt-eyebrow{margin-bottom:16px}
+  .hero h1{
+    font-family:var(--qt-serif);
+    font-size:clamp(32px,4.6vw,48px);line-height:1.1;margin:0 0 16px;
+    font-weight:700;letter-spacing:-.2px;color:var(--qt-txt);text-wrap:balance;
+  }
+  .hero__lede{font-size:16.5px;line-height:1.65;color:var(--qt-mut);max-width:540px;margin:0 0 24px}
+  .hero__cta{display:flex;gap:12px;flex-wrap:wrap}
+
+  .hero__mark{flex:0 0 auto}
+  .hero__mark img{
+    width:150px;height:150px;border-radius:18px;display:block;
+    box-shadow:0 0 0 1px var(--qt-line),0 12px 30px -16px rgba(40,35,25,.5);
+  }
+  @media(max-width:760px){
+    .hero{padding:40px 0 12px}
+    .hero__mark img{width:104px;height:104px;border-radius:14px}
+  }
+
+  /* section */
+  .section{padding:42px 0 0}
+  .section__head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--qt-line);flex-wrap:wrap;
+  }
+  .section__head h2{margin:0;font-family:var(--qt-serif);font-size:20px;font-weight:700;color:var(--qt-txt);letter-spacing:.1px}
+  .section__head .meta{font-size:12.5px;color:var(--qt-faint)}
+
+  .grid{display:grid;gap:18px;grid-template-columns:repeat(2,1fr)}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .qt-card--feature{grid-column:span 2}
+  @media(max-width:880px){.qt-card--feature{grid-column:span 1}}
+  .spark{height:46px;margin-top:16px;display:block;width:100%;opacity:.9}
+</style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Math Problems Collection</h1>
-        </div>
-        
-        <div class="filters">
-            <div class="filter-section">
-                <div class="filter-row">
-                    <div class="filter-controls">
-                        <div class="difficulties-container">
-                            <div class="difficulties-scroll" id="difficulties-list">
-                                <button class="difficulty-tag active" data-difficulty="all">
-                                    All Difficulties
-                                </button>
-                                <button class="difficulty-tag" data-difficulty="easy">
-                                    Easy
-                                </button>
-                                <button class="difficulty-tag" data-difficulty="medium">
-                                    Medium
-                                </button>
-                                <button class="difficulty-tag" data-difficulty="hard">
-                                    Hard
-                                </button>
-                            </div>
-                        </div>
-                        <div class="solved-filter-container">
-                            <div class="solved-filter-scroll" id="solved-filter">
-                                <button class="solved-filter-tag active" data-solved="unsolved">
-                                    Unsolved
-                                </button>
-                                <button class="solved-filter-tag" data-solved="solved">
-                                    Solved
-                                </button>
-                                <button class="solved-filter-tag" data-solved="all">
-                                    All Problems
-                                </button>
-                            </div>
-                        </div>
-                        <div class="solved-counter">
-                            <div class="solved-stats" id="solved-stats">
-                                <!-- Will be populated by JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="companies-container">
-                    <div class="company-search-wrapper">
-                        <button class="search-toggle" id="search-toggle">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                        </button>
-                        <div class="company-search" id="company-search-container">
-                            <input type="text" id="company-search" placeholder="Search companies..." class="company-search-input">
-                        </div>
-                    </div>
-                    <div class="companies-scroll" id="companies-list">
-                       <button class="company-tag all-companies active" data-company="all">
-                            All Companies
-                            <span class="remove-company">×</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<body class="qt">
 
-        <div id="problems" class="problems">
-            <div class="loading">Loading problems...</div>
+  <header class="hero qt-wrap">
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <p class="qt-eyebrow">yk4r2 · quant notes</p>
+        <h1>Quant notes &amp; toy models.</h1>
+        <p class="hero__lede">
+          A handful of small interactive models, derivations and practice problems I keep coming
+          back to — signal orthogonalization, lead/lag reversal detection, change-point statistics
+          and optimal stopping. Everything runs in your browser; have a play.
+        </p>
+        <div class="hero__cta">
+          <a class="qt-btn qt-btn--primary" href="reversal_lab.html">Open Reversal Lab</a>
+          <a class="qt-btn qt-btn--ghost" href="problems.html">Practice problems</a>
         </div>
-        <div id="pagination" class="pagination-container"></div>
+      </div>
+      <div class="hero__mark">
+        <img src="assets/icons/android-chrome-512x512.png" alt="yk4r2 mascot — a capybara in a suit">
+      </div>
     </div>
+  </header>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash/4.17.21/lodash.min.js" crossorigin="anonymous"></script>
-    <script src="script.js"></script>
-    <script>
-        // Lazy load MathJax
-        function loadMathJax() {
-            const script = document.createElement('script');
-            script.src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js";
-            script.async = true;
-            document.head.appendChild(script);
-        }
+  <main class="qt-wrap">
 
-        // Load MathJax when the first batch of problems is rendered
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    loadMathJax();
-                    observer.disconnect();
-                }
-            });
-        });
+    <!-- INTERACTIVE TOOLS -->
+    <section class="section">
+      <div class="section__head">
+        <h2>Interactive models</h2>
+        <span class="meta">runs in the browser</span>
+      </div>
+      <div class="grid">
 
-        // Start observing the problems container
-        observer.observe(document.getElementById('problems'));
+        <a class="qt-card qt-card--feature" href="reversal_lab.html" style="--qt-card-accent:var(--qt-cyan)">
+          <div class="qt-card__head">
+            <span class="qt-card__kind">Simulator</span>
+            <span class="qt-card__arrow">↗</span>
+          </div>
+          <h3>Reversal Lab</h3>
+          <p>Read the fast market (leader A) and execute on the slow one (follower B). Nine exit
+             detectors — EMA flips, z-score, Kalman velocity, BOCPD, CUSUM, OU optimal stopping —
+             compared side by side, with a Monte-Carlo check over random paths.</p>
+          <svg class="spark" viewBox="0 0 600 46" preserveAspectRatio="none" aria-hidden="true">
+            <polyline fill="none" stroke="#b5613f" stroke-width="1.4" opacity=".7"
+              points="0,16 60,12 120,20 180,33 240,39 300,29 360,17 420,12 480,20 540,26 600,22"/>
+            <polyline fill="none" stroke="#2f5d8a" stroke-width="2"
+              points="0,22 60,18 120,26 180,39 240,44 300,37 360,25 420,18 480,24 540,30 600,26"/>
+            <circle cx="240" cy="44" r="3" fill="#b88a2c"/>
+          </svg>
+          <div class="qt-card__tags">
+            <span class="qt-tag">lead/lag</span>
+            <span class="qt-tag">change-point</span>
+            <span class="qt-tag">canvas</span>
+            <span class="qt-tag">Monte-Carlo</span>
+          </div>
+        </a>
 
-        // Add this new code for Service Worker registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker registration successful');
-                    })
-                    .catch(function(error) {
-                        console.log('ServiceWorker registration failed: ', error);
-                    });
-            });
-        }
-    </script>
+        <a class="qt-card" href="orthogonalization/index.html" style="--qt-card-accent:var(--qt-green)">
+          <div class="qt-card__head">
+            <span class="qt-card__kind">Visualizer</span>
+            <span class="qt-card__arrow">↗</span>
+          </div>
+          <h3>Signal Orthogonalization</h3>
+          <p>Strip a shared factor out of a signal — in radio (time &amp; frequency domain) and in
+             finance (α = β·factor + α<sub>orth</sub>). Watch variance and risk fall as ρ rises.</p>
+          <div class="qt-card__tags">
+            <span class="qt-tag">DFT</span>
+            <span class="qt-tag">β-hedge</span>
+            <span class="qt-tag">React</span>
+          </div>
+        </a>
+
+        <a class="qt-card" href="problems.html" style="--qt-card-accent:var(--qt-violet)">
+          <div class="qt-card__head">
+            <span class="qt-card__kind">Practice</span>
+            <span class="qt-card__arrow">↗</span>
+          </div>
+          <h3>Problems Collection</h3>
+          <p>A filterable set of quant-interview math problems — by difficulty, topic and firm —
+             with hints, solutions and a solved-tracker that remembers your progress.</p>
+          <div class="qt-card__tags">
+            <span class="qt-tag">probability</span>
+            <span class="qt-tag">brainteasers</span>
+            <span class="qt-tag">MathJax</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- WRITEUPS -->
+    <section class="section">
+      <div class="section__head">
+        <h2>Derivations &amp; notes</h2>
+        <span class="meta">the math underneath</span>
+      </div>
+      <div class="grid">
+
+        <a class="qt-card" href="reversal_math.html" style="--qt-card-accent:var(--qt-orange)">
+          <div class="qt-card__head">
+            <span class="qt-card__kind">Writeup</span>
+            <span class="qt-card__arrow">↗</span>
+          </div>
+          <h3>Reversal Math — four rungs</h3>
+          <p>The theory behind the Lab: quickest change-point detection as a delay-vs-false-alarm
+             trade-off, from EMA crossovers up through Kalman trend filters, BOCPD, Shiryaev/CUSUM
+             and OU optimal stopping.</p>
+          <div class="qt-card__tags">
+            <span class="qt-tag">EMA · z-score</span>
+            <span class="qt-tag">Kalman · BOCPD</span>
+            <span class="qt-tag">CUSUM · OU</span>
+          </div>
+        </a>
+
+        <a class="qt-card" href="orthogonalization/index.html" style="--qt-card-accent:var(--qt-green)">
+          <div class="qt-card__head">
+            <span class="qt-card__kind">Note</span>
+            <span class="qt-card__arrow">↗</span>
+          </div>
+          <h3>Orthogonalization, two ways</h3>
+          <p>Why projecting out a factor (S₂⊥ = S₂ − β·S₁) is the same move whether you're cleaning a
+             radio channel or isolating idiosyncratic alpha — and the variance reduction you get for it.</p>
+          <div class="qt-card__tags">
+            <span class="qt-tag">projection</span>
+            <span class="qt-tag">variance</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="assets/site.js" data-base=""></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+  </script>
 </body>
 </html>
-

@@ -1,0 +1,160 @@
+/* ============================================================
+   yk4r2 — shared design system  (classic / light / calm)
+   Loaded on every page. Page-specific CSS may layer on top.
+   Tokens keep their --qt-* names so dependent pages follow
+   automatically when the palette changes.
+   ============================================================ */
+
+:root{
+  --qt-ink:#f6f3ec;        /* page background — warm paper   */
+  --qt-ink2:#efebe1;       /* footer / deeper wells          */
+  --qt-panel:#fffefb;      /* cards / panels                 */
+  --qt-panel2:#f3efe6;     /* raised / hover surfaces        */
+  --qt-line:#e2ddd1;       /* hairlines / borders            */
+  --qt-line-soft:#ece7db;  /* faint dividers / grid          */
+  --qt-txt:#23262c;        /* primary text — soft black      */
+  --qt-mut:#5c626d;        /* secondary text                 */
+  --qt-faint:#8b8f99;      /* tertiary / labels              */
+
+  /* restrained, classic accent system (muted earth tones) */
+  --qt-orange:#b5613f;     /* terracotta — "leader" / warm   */
+  --qt-cyan:#2f5d8a;       /* classic blue — primary accent  */
+  --qt-gold:#b88a2c;       /* brass — highlight              */
+  --qt-green:#4f7a4d;      /* sage — positive / "orth"       */
+  --qt-violet:#6a5a9c;     /* muted indigo — tertiary        */
+  --qt-pink:#a8454c;       /* dusty red — negative           */
+
+  --qt-serif:Georgia,'Iowan Old Style','Palatino Linotype','Times New Roman',serif;
+  --qt-sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --qt-mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+
+/* ---- base (apply by adding class="qt" to <body>) -------------- */
+body.qt{
+  margin:0;
+  background:var(--qt-ink);
+  color:var(--qt-txt);
+  font-family:var(--qt-sans);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body.qt *{box-sizing:border-box}
+body.qt ::selection{background:rgba(47,93,138,.16)}
+
+.qt-wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+/* ============================================================
+   Top navigation  (injected by site.js)
+   ============================================================ */
+.site-nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,243,236,.88);
+  backdrop-filter:saturate(120%) blur(8px);
+  -webkit-backdrop-filter:saturate(120%) blur(8px);
+  border-bottom:1px solid var(--qt-line);
+}
+.site-nav__inner{
+  max-width:1080px;margin:0 auto;padding:0 24px;
+  height:60px;display:flex;align-items:center;gap:22px;
+}
+.site-brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex:0 0 auto}
+.site-brand img{
+  width:30px;height:30px;border-radius:7px;display:block;
+  box-shadow:0 0 0 1px var(--qt-line);
+}
+.site-brand b{
+  font-family:var(--qt-serif);font-weight:700;font-size:17px;letter-spacing:.2px;
+  color:var(--qt-txt);white-space:nowrap;
+}
+.site-brand b span{color:var(--qt-faint);font-weight:400;font-style:italic}
+.site-nav__links{
+  display:flex;align-items:center;gap:2px;margin-left:auto;
+  overflow-x:auto;scrollbar-width:none;
+}
+.site-nav__links::-webkit-scrollbar{display:none}
+.site-nav__links a{
+  font-family:var(--qt-sans);font-size:13.5px;font-weight:500;
+  color:var(--qt-mut);text-decoration:none;white-space:nowrap;
+  padding:7px 12px;border-radius:7px;transition:.14s;
+}
+.site-nav__links a:hover{color:var(--qt-txt);background:rgba(0,0,0,.035)}
+.site-nav__links a[aria-current="page"]{
+  color:var(--qt-cyan);font-weight:600;
+}
+
+/* ============================================================
+   Footer  (injected by site.js)
+   ============================================================ */
+.site-footer{
+  border-top:1px solid var(--qt-line);
+  margin-top:72px;background:var(--qt-ink2);
+}
+.site-footer__inner{
+  max-width:1080px;margin:0 auto;padding:30px 24px;
+  display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-content:space-between;
+}
+.site-footer__brand{display:flex;align-items:center;gap:12px}
+.site-footer__brand img{width:34px;height:34px;border-radius:8px;box-shadow:0 0 0 1px var(--qt-line)}
+.site-footer__brand .t{font-size:13px;color:var(--qt-mut);line-height:1.45}
+.site-footer__brand .t b{color:var(--qt-txt);font-family:var(--qt-serif);font-weight:700}
+.site-footer__links{display:flex;flex-wrap:wrap;gap:16px}
+.site-footer__links a{
+  font-family:var(--qt-sans);font-size:13px;color:var(--qt-mut);text-decoration:none;transition:.14s;
+}
+.site-footer__links a:hover{color:var(--qt-cyan)}
+
+/* ============================================================
+   Reusable building blocks
+   ============================================================ */
+.qt-eyebrow{
+  font-family:var(--qt-sans);font-size:11.5px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--qt-faint);margin:0;
+}
+.qt-panel{
+  background:var(--qt-panel);border:1px solid var(--qt-line);border-radius:10px;padding:22px;
+}
+
+/* card — links to a tool / writeup */
+.qt-card{
+  position:relative;display:flex;flex-direction:column;
+  background:var(--qt-panel);border:1px solid var(--qt-line);border-radius:10px;
+  padding:22px;text-decoration:none;color:inherit;overflow:hidden;
+  box-shadow:0 1px 2px rgba(40,35,25,.04);
+  transition:border-color .16s, box-shadow .16s, transform .16s;
+}
+.qt-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--qt-card-accent,var(--qt-cyan));
+  box-shadow:0 8px 22px -12px rgba(40,35,25,.28);
+}
+.qt-card__head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+.qt-card__kind{
+  font-family:var(--qt-sans);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--qt-card-accent,var(--qt-cyan));
+}
+.qt-card__arrow{font-family:var(--qt-sans);color:var(--qt-faint);font-size:16px;transition:.16s}
+.qt-card:hover .qt-card__arrow{color:var(--qt-card-accent,var(--qt-cyan));transform:translate(2px,-2px)}
+.qt-card h3{margin:0 0 8px;font-family:var(--qt-serif);font-size:21px;font-weight:700;letter-spacing:.1px;color:var(--qt-txt)}
+.qt-card p{margin:0;font-size:14px;color:var(--qt-mut);line-height:1.6}
+.qt-card__tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.qt-tag{
+  font-family:var(--qt-mono);font-size:11px;color:var(--qt-mut);
+  background:var(--qt-panel2);border:1px solid var(--qt-line);border-radius:5px;padding:3px 8px;white-space:nowrap;
+}
+
+/* buttons */
+.qt-btn{
+  display:inline-flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none;
+  font-family:var(--qt-sans);font-weight:600;font-size:14px;letter-spacing:.1px;
+  padding:11px 19px;border-radius:8px;border:1px solid transparent;transition:.14s;
+}
+.qt-btn--primary{background:var(--qt-cyan);color:#fff}
+.qt-btn--primary:hover{filter:brightness(1.07)}
+.qt-btn--ghost{background:transparent;border-color:var(--qt-line);color:var(--qt-txt)}
+.qt-btn--ghost:hover{border-color:var(--qt-cyan);color:var(--qt-cyan)}
+
+@media(max-width:640px){
+  .site-nav__inner{gap:12px}
+  .site-brand b span{display:none}
+}

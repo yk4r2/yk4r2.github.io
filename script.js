@@ -35,7 +35,7 @@ function toggleSolved(problemId, checkbox) {
             particleCount: 100,
             spread: 70,
             origin: { y: 0.8 }, // Start from near the checkbox
-            colors: ['#4ade80', '#2563eb', '#fbbf24'], // Use our theme colors
+            colors: ['#4f7a4d', '#2f5d8a', '#b88a2c'], // Use our theme colors
             disableForReducedMotion: true // Accessibility consideration
         });
         
@@ -45,7 +45,7 @@ function toggleSolved(problemId, checkbox) {
                 particleCount: 50,
                 spread: 50,
                 origin: { y: 0.8 },
-                colors: ['#4ade80', '#2563eb', '#fbbf24'],
+                colors: ['#4f7a4d', '#2f5d8a', '#b88a2c'],
                 disableForReducedMotion: true
             });
         }, 150);

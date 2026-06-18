@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reversal Math — математика разворотов · yk4r2</title>
+
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+<link rel="manifest" href="assets/manifest/site.webmanifest">
+
+<script>
+  MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] } };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" async></script>
+<link rel="stylesheet" href="assets/site.css?v=2">
+<style>
+  .article{max-width:800px;padding:48px 22px 0}
+  .article__eyebrow{margin-bottom:14px}
+  .article h1{font-size:clamp(28px,4.4vw,40px);line-height:1.12;margin:0 0 14px;
+    font-family:var(--qt-serif);font-weight:700;letter-spacing:-.2px;color:var(--qt-txt);text-wrap:balance}
+  .article__lede{color:var(--qt-mut);font-size:15px;line-height:1.6;margin:0 0 12px}
+  .article__nav{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0 8px}
+
+  .article h2{
+    font-size:12.5px;font-family:var(--qt-sans);font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--qt-faint);
+    margin:46px 0 14px;padding-top:18px;border-top:1px solid var(--qt-line);
+  }
+  .article h3{font-size:18px;font-family:var(--qt-serif);font-weight:700;color:var(--qt-txt);margin:26px 0 8px;letter-spacing:.1px}
+  .article p{color:var(--qt-txt);font-size:15px;line-height:1.7;margin:0 0 14px}
+  .article code{
+    font-family:var(--qt-mono);font-size:.86em;background:var(--qt-panel2);
+    border:1px solid var(--qt-line);border-radius:5px;padding:1px 6px;color:var(--qt-cyan);
+  }
+  /* display-math blocks: give them a panel-ish frame + horizontal scroll on mobile */
+  mjx-container[display="true"]{
+    overflow-x:auto;overflow-y:hidden;padding:14px 16px;margin:16px 0 !important;
+    background:var(--qt-panel);border:1px solid var(--qt-line);border-left:3px solid var(--qt-cyan);
+    border-radius:10px;color:var(--qt-txt);
+  }
+  mjx-container{color:var(--qt-txt)}
+</style>
+</head>
+<body class="qt">
+
+<main class="article qt-wrap">
+
+  <p class="qt-eyebrow article__eyebrow">Writeup · change-point detection</p>
+  <h1>Ловля разворотов: математика четырёх ступеней</h1>
+  <p class="article__lede">Теория, на которой стоит <a href="reversal_lab.html" style="color:var(--qt-cyan)">Reversal Lab</a>:
+     быстрая детекция смены знака дрейфа как компромисс «задержка против ложных тревог» — от EMA до
+     оптимальной остановки на процессе Орнштейна–Уленбека.</p>
+  <div class="article__nav">
+    <a class="qt-btn qt-btn--primary" href="reversal_lab.html">Открыть симулятор →</a>
+    <a class="qt-btn qt-btn--ghost" href="index.html">← На главную</a>
+  </div>
+
+<p>Везде: leader <code>A</code> даёт сигнал, торгуем follower <code>B</code> (запаздывает на \(L\) баров).
+Торгуемый ряд \(s_t\), дрейф \(\mu_t=\mathbb{E}[\Delta s_t]\). «Разворот» — смена знака дрейфа (для дна: \(\mu&lt;0\to\mu&gt;0\)).</p>
+
+<h2>Постановка</h2>
+
+<p>Задача — online change-point / quickest detection: засечь смену знака дрейфа быстро, но без ложных тревог.
+Две метрики — задержка \(D\) и среднее время до ложной тревоги \(\mathrm{ARL}_0\):</p>
+
+\[ D=\mathbb{E}\big[\,\tau-\theta \mid \tau\ge\theta\,\big],\qquad
+   \mathrm{ARL}_0=\mathbb{E}\big[\,\tau \mid \text{no change-point}\,\big]. \]
+
+<p>Любой детектор — точка на кривой \(D\) против \(\mathrm{ARL}_0\); одновременно мгновенно и без ложных нельзя.</p>
+
+<h3>Lead-lag</h3>
+
+<p>Follower повторяет тот же путь с задержкой: \(B_t \approx A_{t-L}+\varepsilon_t\).
+Детектор подтверждает разворот на leader с задержкой \(d\); follower достигает дна на \(L\) баров позже.
+При исполнении на follower по сигналу leader задержки гасятся:</p>
+
+\[ \underbrace{d}_{\text{detector lag}}\;+\;\underbrace{(-L)}_{\text{lead-time}}\;\approx\;0. \]
+
+<h2>Ступень 1 — EMA</h2>
+
+\[ \mathrm{EMA}_t=\alpha\,s_t+(1-\alpha)\,\mathrm{EMA}_{t-1},\qquad \alpha=\frac{2}{N+1}. \]
+
+<p>Три варианта сигнала «разворот вверх»:</p>
+
+<p>1a — наклон сменил знак: \(g_t=\mathrm{EMA}_t-\mathrm{EMA}_{t-1}\), сигнал при \(g_{t-1}&lt;0\le g_t\).</p>
+<p>1b — цена пересекла EMA снизу вверх: \(s_{t-1}\le\mathrm{EMA}_{t-1}\) и \(s_t&gt;\mathrm{EMA}_t\).</p>
+<p>1c — быстрая EMA пересекла медленную: \(d_t=\mathrm{EMA}^{f}_t-\mathrm{EMA}^{s}_t\) пересекает \(0\).</p>
+
+<p>Структурная задержка (средний «возраст» данных в EMA):</p>
+
+\[ \mathrm{lag}=\frac{1-\alpha}{\alpha}
+   =\frac{1-\tfrac{2}{N+1}}{\tfrac{2}{N+1}}
+   =\frac{N-1}{2}. \]
+
+<h2>Ступень 2 — z-score и ZigZag</h2>
+
+<p>EW-оценки среднего и дисперсии, нормированное отклонение:</p>
+
+\[ \mu_t=(1-\beta)\mu_{t-1}+\beta\,s_t,\qquad
+   \nu_t=(1-\beta)\nu_{t-1}+\beta\,(s_t-\mu_t)^2,\qquad
+   z_t=\frac{s_t-\mu_t}{\sqrt{\nu_t}}. \]
+
+<p>Вход при \(|z|\ge z_{\mathrm{in}}\); выход у разворота — пересечение \(z\) через \(0\) (или порог \(z_{\mathrm{out}}&lt;z_{\mathrm{in}}\)) с подтверждением \(k\) баров (гистерезис).</p>
+
+<p>ZigZag по волатильности: от текущего минимума \(m_t\) разворот вверх при превышении порога в \(\sigma\):</p>
+
+\[ \theta_t=c\,\sigma_t,\qquad s_t-m_t\ \ge\ \theta_t. \]
+
+<h2>Ступень 3 — Kalman и BOCPD</h2>
+
+<p>Local linear trend: состояние \(x_t=(\ell_t,\,b_t)^\top\) = (уровень, скорость).</p>
+
+\[ \ell_t=\ell_{t-1}+b_{t-1}+\eta_t,\qquad b_t=b_{t-1}+\zeta_t,\qquad s_t=\ell_t+\varepsilon_t, \]
+
+\[ F=\begin{pmatrix}1&1\\[2pt]0&1\end{pmatrix},\qquad H=\begin{pmatrix}1&0\end{pmatrix},\qquad
+   Q=\mathrm{diag}(\sigma_\eta^2,\sigma_\zeta^2),\qquad R=\sigma_\varepsilon^2. \]
+
+<p>Предсказание:</p>
+
+\[ \hat x_{t\mid t-1}=F\,\hat x_{t-1\mid t-1},\qquad
+   P_{t\mid t-1}=F\,P_{t-1\mid t-1}\,F^\top+Q. \]
+
+<p>Обновление:</p>
+
+\[ \nu_t=s_t-H\hat x_{t\mid t-1},\qquad
+   S_t=H\,P_{t\mid t-1}\,H^\top+R,\qquad
+   K_t=P_{t\mid t-1}\,H^\top S_t^{-1}, \]
+
+\[ \hat x_{t\mid t}=\hat x_{t\mid t-1}+K_t\nu_t,\qquad
+   P_{t\mid t}=(I-K_tH)\,P_{t\mid t-1}. \]
+
+<p>Сигнал — скорость значимо сменила знак вверх (t-статистика по дисперсии скорости \([P_{t\mid t}]_{22}\)):</p>
+
+\[ T_t=\frac{\hat b_{t\mid t}}{\sqrt{[P_{t\mid t}]_{22}}},\qquad
+   T_{t-1}&lt;\tau^*\le T_t. \]
+
+<p>BOCPD: апостериор по длине текущего сегмента (run-length) \(r_t\), hazard \(H=1/\lambda\):</p>
+
+\[ \gamma_t(r)=\gamma_{t-1}(r-1)\,\pi_t^{(r-1)}(1-H),\qquad
+   \gamma_t(0)=\sum_{r'}\gamma_{t-1}(r')\,\pi_t^{(r')}\,H, \]
+
+<p>Первое уравнение — рост текущего сегмента, второе (\(r=0\)) — разлад (сброс длины).
+Здесь \(\pi_t^{(r)}=p\big(s_t\mid s_{t-r:t-1}\big)\) — предиктив. Разворот = масса run-length коллапсирует в \(r=0\).</p>
+
+<h2>Ступень 4 — Shiryaev/CUSUM и OU optimal stopping</h2>
+
+<p>Наблюдение до/после неизвестного момента разлада \(\theta\):</p>
+
+\[ dX_t=\mu\,\mathbb{1}_{\{t\ge\theta\}}\,dt+\sigma\,dW_t. \]
+
+<p>Апостериор \(\pi_t=\mathbb{P}(\theta\le t\mid\mathcal{F}_t)\) — фильтр Вонэма:</p>
+
+\[ d\pi_t=\lambda(1-\pi_t)\,dt+\frac{\mu}{\sigma}\,\pi_t(1-\pi_t)\,d\bar W_t. \]
+
+<p>Минимизируя байес-риск \(\mathbb{P}(\tau&lt;\theta)+c\,\mathbb{E}[(\tau-\theta)^+]\), оптимальное правило — порог по апостериору:</p>
+
+\[ \tau^*=\inf\{\,t:\pi_t\ge A^*\,\}. \]
+
+<p>Дискретный рабочий эквивалент — CUSUM (Page), оптимальный по Лордену/Мустакидесу. Лог-правдоподобный вклад и накопитель:</p>
+
+\[ \ell_t=\log\frac{f_1(s_t)}{f_0(s_t)},\qquad
+   g_t=\max\big(0,\;g_{t-1}+\ell_t\big),\qquad g_t\ge h, \]
+
+<p>где \(f_0\) — плотность «до» (дрейф вниз), \(f_1\) — «после» (вверх). Порог \(h\) задаётся через целевой \(\mathrm{ARL}_0\) (приближение Сигмунда):</p>
+
+\[ \mathrm{ARL}_0\approx\frac{e^{\,h}-h-1}{\text{drift}}. \]
+
+<p>OU optimal stopping. Спред как процесс Орнштейна–Уленбека, закрытие максимизирует дисконтированную выручку (издержки \(c\)):</p>
+
+\[ dX_t=\kappa(\bar\theta-X_t)\,dt+\sigma\,dW_t,\qquad
+   V(x)=\sup_{\tau}\mathbb{E}_x\big[e^{-r\tau}(X_\tau-c)\big]. \]
+
+<p>В зоне продолжения — обыкновенное ДУ \(\mathcal{L}V=rV\), где</p>
+
+\[ \mathcal{L}=\frac{\sigma^2}{2}\,\partial_{xx}+\kappa(\bar\theta-x)\,\partial_x. \]
+
+<p>Решение \(V(x)=A\,F(x)\) с возрастающим фундаментальным решением \(F\). Условие гладкой склейки (smooth pasting) на границе \(b^*\):</p>
+
+\[ A\,F(b^*)=b^*-c,\qquad A\,F'(b^*)=1
+   \quad\Longrightarrow\quad
+   F(b^*)=(b^*-c)\,F'(b^*). \]
+
+<p>Корень \(b^*\) — оптимальный порог выхода, зависит от \(\kappa,\sigma,r,c\), а не от подгонки.</p>
+
+</main>
+
+<script src="assets/site.js" data-base=""></script>
+</body>
+</html>

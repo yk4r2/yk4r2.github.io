@@ -1,12 +1,12 @@
 :root {
-    --primary: #2563eb;
-    --background: #f8fafc;
-    --text: #1e293b;
-    --card: #ffffff;
-    --border: #e2e8f0;
-    --easy: #4ade80;
-    --medium: #fbbf24;
-    --hard: #ef4444;
+    --primary: #2f5d8a;
+    --background: #f6f3ec;
+    --text: #23262c;
+    --card: #fffefb;
+    --border: #e2ddd1;
+    --easy: #4f7a4d;
+    --medium: #b88a2c;
+    --hard: #a8454c;
 }
 
 body {
@@ -15,12 +15,13 @@ body {
     color: var(--text);
     line-height: 1.5;
     margin: 0;
-    padding: 20px;
+    padding: 0;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1180px;
     margin: 0 auto;
+    padding: 30px 22px 0;
 }
 
 .header {
@@ -68,6 +69,12 @@ select {
 
 .problem-card:hover {
     transform: translateY(-2px);
+    border-color: rgba(47,93,138,0.45);
+    box-shadow: 0 8px 22px -12px rgba(40,35,25,0.28);
+}
+
+.problem-card {
+    border: 1px solid var(--border);
 }
 
 .problem-header {
@@ -89,16 +96,18 @@ select {
 }
 
 .tag {
-    background: #f1f5f9;
+    background: #f3efe6;
+    border: 1px solid var(--border);
     padding: 0.25rem 0.75rem;
     border-radius: 999px;
     font-size: 0.75rem;
-    color: #64748b;
+    color: #5c626d;
 }
 
 .company-tag-card {
-    background: #e2e8f0;
-    color: #475569;
+    background: #eef2f6;
+    border-color: #d2dde7;
+    color: #2f5d8a;
 }
 
 .solved-checkbox {
@@ -139,7 +148,7 @@ select {
 
 .solved-checkbox input[type="checkbox"]:checked::before {
     content: "✓";
-    color: white;
+    color: #fff;
     font-size: 0.875rem;
 }
 
@@ -218,7 +227,7 @@ select {
 
 .page-button.active {
     background: var(--primary);
-    color: white;
+    color: #fff;
     border-color: var(--primary);
 }
 
@@ -388,13 +397,13 @@ select {
 
 .company-tag:hover {
     background: var(--primary);
-    color: white;
+    color: #fff;
     border-color: var(--primary);
 }
 
 .company-tag.active {
     background: var(--primary);
-    color: white;
+    color: #fff;
     border-color: var(--primary);
 }
 
@@ -466,13 +475,13 @@ select {
 
 .difficulty-tag:hover {
     background: var(--primary);
-    color: white;
+    color: #fff;
     border-color: var(--primary);
 }
 
 .difficulty-tag.active {
     background: var(--primary);
-    color: white;
+    color: #fff;
     border-color: var(--primary);
 }
 
@@ -493,17 +502,17 @@ select {
 
 .difficulty-tag[data-difficulty="easy"].active {
     background: var(--easy);
-    color: white;
+    color: #fff;
 }
 
 .difficulty-tag[data-difficulty="medium"].active {
     background: var(--medium);
-    color: white;
+    color: #fff;
 }
 
 .difficulty-tag[data-difficulty="hard"].active {
     background: var(--hard);
-    color: white;
+    color: #fff;
 }
 
 .difficulty.easy { color: var(--easy); }
@@ -581,7 +590,7 @@ select {
 .solved-filter-tag:hover,
 .solved-filter-tag.active {
     background: var(--primary);
-    color: white;
+    color: #fff;
     border-color: var(--primary);
 }
 
