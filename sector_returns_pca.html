@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sector returns → PCA factors · yk4r2</title>
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png">
+<link rel="manifest" href="assets/manifest/site.webmanifest">
+<link rel="stylesheet" href="assets/site.css?v=2">
+<style>
+  :root{
+    --ink:#f6f3ec; --panel:#fffefb; --panel2:#f3efe6; --line:#e2ddd1;
+    --txt:#23262c; --txt2:#5c626d; --txt3:#8b8f99;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ink);color:var(--txt);
+    font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+  .wrap{max-width:1280px;margin:0 auto;padding:26px 20px 60px}
+
+  header{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:15px;margin-bottom:20px;gap:18px;flex-wrap:wrap}
+  .eyebrow{font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#2f5d8a}
+  h1{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:27px;font-weight:700;margin:6px 0 0;letter-spacing:-.01em}
+  .sub{color:var(--txt2);font-size:13.5px;max-width:560px;line-height:1.5;margin-top:6px}
+  .seedbtn{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--txt2);background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:8px 13px;cursor:pointer;white-space:nowrap}
+  .seedbtn:hover{border-color:#b88a2c;color:var(--txt)}
+
+  .grid{display:grid;grid-template-columns:262px 1fr;gap:20px;align-items:start}
+  @media(max-width:920px){.grid{grid-template-columns:1fr}}
+  .rail{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 17px;position:sticky;top:18px}
+  @media(max-width:920px){.rail{position:static}}
+  .rail h2{font-family:ui-monospace,monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--txt3);margin:0 0 12px;font-weight:600}
+  .rail .blk + .blk{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+
+  .seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:3px;gap:3px}
+  .seg button{flex:1;font-family:ui-monospace,monospace;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--txt2);background:transparent;border:none;border-radius:6px;padding:9px 0;cursor:pointer}
+  .seg button.on{background:#b88a2c;color:#fff}
+  .seg button.on.off{background:var(--txt3);color:#fff}
+  .spikecap{font-size:11.5px;color:var(--txt3);margin-top:8px;line-height:1.45}
+
+  .ctl{margin-bottom:14px}.ctl:last-child{margin-bottom:0}
+  .ctl label{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--txt2);margin-bottom:7px}
+  .ctl label b{font-family:ui-monospace,monospace;color:var(--txt);font-weight:500;font-size:13px}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:var(--line);border-radius:3px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#2f5d8a;cursor:pointer;border:2px solid var(--panel);box-shadow:0 0 0 1px #1d3a57}
+  input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:#2f5d8a;cursor:pointer;border:2px solid var(--panel)}
+
+  .legend{display:flex;flex-direction:column;gap:7px}
+  .lrow{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--txt2)}
+  .lrow .sw{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+  .lrow .ct{margin-left:auto;font-family:ui-monospace,monospace;font-size:11px;color:var(--txt3)}
+
+  .stage{min-width:0;display:flex;flex-direction:column;gap:16px}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+  .tabs button{font-size:13.5px;font-weight:500;color:var(--txt2);background:transparent;border:none;padding:11px 16px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tabs button.active{color:var(--txt);border-bottom-color:#b88a2c}
+  .tabs button:hover{color:var(--txt)}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .cap{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:12px;flex-wrap:wrap}
+  .cap h3{font-size:14px;font-weight:600;margin:0}
+  .cap .hint{font-size:11.5px;color:var(--txt3)}
+  .plot svg{display:block;width:100%;height:auto}
+  .note{font-size:12.5px;color:var(--txt2);line-height:1.55;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+  .note b{color:#b88a2c}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.split{grid-template-columns:1fr}}
+  .statline{display:flex;gap:22px;flex-wrap:wrap;font-family:ui-monospace,monospace;font-size:11.5px;color:var(--txt2);margin-top:8px}
+  .statline b{color:var(--txt)}
+  .subcap{font-size:11px;color:var(--txt3);margin-top:6px;text-align:center}
+  .pclegend{display:flex;gap:16px;flex-wrap:wrap;margin-top:11px;font-size:11.5px;color:var(--txt2)}
+  .pclegend .pl{display:flex;align-items:center;gap:6px}
+  .pclegend .pl i{width:14px;height:3px;border-radius:2px;display:inline-block}
+  .pclegend .pl em{font-style:normal;font-family:ui-monospace,monospace;color:var(--txt3)}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Factor model · PCA</div>
+      <h1>Sector returns → PCA factors</h1>
+      <div class="sub">25 return streams built from a market factor + 5 unequal sector factors + noise. PCA reads the structure back out: the market is the spike, the sectors are the next bumps, the rest is sea.</div>
+    </div>
+    <button class="seedbtn mono" id="reseed">↻ new market</button>
+  </header>
+
+  <div class="grid">
+    <aside class="rail">
+      <div class="blk">
+        <h2>Market spike</h2>
+        <div class="seg" id="seg">
+          <button id="segOn" class="on">ON</button>
+          <button id="segOff">OFF</button>
+        </div>
+        <div class="spikecap" id="spikecap">Market factor present — every asset loads on a common direction.</div>
+      </div>
+      <div class="blk">
+        <h2>Dimensions</h2>
+        <div class="ctl"><label>Observations (points on PCA) <b id="tVal">250</b></label><input type="range" id="T" min="30" max="600" step="10" value="250"></div>
+        <div class="ctl"><label>Assets (series) <b id="nVal">25</b></label><input type="range" id="N" min="18" max="30" step="1" value="25"></div>
+        <div class="ctl"><label>Sector strength <b id="ssVal">1.0</b></label><input type="range" id="ss" min="0" max="160" step="5" value="100"></div>
+      </div>
+      <div class="blk">
+        <h2>PCA factor overlay</h2>
+        <div class="ctl"><label>Show first k PCs on returns <b id="kVal">1</b></label><input type="range" id="kc" min="0" max="5" step="1" value="1"></div>
+        <div class="spikecap">Overlays the first k principal-component factor portfolios on the Returns tab.</div>
+      </div>
+      <div class="blk"><h2>5 sectors (uneven)</h2><div class="legend" id="legend"></div></div>
+    </aside>
+
+    <section class="stage">
+      <div class="tabs">
+        <button class="active" data-t="ret">Returns</button>
+        <button data-t="scree">Scree (PCA factors)</button>
+        <button data-t="map">Factor map</button>
+      </div>
+
+      <div class="card" id="tab-ret">
+        <div class="cap"><h3>Cumulative return paths</h3><span class="hint">colored by sector · thick line = equal-weight index (realized market factor)</span></div>
+        <div class="plot" id="svg-ret"></div>
+        <div class="pclegend" id="pc-legend"></div>
+        <div class="note" id="note-ret"></div>
+      </div>
+
+      <div class="card hidden" id="tab-scree">
+        <div class="cap"><h3>Eigenvalue spectrum</h3><span class="hint">each bar = a PCA factor · height = variance it carries</span></div>
+        <div class="plot" id="svg-scree"></div>
+        <div class="statline" id="scree-stat"></div>
+        <div class="note" id="note-scree"></div>
+      </div>
+
+      <div class="card hidden" id="tab-map">
+        <div class="cap"><h3>Loading map &amp; correlation</h3><span class="hint">left: each asset by PC1/PC2 loading · right: correlation, grouped by sector</span></div>
+        <div class="split">
+          <div><div class="plot" id="svg-map"></div><div class="subcap" id="map-axes">PC1 × PC2</div></div>
+          <div><div class="plot" id="svg-heat"></div><div class="subcap">correlation · block = sector</div></div>
+        </div>
+        <div class="note" id="note-map"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+/* ---------- numerics ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gaussFrom(rng){let sp=null;return function(){if(sp!==null){const s=sp;sp=null;return s}let u,v,s;do{u=2*rng()-1;v=2*rng()-1;s=u*u+v*v}while(s>=1||s===0);const m=Math.sqrt(-2*Math.log(s)/s);sp=v*m;return u*m}}
+function jacobi(Ain){const n=Ain.length;const a=Ain.map(r=>Array.from(r));const v=Array.from({length:n},(_,i)=>{const row=new Float64Array(n);row[i]=1;return row;});for(let sw=0;sw<80;sw++){let off=0;for(let p=0;p<n;p++)for(let q=p+1;q<n;q++)off+=Math.abs(a[p][q]);if(off<1e-9)break;for(let p=0;p<n;p++)for(let q=p+1;q<n;q++){const apq=a[p][q];if(Math.abs(apq)<1e-14)continue;const app=a[p][p],aqq=a[q][q];const th=(aqq-app)/(2*apq);const t=Math.sign(th||1)/(Math.abs(th)+Math.sqrt(th*th+1));const c=1/Math.sqrt(t*t+1),s=t*c,tau=s/(1+c);a[p][p]=app-t*apq;a[q][q]=aqq+t*apq;a[p][q]=0;a[q][p]=0;for(let i=0;i<n;i++)if(i!==p&&i!==q){const aip=a[i][p],aiq=a[i][q];a[i][p]=aip-s*(aiq+tau*aip);a[p][i]=a[i][p];a[i][q]=aiq+s*(aip-tau*aiq);a[q][i]=a[i][q];}for(let i=0;i<n;i++){const vip=v[i][p],viq=v[i][q];v[i][p]=vip-s*(viq+tau*vip);v[i][q]=viq+s*(vip-tau*viq);}}}const e=[];for(let i=0;i<n;i++)e.push({val:a[i][i],vec:v.map(r=>r[i])});e.sort((x,y)=>y.val-x.val);return e;}
+
+/* ---------- model ---------- */
+const RATIO=[0.28,0.24,0.20,0.16,0.12];
+function clusterSizes(N){let s=RATIO.map(r=>Math.max(1,Math.round(r*N)));let d=N-s.reduce((a,b)=>a+b,0);let k=0;while(d!==0){s[k%5]+=Math.sign(d);d-=Math.sign(d);k++;}return s;}
+let SEED=4242;
+function generate(N,T,spikeOn,secStr,seed){
+  const rng=mulberry32(seed),g=gaussFrom(rng);
+  const sizes=clusterSizes(N);const cluster=[];sizes.forEach((sz,c)=>{for(let i=0;i<sz;i++)cluster.push(c);});
+  const bm=[],bs=[],sig=[];
+  for(let i=0;i<N;i++){bm.push(spikeOn?(0.55+0.35*rng()):0);bs.push(secStr*(0.70+0.50*rng()));sig.push(0.60+0.50*rng());}
+  const M=new Float64Array(T);for(let t=0;t<T;t++)M[t]=g();
+  const S=Array.from({length:5},()=>{const a=new Float64Array(T);for(let t=0;t<T;t++)a[t]=g();return a;});
+  const R=Array.from({length:T},()=>new Float64Array(N));
+  for(let t=0;t<T;t++)for(let i=0;i<N;i++)R[t][i]=bm[i]*M[t]+bs[i]*S[cluster[i]][t]+sig[i]*g();
+  const mean=new Float64Array(N),sd=new Float64Array(N);
+  for(let i=0;i<N;i++){let m=0;for(let t=0;t<T;t++)m+=R[t][i];mean[i]=m/T;}
+  for(let i=0;i<N;i++){let v=0;for(let t=0;t<T;t++){const d=R[t][i]-mean[i];v+=d*d;}sd[i]=Math.sqrt(v/T)||1;}
+  const corr=Array.from({length:N},()=>new Float64Array(N));
+  for(let i=0;i<N;i++)for(let j=i;j<N;j++){let s=0;for(let t=0;t<T;t++)s+=(R[t][i]-mean[i])*(R[t][j]-mean[j]);s/=(T*sd[i]*sd[j]);corr[i][j]=s;corr[j][i]=s;}
+  return {R,corr,eig:jacobi(corr),cluster,sizes,N,T,spikeOn,mean,sd};
+}
+
+/* ---------- SVG helpers ---------- */
+const SC=['#b88a2c','#6a5a9c','#2f5d8a','#b5613f','#4f7a4d'];
+const MKT='#23262c', TEAL='#2f5d8a', GREY='#bdb6a8', GRID='#ece7db', AX='#d8d2c6', TX='#8b8f99';
+const F=(n,d=1)=>Number(n).toFixed(d);
+function svg(W,H,inner){return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"><style>text{font-family:ui-monospace,monospace}</style>${inner}</svg>`;}
+function line(x1,y1,x2,y2,stroke,sw=1,dash=''){return `<line x1="${F(x1)}" y1="${F(y1)}" x2="${F(x2)}" y2="${F(y2)}" stroke="${stroke}" stroke-width="${sw}"${dash?` stroke-dasharray="${dash}"`:''}/>`;}
+function txt(x,y,s,fill,size=11,anchor='start',weight=400){return `<text x="${F(x)}" y="${F(y)}" fill="${fill}" font-size="${size}" text-anchor="${anchor}" font-weight="${weight}" dominant-baseline="middle">${s}</text>`;}
+function poly(pts,stroke,sw,op=1){return `<polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="${sw}" opacity="${op}" stroke-linejoin="round"/>`;}
+function rect(x,y,w,h,fill){return `<rect x="${F(x)}" y="${F(y)}" width="${F(w)}" height="${F(h)}" fill="${fill}"/>`;}
+
+let model=null, tab='ret', SPIKE=true;
+
+/* ---------- RETURNS ---------- */
+const PCC=['#23262c','#a8454c','#4f7a4d','#b88a2c','#2f5d8a'];
+function viewReturns(){
+  const W=800,H=360,padL=48,padR=14,padT=12,padB=26,pw=W-padL-padR,ph=H-padT-padB;
+  const {R,cluster,N,T,eig,mean,sd}=model;
+  const K=Math.max(0,Math.min(5,+kc_.value));
+  const demean=K>0;                                               // PCA works on demeaned data → show that basis
+  // cumulative asset paths (raw, or demeaned when PCs shown)
+  const cum=Array.from({length:N},()=>new Float64Array(T));let lo=1e9,hi=-1e9;
+  for(let i=0;i<N;i++){let acc=0;for(let t=0;t<T;t++){acc+=demean?(R[t][i]-mean[i]):R[t][i];cum[i][t]=acc;if(acc<lo)lo=acc;if(acc>hi)hi=acc;}}
+  const idx=new Float64Array(T);for(let t=0;t<T;t++){let s=0;for(let i=0;i<N;i++)s+=cum[i][t];idx[t]=s/N;}  // = demeaned index when demean
+  // first K PC factor portfolios: w=v/Σ|v| (unit gross) on standardized returns, ×meanSd → avg-asset units (driftless)
+  let meanSd=0;for(let i=0;i<N;i++)meanSd+=sd[i];meanSd/=N;
+  const pcs=[];
+  for(let k=0;k<K;k++){
+    const v=eig[k].vec;let gross=0;for(let i=0;i<N;i++)gross+=Math.abs(v[i]);gross=gross||1;
+    const cf=new Float64Array(T);let acc=0;
+    for(let t=0;t<T;t++){let f=0;for(let i=0;i<N;i++)f+=(v[i]/gross)*((R[t][i]-mean[i])/sd[i]);acc+=f*meanSd;cf[t]=acc;}
+    let flip;                                                     // orient for clean overlay
+    if(k===0){let d=0;for(let t=0;t<T;t++)d+=cf[t]*idx[t];flip=d<0;}  // PC1: align with the (demeaned) index
+    else flip=cf[T-1]<0;
+    if(flip)for(let t=0;t<T;t++)cf[t]=-cf[t];
+    for(let t=0;t<T;t++){if(cf[t]<lo)lo=cf[t];if(cf[t]>hi)hi=cf[t];}
+    pcs.push({cf,color:PCC[k],label:'PC'+(k+1),pct:100*eig[k].val/N});
+  }
+  const pad=(hi-lo)*0.08||1;lo-=pad;hi+=pad;
+  const X=t=>padL+(T<=1?0:t/(T-1)*pw), Y=v=>padT+ph-(v-lo)/(hi-lo)*ph;
+  let s='';
+  for(let g=0;g<=4;g++){const val=lo+(hi-lo)*g/4,y=Y(val);s+=line(padL,y,padL+pw,y,GRID);s+=txt(padL-7,y,F(val,0),TX,10,'end');}
+  s+=line(padL,Y(0),padL+pw,Y(0),'#cfc8ba',1);
+  const assetOp=K>0?0.26:0.6;
+  for(let i=0;i<N;i++){let p='';for(let t=0;t<T;t++)p+=`${F(X(t))},${F(Y(cum[i][t]))} `;s+=poly(p.trim(),SC[cluster[i]],1.1,assetOp);}
+  let pi='';for(let t=0;t<T;t++)pi+=`${F(X(t))},${F(Y(idx[t]))} `;
+  if(K>0)s+=`<polyline points="${pi.trim()}" fill="none" stroke="#8b8f99" stroke-width="1.3" stroke-dasharray="4,4" opacity="0.9"/>`;
+  else s+=poly(pi.trim(),MKT,2.4,1);
+  pcs.forEach((P,k)=>{let p='';for(let t=0;t<T;t++)p+=`${F(X(t))},${F(Y(P.cf[t]))} `;s+=poly(p.trim(),P.color,k===0?2.7:2.0,1);});
+  s+=txt(padL+pw/2,padT+ph+16,'time (observations)',TX,10,'middle');
+  document.getElementById('svg-ret').innerHTML=svg(W,H,s);
+  // legend
+  const lg=document.getElementById('pc-legend');
+  if(K>0)lg.innerHTML='<span class="pl"><i style="border-top:2px dashed #8b8f99;height:0;width:14px;background:none"></i>demeaned index</span>'+pcs.map(P=>`<span class="pl"><i style="background:${P.color}"></i>${P.label} <em>${F(P.pct,0)}% var</em></span>`).join('');
+  else lg.innerHTML='<span class="pl"><i style="background:'+MKT+'"></i>equal-weight index (realized market factor)</span>';
+  // note
+  let note;
+  if(K>0){
+    note = model.spikeOn
+      ? `Paths shown <b>demeaned</b> (drift removed = the basis PCA operates on). Bold lines = first ${K} PCA factor portfolios. <b>PC1</b> tracks the dashed demeaned index almost exactly — PCA recovers the <b>market factor</b> from returns alone, no labels. PC2+ are lower-vol long-short <b>sector</b> factors.`
+      : `Demeaned paths. With no market, <b>PC1</b> is the strongest <b>sector spread</b>, not the index (now ~flat) — the dominant common direction is sectoral.`;
+  } else {
+    note = model.spikeOn
+      ? 'Spike <b>ON</b>: all paths share a common drift — white index = realized market factor. Raise <b>k</b> in the rail to overlay the PCA factors and watch PC1 trace the market.'
+      : 'Spike <b style="color:#8b8f99">OFF</b>: no common direction; paths bundle only within sectors. Raise <b>k</b> to see PCA surface the sector factors.';
+  }
+  document.getElementById('note-ret').innerHTML=note;
+}
+
+/* ---------- SCREE ---------- */
+function viewScree(){
+  const W=800,H=360,padL=46,padR=14,padT=16,padB=30,pw=W-padL-padR,ph=H-padT-padB;
+  const {eig,N,T}=model;const g=N/T,sq=Math.sqrt(g),lp=(1+sq)**2,lm=Math.max(0,(1-sq)**2);
+  let ymax=Math.max(lp*1.3,eig[0].val*1.1);
+  const X=i=>padL+(i+0.5)/N*pw, Y=v=>padT+ph-v/ymax*ph;
+  let s='';
+  s+=rect(padL,Y(lp),pw,Y(lm)-Y(lp),'rgba(150,140,120,.18)');
+  for(let k=0;k<=4;k++){const v=ymax*k/4,y=Y(v);s+=line(padL,y,padL+pw,y,GRID);s+=txt(padL-7,y,F(v),TX,10,'end');}
+  s+=line(padL,Y(lp),padL+pw,Y(lp),TEAL,1.3,'5,4');
+  s+=txt(padL+6,Y(lp)-9,'noise floor λ₊ '+F(lp,2),TEAL,10,'start',600);
+  const bw=Math.min(22,pw/N*0.66);
+  eig.forEach((e,i)=>{const x=X(i),y=Y(e.val),above=e.val>lp;
+    const col=(i===0&&model.spikeOn&&above)?MKT:(above?'#6a5a9c':GREY);
+    s+=`<rect x="${F(x-bw/2)}" y="${F(y)}" width="${F(bw)}" height="${F(padT+ph-y)}" fill="${col}" opacity="${above?1:0.85}"/>`;
+    if(above&&i<6)s+=txt(x,y-7,F(100*e.val/N,0)+'%','#23262c',9.5,'middle',600);
+  });
+  for(let i=0;i<N;i++)if(i<6||i===N-1||i%5===4)s+=txt(X(i),padT+ph+14,'PC'+(i+1),TX,10,'middle');
+  document.getElementById('svg-scree').innerHTML=svg(W,H,s);
+  const above=eig.filter(e=>e.val>lp).length, cum5=eig.slice(0,5).reduce((a,e)=>a+e.val,0);
+  document.getElementById('scree-stat').innerHTML=`γ=N/T <b>${F(g,3)}</b>   ·   factors above floor <b>${above}</b>   ·   PC1 share <b>${F(100*eig[0].val/N,0)}%</b>   ·   top-5 cumulative <b>${F(100*cum5/N,0)}%</b>`;
+  document.getElementById('note-scree').innerHTML = model.spikeOn
+    ? 'One <b style="color:#23262c">market spike</b> (market, PC1 ≈ 40% of variance) towers, then the <b style="color:#6a5a9c">sector spikes</b> above the floor, then the bulk. Shrink <b>Observations</b> → band widens → the smallest sectors sink below the floor and vanish.'
+    : 'No market spike: the first eigenvalue collapses toward the sector level. Now ~<b style="color:#6a5a9c">5 comparable spikes</b> (the sectors) sit above the floor — no single dominant factor.';
+}
+
+/* ---------- FACTOR MAP ---------- */
+function viewMap(){
+  const W=380,H=320,padL=34,padR=14,padT=14,padB=22,pw=W-padL-padR,ph=H-padT-padB;
+  const {eig,cluster,N}=model;const v1=eig[0].vec,v2=eig[1].vec;
+  let s1=0;for(let i=0;i<N;i++)s1+=v1[i];const f1=s1<0?-1:1;
+  const xs=v1.map(x=>x*f1),ys=v2.slice();
+  let xlo=Math.min(...xs),xhi=Math.max(...xs),ylo=Math.min(...ys),yhi=Math.max(...ys);
+  const ex=(xhi-xlo)*0.15+1e-3,ey=(yhi-ylo)*0.15+1e-3;xlo-=ex;xhi+=ex;ylo-=ey;yhi+=ey;
+  const X=v=>padL+(v-xlo)/(xhi-xlo)*pw, Y=v=>padT+ph-(v-ylo)/(yhi-ylo)*ph;
+  let s='';
+  s+=rect(padL,padT,pw,ph,'rgba(0,0,0,0.02)');
+  if(0>xlo&&0<xhi)s+=line(X(0),padT,X(0),padT+ph,AX);
+  if(0>ylo&&0<yhi)s+=line(padL,Y(0),padL+pw,Y(0),AX);
+  for(let i=0;i<N;i++)s+=`<circle cx="${F(X(xs[i]))}" cy="${F(Y(ys[i]))}" r="4.5" fill="${SC[cluster[i]]}" stroke="#fffefb" stroke-width="1"/>`;
+  document.getElementById('svg-map').innerHTML=svg(W,H,s);
+  document.getElementById('map-axes').textContent = model.spikeOn? 'PC1 = market (all same side) × PC2 = sector contrast' : 'PC1 × PC2 = two sector contrasts (no market)';
+  viewHeat();
+  document.getElementById('note-map').innerHTML = model.spikeOn
+    ? 'With the market spike, PC1 pushes <b>every asset to the same side</b> (common β) — sectors separate only on PC2+. The heatmap shows a high-correlation wash (market) with brighter <b>diagonal blocks</b> (sectors).'
+    : 'No market: PC1 and PC2 each become <b>sector contrasts</b>, so clusters spread out in the plane. Heatmap loses the global wash — only the block diagonal survives.';
+}
+function viewHeat(){
+  const W=320,H=320,{corr,cluster,sizes,N}=model;
+  const ord=[...Array(N).keys()].sort((a,b)=>cluster[a]-cluster[b]);
+  const cell=W/N;let s='';
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){const v=corr[ord[i]][ord[j]];
+    const fill = v>=0 ? `rgba(181,97,63,${F(0.06+0.9*Math.min(1,v),3)})` : `rgba(47,93,138,${F(0.06+0.9*Math.min(1,-v),3)})`;
+    s+=`<rect x="${F(j*cell)}" y="${F(i*cell)}" width="${F(cell+0.5)}" height="${F(cell+0.5)}" fill="${fill}"/>`;}
+  let acc=0;sizes.forEach(sz=>{acc+=sz;const p=acc*cell;s+=line(p,0,p,W,'#fffefb',1.5);s+=line(0,p,W,p,'#fffefb',1.5);});
+  s+=`<rect x="0.5" y="0.5" width="${W-1}" height="${W-1}" fill="none" stroke="${AX}"/>`;
+  document.getElementById('svg-heat').innerHTML=svg(W,H,s);
+}
+
+/* ---------- render / state ---------- */
+function render(){ if(!model)return; if(tab==='ret')viewReturns(); else if(tab==='scree')viewScree(); else viewMap(); }
+function recompute(){ model=generate(+N_.value,+T_.value,SPIKE,(+ss_.value)/100,SEED); buildLegend(); render(); }
+function buildLegend(){const L=document.getElementById('legend');const names=['Sector A','Sector B','Sector C','Sector D','Sector E'];L.innerHTML=model.sizes.map((sz,c)=>`<div class="lrow"><span class="sw" style="background:${SC[c]}"></span><span>${names[c]}</span><span class="ct">${sz} assets</span></div>`).join('');}
+
+/* ---------- wiring ---------- */
+const N_=document.getElementById('N'),T_=document.getElementById('T'),ss_=document.getElementById('ss'),kc_=document.getElementById('kc');
+const segOn=document.getElementById('segOn'),segOff=document.getElementById('segOff');
+function setSpike(on){SPIKE=on;segOn.classList.toggle('on',on);segOff.classList.toggle('on',!on);segOff.classList.toggle('off',!on);
+  document.getElementById('spikecap').textContent = on?'Market factor present — every asset loads on a common direction.':'Market factor removed — only sector structure + idiosyncratic noise remain.';recompute();}
+segOn.onclick=()=>setSpike(true);segOff.onclick=()=>setSpike(false);
+let timer=null;function deb(){clearTimeout(timer);timer=setTimeout(recompute,70);}
+N_.oninput=()=>{document.getElementById('nVal').textContent=N_.value;deb();};
+T_.oninput=()=>{document.getElementById('tVal').textContent=T_.value;deb();};
+ss_.oninput=()=>{document.getElementById('ssVal').textContent=((+ss_.value)/100).toFixed(1);deb();};
+kc_.oninput=()=>{document.getElementById('kVal').textContent=kc_.value;render();};
+document.getElementById('reseed').onclick=()=>{SEED=(SEED*1664525+1013904223)>>>0;recompute();};
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');tab=b.dataset.t;
+  document.getElementById('tab-ret').classList.toggle('hidden',tab!=='ret');
+  document.getElementById('tab-scree').classList.toggle('hidden',tab!=='scree');
+  document.getElementById('tab-map').classList.toggle('hidden',tab!=='map');
+  render();
+});
+
+recompute();
+</script>
+<script src="assets/site.js" data-base=""></script>
+</body>
+</html>

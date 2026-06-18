@@ -15,7 +15,8 @@
     { id: 'prob',  label: 'Problems',        href: 'problems.html' },
     { id: 'lab',   label: 'Reversal Lab',    href: 'reversal_lab.html' },
     { id: 'math',  label: 'Reversal Math',   href: 'reversal_math.html' },
-    { id: 'orth',  label: 'Orthogonalization', href: 'orthogonalization/index.html' }
+    { id: 'orth',  label: 'Orthogonalization', href: 'orthogonalization/index.html' },
+    { id: 'pca',   label: 'PCA Factors',     href: 'sector_returns_pca.html' }
   ];
 
   // figure out which link is current
@@ -24,6 +25,7 @@
   if (/problems\.html/.test(path)) active = 'prob';
   else if (/reversal_lab\.html/.test(path)) active = 'lab';
   else if (/reversal_math\.html/.test(path)) active = 'math';
+  else if (/sector_returns_pca\.html/.test(path)) active = 'pca';
   else if (/orthogonalization/.test(path)) active = 'orth';
   else if (/\/$|index\.html$/.test(path) || path === '' ) active = 'home';
 
