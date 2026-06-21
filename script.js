@@ -12,7 +12,20 @@ window.MathJax = {
 window.questions = [];
 window.currentPage = 1;
 window.companies = new Set();
+window.tags = new Set();
 window.solvedProblems = new Set(JSON.parse(localStorage.getItem('solvedProblems') || '[]'));
+
+function parseList(value) {
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+        try {
+            return JSON.parse(value.replace(/'/g, '"'));
+        } catch (error) {
+            return [];
+        }
+    }
+    return [];
+}
 
 
 function debounce(func, wait) {
@@ -123,28 +136,20 @@ async function loadQuestions() {
         }
 
         window.companies = new Set();
+        window.tags = new Set();
         window.questions.forEach(question => {
-            let companies;
-            try {
-                companies = typeof question.Companies === 'string' 
-                    ? JSON.parse(question.Companies.replace(/'/g, '"')) 
-                    : question.Companies;
-                
-                if (Array.isArray(companies)) {
-                    companies.forEach(company => {
-                        if (company && company !== '') {
-                            window.companies.add(company);
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Error parsing companies for question:', question);
-            }
+            parseList(question.Companies).forEach(company => {
+                if (company && company.trim()) window.companies.add(company);
+            });
+            parseList(question.Tags).forEach(tag => {
+                if (tag && tag.trim()) window.tags.add(tag);
+            });
         });
 
-        // Populate company filter
+        // Populate filters
         populateCompanyFilter();
-        
+        populateTagFilter();
+
         await filterProblems();
     } catch (error) {
         console.error('Error loading questions:', error);
@@ -203,6 +208,44 @@ function populateCompanyFilter() {
             }
         }
         
+        window.currentPage = 1;
+        filterProblems();
+    });
+}
+
+function populateTagFilter() {
+    const tagsList = document.getElementById('tags-list');
+    if (!tagsList) return;
+
+    tagsList.innerHTML = '<button class="tag-filter-tag active" data-tag="all">All Tags</button>';
+
+    Array.from(window.tags).sort().forEach(tag => {
+        const button = document.createElement('button');
+        button.className = 'tag-filter-tag';
+        button.setAttribute('data-tag', tag);
+        button.textContent = tag;
+        tagsList.appendChild(button);
+    });
+
+    tagsList.addEventListener('click', (e) => {
+        const tagButton = e.target.closest('.tag-filter-tag');
+        if (!tagButton) return;
+
+        const tag = tagButton.getAttribute('data-tag');
+
+        if (tag === 'all') {
+            document.querySelectorAll('.tag-filter-tag').forEach(t => t.classList.remove('active'));
+            tagButton.classList.add('active');
+        } else {
+            tagsList.querySelector('.tag-filter-tag[data-tag="all"]').classList.remove('active');
+            tagButton.classList.toggle('active');
+
+            const activeTags = tagsList.querySelectorAll('.tag-filter-tag.active:not([data-tag="all"])');
+            if (activeTags.length === 0) {
+                tagsList.querySelector('.tag-filter-tag[data-tag="all"]').classList.add('active');
+            }
+        }
+
         window.currentPage = 1;
         filterProblems();
     });
@@ -288,12 +331,8 @@ function createProblemCard(problem) {
     const card = document.createElement('div');
     card.className = 'problem-card';
     
-    const tags = typeof problem.Tags === 'string' ? 
-        JSON.parse(problem.Tags.replace(/'/g, '"')) : 
-        problem.Tags;
-    const companies = typeof problem.Companies === 'string' ? 
-        JSON.parse(problem.Companies.replace(/'/g, '"')) : 
-        problem.Companies;
+    const tags = parseList(problem.Tags);
+    const companies = parseList(problem.Companies);
     
     card.innerHTML = `
         <div class="problem-header">
@@ -450,6 +489,8 @@ async function filterProblems() {
         .map(tag => tag.getAttribute('data-difficulty'));
     const selectedCompanies = Array.from(document.querySelectorAll('.company-tag.active'))
         .map(button => button.getAttribute('data-company'));
+    const selectedTags = Array.from(document.querySelectorAll('.tag-filter-tag.active'))
+        .map(button => button.getAttribute('data-tag'));
     const solvedFilter = document.querySelector('.solved-filter-tag.active')?.getAttribute('data-solved') || 'unsolved';
 
     if (!window.questions || window.questions.length === 0) {
@@ -463,21 +504,22 @@ async function filterProblems() {
             selectedDifficulties.some(d => problem.Difficulty.toLowerCase() === d);
                 
         // Check companies
-        const companies = typeof problem.Companies === 'string'
-            ? JSON.parse(problem.Companies.replace(/'/g, '"'))
-            : problem.Companies;
-            
+        const companies = parseList(problem.Companies);
         const companiesMatch = selectedCompanies.includes('all') ||
-            (Array.isArray(companies) && companies.some(company => 
-                selectedCompanies.includes(company)));
-        
+            companies.some(company => selectedCompanies.includes(company));
+
+        // Check tags
+        const tags = parseList(problem.Tags);
+        const tagsMatch = selectedTags.includes('all') ||
+            tags.some(tag => selectedTags.includes(tag));
+
         // Check solved status
         const isSolved = window.solvedProblems.has(problem.url);
-        const solvedMatch = solvedFilter === 'all' || 
+        const solvedMatch = solvedFilter === 'all' ||
             (solvedFilter === 'solved' && isSolved) ||
             (solvedFilter === 'unsolved' && !isSolved);
-       
-        return difficultyMatch && companiesMatch && solvedMatch;
+
+        return difficultyMatch && companiesMatch && tagsMatch && solvedMatch;
     });
 
     const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
