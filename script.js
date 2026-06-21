@@ -14,6 +14,9 @@ window.currentPage = 1;
 window.companies = new Set();
 window.tags = new Set();
 window.solvedProblems = new Set(JSON.parse(localStorage.getItem('solvedProblems') || '[]'));
+window.solveTimes = JSON.parse(localStorage.getItem('solveTimes') || '{}');
+window.openTimers = {};
+window.timedMode = false;
 
 function parseList(value) {
     if (Array.isArray(value)) return value;
@@ -62,11 +65,15 @@ function toggleSolved(problemId, checkbox) {
                 disableForReducedMotion: true
             });
         }, 150);
+        finalizeSolveTime(problemId, checkbox.closest('.problem-card'));
     } else {
         window.solvedProblems.delete(problemId);
+        delete window.solveTimes[problemId];
+        localStorage.setItem('solveTimes', JSON.stringify(window.solveTimes));
     }
     localStorage.setItem('solvedProblems', JSON.stringify([...window.solvedProblems]));
     updateSolvedStats();
+    renderTimeStats();
 }
 
 function updateSolvedStats() {
@@ -322,15 +329,181 @@ function initializeDifficultyFilter() {
 function toggleSpoiler(element) {
     const content = element.nextElementSibling;
     content.classList.toggle('visible');
-    element.textContent = content.classList.contains('visible') 
-        ? `Hide ${element.dataset.type}` 
-        : `Show ${element.dataset.type}`;
+    const opened = content.classList.contains('visible');
+    element.textContent = opened ? `Hide ${element.dataset.type}` : `Show ${element.dataset.type}`;
+    if (opened && (element.dataset.type === 'Solution' || element.dataset.type === 'Answer')) {
+        const card = element.closest('.problem-card');
+        if (card) card.dataset.peeked = '1';
+    }
+}
+
+function formatTime(totalSeconds) {
+    const s = Math.max(0, Math.round(totalSeconds));
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+
+function updateCardTimer(card) {
+    const timer = card.querySelector('.card-timer');
+    const start = window.openTimers[card.dataset.url];
+    if (timer && start != null) {
+        timer.textContent = '⏱ ' + formatTime((Date.now() - start) / 1000);
+    }
+}
+
+function applyCardTimedState(card, problem) {
+    if (!window.timedMode) return;
+    const url = problem.url;
+
+    if (window.openTimers[url] != null) {
+        card.classList.add('is-running');
+        updateCardTimer(card);
+        return;
+    }
+
+    card.classList.add('is-closed');
+    const record = window.solveTimes[url];
+    if (record && typeof record.seconds === 'number') {
+        const timer = card.querySelector('.card-timer');
+        const hint = card.querySelector('.card-tap-hint');
+        if (timer) {
+            timer.textContent = '✓ ' + formatTime(record.seconds) + (record.peeked ? ' (peeked)' : '');
+            timer.classList.add('card-timer--done');
+        }
+        if (hint) hint.textContent = 'Tap to review';
+    }
+}
+
+function openCard(card) {
+    if (!window.timedMode || card.classList.contains('flipping') || !card.classList.contains('is-closed')) return;
+    const url = card.dataset.url;
+    card.classList.add('flipping');
+    setTimeout(() => {
+        card.classList.remove('is-closed');
+        if (!window.solvedProblems.has(url)) {
+            window.openTimers[url] = Date.now();
+            card.classList.add('is-running');
+            updateCardTimer(card);
+        }
+    }, 150);
+    setTimeout(() => card.classList.remove('flipping'), 300);
+}
+
+function finalizeSolveTime(url, card) {
+    if (window.openTimers[url] == null) return;
+    const seconds = (Date.now() - window.openTimers[url]) / 1000;
+    const peeked = card?.dataset.peeked === '1';
+    window.solveTimes[url] = { seconds, peeked };
+    localStorage.setItem('solveTimes', JSON.stringify(window.solveTimes));
+    delete window.openTimers[url];
+    if (!card) return;
+    card.classList.remove('is-running');
+    const timer = card.querySelector('.card-timer');
+    if (timer) {
+        timer.textContent = '✓ Solved in ' + formatTime(seconds) + (peeked ? ' (peeked)' : '');
+        timer.classList.add('card-timer--done');
+    }
+}
+
+function renderTimeStats() {
+    const el = document.getElementById('time-stats');
+    if (!el) return;
+    el.hidden = !window.timedMode;
+    if (!window.timedMode) return;
+
+    const byUrl = {};
+    window.questions.forEach(q => { byUrl[q.url] = q; });
+
+    const clean = Object.entries(window.solveTimes)
+        .filter(([, r]) => r && !r.peeked && typeof r.seconds === 'number');
+
+    if (clean.length === 0) {
+        el.innerHTML = '<span class="time-stats__empty">No clean solves yet — solve a problem without revealing the solution to log a time.</span>';
+        return;
+    }
+
+    const diffAgg = {};
+    const tagAgg = {};
+    clean.forEach(([url, r]) => {
+        const q = byUrl[url];
+        if (!q) return;
+        const d = (q.Difficulty || '').toLowerCase();
+        if (d) {
+            diffAgg[d] = diffAgg[d] || { sum: 0, n: 0 };
+            diffAgg[d].sum += r.seconds; diffAgg[d].n += 1;
+        }
+        parseList(q.Tags).forEach(tag => {
+            tagAgg[tag] = tagAgg[tag] || { sum: 0, n: 0 };
+            tagAgg[tag].sum += r.seconds; tagAgg[tag].n += 1;
+        });
+    });
+
+    const pill = (label, agg) =>
+        `<span class="time-stat"><b>${label}</b> ${formatTime(agg.sum / agg.n)} <em>·${agg.n}</em></span>`;
+
+    const diffHtml = ['easy', 'medium', 'hard']
+        .filter(d => diffAgg[d])
+        .map(d => pill(d.charAt(0).toUpperCase() + d.slice(1), diffAgg[d]))
+        .join('');
+
+    const tagHtml = Object.entries(tagAgg)
+        .sort((a, b) => b[1].n - a[1].n)
+        .slice(0, 5)
+        .map(([tag, agg]) => pill(tag, agg))
+        .join('');
+
+    el.innerHTML = `
+        <div class="time-stats__group">
+            <span class="time-stats__title">Avg by difficulty</span>
+            <div class="time-stats__row">${diffHtml || '<span class="time-stats__empty">—</span>'}</div>
+        </div>
+        <div class="time-stats__group">
+            <span class="time-stats__title">Top solved tags</span>
+            <div class="time-stats__row">${tagHtml || '<span class="time-stats__empty">—</span>'}</div>
+        </div>
+    `;
+}
+
+function applyTimedMode() {
+    const toggle = document.getElementById('timed-toggle');
+    document.body.classList.toggle('timed-mode', window.timedMode);
+    if (toggle) toggle.setAttribute('aria-checked', window.timedMode ? 'true' : 'false');
+    renderTimeStats();
+}
+
+function initializeTimedMode() {
+    window.timedMode = localStorage.getItem('timedMode') === '1';
+    applyTimedMode();
+
+    const toggle = document.getElementById('timed-toggle');
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            window.timedMode = !window.timedMode;
+            localStorage.setItem('timedMode', window.timedMode ? '1' : '0');
+            applyTimedMode();
+            window.currentPage = 1;
+            filterProblems();
+        });
+    }
+
+    const problemsContainer = document.getElementById('problems');
+    if (problemsContainer) {
+        problemsContainer.addEventListener('click', (e) => {
+            if (!window.timedMode) return;
+            const card = e.target.closest('.problem-card.is-closed');
+            if (card) openCard(card);
+        });
+    }
+
+    setInterval(() => {
+        document.querySelectorAll('.problem-card.is-running').forEach(updateCardTimer);
+    }, 1000);
 }
 
 function createProblemCard(problem) {
     const card = document.createElement('div');
     card.className = 'problem-card';
-    
+    card.dataset.url = problem.url || '';
+
     const tags = parseList(problem.Tags);
     const companies = parseList(problem.Companies);
     
@@ -344,8 +517,10 @@ function createProblemCard(problem) {
                     ${problem.url ? `<a href="${problem.url}" class="problem-link" target="_blank">Original Task</a>` : ''}
                 </div>
             </div>
+            <div class="card-timer" aria-live="polite"></div>
+            <div class="card-tap-hint">Tap to reveal — starts the timer</div>
         </div>
-        
+
         <div class="problem-task">${problem.task}</div>
         
         <div class="tags-section">
@@ -385,7 +560,8 @@ function createProblemCard(problem) {
             </label>
         </div>
     `;
-    
+
+    applyCardTimedState(card, problem);
     return card;
 }
 
@@ -547,12 +723,14 @@ async function filterProblems() {
     paginationContainer.appendChild(createPagination(window.currentPage, totalPages));
 
     updateSolvedStats();
+    renderTimeStats();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeDifficultyFilter();
     initializeSolvedFilter();
     initializeCompanySearch(); // Add this line
+    initializeTimedMode();
     filterProblems();
 
     window.addEventListener('resize', debounce(() => {

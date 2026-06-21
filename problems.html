@@ -55,6 +55,14 @@
             <p>A filterable deck of probability, brainteaser and combinatorics problems by difficulty,
                topic and firm. Reveal hints &amp; solutions, and tick problems off — your progress is
                saved locally in your browser.</p>
+            <div class="mode-switch">
+                <span class="mode-switch__label">Timed mode</span>
+                <button id="timed-toggle" class="mode-toggle" role="switch" aria-checked="false" aria-label="Toggle timed mode">
+                    <span class="mode-toggle__knob"></span>
+                </button>
+                <span class="mode-switch__hint">cards stay face-down; tap to start the clock</span>
+            </div>
+            <div id="time-stats" class="time-stats" hidden></div>
         </div>
 
         <div class="filters">
