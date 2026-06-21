@@ -50,22 +50,31 @@
 <body class="qt">
     <div class="container">
         <div class="problems-intro">
-            <p class="qt-eyebrow">Practice · quant interview math</p>
+            <div class="problems-intro__top">
+                <p class="qt-eyebrow">Practice · quant interview math</p>
+                <div class="mode-switch">
+                    <span class="mode-switch__label">Timed mode</span>
+                    <button id="timed-toggle" class="mode-toggle" role="switch" aria-checked="false" aria-label="Toggle timed mode" title="Cards stay face-down; tap to start the clock">
+                        <span class="mode-toggle__knob"></span>
+                    </button>
+                </div>
+            </div>
             <h1>Problems Collection</h1>
             <p>A filterable deck of probability, brainteaser and combinatorics problems by difficulty,
                topic and firm. Reveal hints &amp; solutions, and tick problems off — your progress is
                saved locally in your browser.</p>
-            <div class="mode-switch">
-                <span class="mode-switch__label">Timed mode</span>
-                <button id="timed-toggle" class="mode-toggle" role="switch" aria-checked="false" aria-label="Toggle timed mode">
-                    <span class="mode-toggle__knob"></span>
-                </button>
-                <span class="mode-switch__hint">cards stay face-down; tap to start the clock</span>
-            </div>
-            <div id="time-stats" class="time-stats" hidden></div>
+            <div id="stats-widget" class="stats-widget"></div>
         </div>
 
-        <div class="filters">
+        <div class="filters-bar">
+            <button id="filters-toggle" class="filters-toggle" aria-expanded="false" aria-controls="filters-panel">
+                <span class="filters-toggle__label">Filters</span>
+                <span class="filters-toggle__chevron" aria-hidden="true">▾</span>
+            </button>
+            <span class="filters-summary" id="filters-summary"></span>
+        </div>
+
+        <div class="filters" id="filters-panel" hidden>
             <div class="filter-section">
                 <div class="filter-row">
                     <div class="filter-controls">
@@ -96,11 +105,6 @@
                                 <button class="solved-filter-tag" data-solved="all">
                                     All Problems
                                 </button>
-                            </div>
-                        </div>
-                        <div class="solved-counter">
-                            <div class="solved-stats" id="solved-stats">
-                                <!-- Will be populated by JavaScript -->
                             </div>
                         </div>
                     </div>

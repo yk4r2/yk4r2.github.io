@@ -72,39 +72,79 @@ function toggleSolved(problemId, checkbox) {
         localStorage.setItem('solveTimes', JSON.stringify(window.solveTimes));
     }
     localStorage.setItem('solvedProblems', JSON.stringify([...window.solvedProblems]));
-    updateSolvedStats();
-    renderTimeStats();
+    renderStatsWidget();
 }
 
-function updateSolvedStats() {
-    const statsContainer = document.getElementById('solved-stats');
-    const solvedByDifficulty = {};
-    const totalProblems = {};
-    
-    // Count total problems by difficulty
-    window.questions.forEach(problem => {
-        const difficulty = problem.Difficulty.toLowerCase();
-        totalProblems[difficulty] = (totalProblems[difficulty] || 0) + 1;
+function renderStatsWidget() {
+    const el = document.getElementById('stats-widget');
+    if (!el) return;
+
+    const order = ['easy', 'medium', 'hard'];
+    const cap = d => d.charAt(0).toUpperCase() + d.slice(1);
+
+    const total = {};
+    const solved = {};
+    window.questions.forEach(q => {
+        const d = (q.Difficulty || '').toLowerCase();
+        if (!d) return;
+        total[d] = (total[d] || 0) + 1;
+        if (window.solvedProblems.has(q.url)) solved[d] = (solved[d] || 0) + 1;
     });
-    
-    // Count solved problems by difficulty
-    window.questions.forEach(problem => {
-        if (window.solvedProblems.has(problem.url)) {
-            const difficulty = problem.Difficulty.toLowerCase();
-            solvedByDifficulty[difficulty] = (solvedByDifficulty[difficulty] || 0) + 1;
-        }
-    });
-    
-    // Update stats display
-    statsContainer.innerHTML = Object.keys(totalProblems)
-        .sort()
-        .map(difficulty => `
-            <div class="stat-item">
-                ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}: 
-                ${solvedByDifficulty[difficulty] || 0}/${totalProblems[difficulty]}
-            </div>
-        `)
+    const present = order.filter(d => total[d]);
+
+    const solvedItems = present
+        .map(d => `<span class="stat-chip ${d}">${cap(d)} <b>${solved[d] || 0}/${total[d]}</b></span>`)
         .join('');
+
+    let rows = `
+        <div class="stats-widget__row">
+            <span class="stats-widget__label">Solved</span>
+            <div class="stats-widget__items">${solvedItems}</div>
+        </div>`;
+
+    if (window.timedMode) {
+        const byUrl = {};
+        window.questions.forEach(q => { byUrl[q.url] = q; });
+        const clean = Object.entries(window.solveTimes)
+            .filter(([, r]) => r && !r.peeked && typeof r.seconds === 'number');
+
+        const diffAgg = {};
+        const tagAgg = {};
+        clean.forEach(([url, r]) => {
+            const q = byUrl[url];
+            if (!q) return;
+            const d = (q.Difficulty || '').toLowerCase();
+            if (d) {
+                diffAgg[d] = diffAgg[d] || { sum: 0, n: 0 };
+                diffAgg[d].sum += r.seconds; diffAgg[d].n += 1;
+            }
+            parseList(q.Tags).forEach(tag => {
+                tagAgg[tag] = tagAgg[tag] || { sum: 0, n: 0 };
+                tagAgg[tag].sum += r.seconds; tagAgg[tag].n += 1;
+            });
+        });
+
+        const timeItems = present
+            .map(d => `<span class="stat-chip ${d}">${cap(d)} <b>${diffAgg[d] ? formatTime(diffAgg[d].sum / diffAgg[d].n) : '—'}</b></span>`)
+            .join('');
+
+        const topTags = Object.entries(tagAgg).sort((a, b) => b[1].n - a[1].n).slice(0, 5);
+        const tagItems = topTags.length
+            ? topTags.map(([tag, a]) => `<span class="stat-chip">${tag} <b>${formatTime(a.sum / a.n)}</b> <em>·${a.n}</em></span>`).join('')
+            : '<span class="stats-widget__empty">no clean solves yet</span>';
+
+        rows += `
+        <div class="stats-widget__row">
+            <span class="stats-widget__label">Avg time</span>
+            <div class="stats-widget__items">${timeItems}</div>
+        </div>
+        <div class="stats-widget__row">
+            <span class="stats-widget__label">Top tags</span>
+            <div class="stats-widget__items">${tagItems}</div>
+        </div>`;
+    }
+
+    el.innerHTML = rows;
 }
 
 function initializeSolvedFilter() {
@@ -404,70 +444,11 @@ function finalizeSolveTime(url, card) {
     }
 }
 
-function renderTimeStats() {
-    const el = document.getElementById('time-stats');
-    if (!el) return;
-    el.hidden = !window.timedMode;
-    if (!window.timedMode) return;
-
-    const byUrl = {};
-    window.questions.forEach(q => { byUrl[q.url] = q; });
-
-    const clean = Object.entries(window.solveTimes)
-        .filter(([, r]) => r && !r.peeked && typeof r.seconds === 'number');
-
-    if (clean.length === 0) {
-        el.innerHTML = '<span class="time-stats__empty">No clean solves yet — solve a problem without revealing the solution to log a time.</span>';
-        return;
-    }
-
-    const diffAgg = {};
-    const tagAgg = {};
-    clean.forEach(([url, r]) => {
-        const q = byUrl[url];
-        if (!q) return;
-        const d = (q.Difficulty || '').toLowerCase();
-        if (d) {
-            diffAgg[d] = diffAgg[d] || { sum: 0, n: 0 };
-            diffAgg[d].sum += r.seconds; diffAgg[d].n += 1;
-        }
-        parseList(q.Tags).forEach(tag => {
-            tagAgg[tag] = tagAgg[tag] || { sum: 0, n: 0 };
-            tagAgg[tag].sum += r.seconds; tagAgg[tag].n += 1;
-        });
-    });
-
-    const pill = (label, agg) =>
-        `<span class="time-stat"><b>${label}</b> ${formatTime(agg.sum / agg.n)} <em>·${agg.n}</em></span>`;
-
-    const diffHtml = ['easy', 'medium', 'hard']
-        .filter(d => diffAgg[d])
-        .map(d => pill(d.charAt(0).toUpperCase() + d.slice(1), diffAgg[d]))
-        .join('');
-
-    const tagHtml = Object.entries(tagAgg)
-        .sort((a, b) => b[1].n - a[1].n)
-        .slice(0, 5)
-        .map(([tag, agg]) => pill(tag, agg))
-        .join('');
-
-    el.innerHTML = `
-        <div class="time-stats__group">
-            <span class="time-stats__title">Avg by difficulty</span>
-            <div class="time-stats__row">${diffHtml || '<span class="time-stats__empty">—</span>'}</div>
-        </div>
-        <div class="time-stats__group">
-            <span class="time-stats__title">Top solved tags</span>
-            <div class="time-stats__row">${tagHtml || '<span class="time-stats__empty">—</span>'}</div>
-        </div>
-    `;
-}
-
 function applyTimedMode() {
     const toggle = document.getElementById('timed-toggle');
     document.body.classList.toggle('timed-mode', window.timedMode);
     if (toggle) toggle.setAttribute('aria-checked', window.timedMode ? 'true' : 'false');
-    renderTimeStats();
+    renderStatsWidget();
 }
 
 function initializeTimedMode() {
@@ -497,6 +478,35 @@ function initializeTimedMode() {
     setInterval(() => {
         document.querySelectorAll('.problem-card.is-running').forEach(updateCardTimer);
     }, 1000);
+}
+
+function initializeFiltersToggle() {
+    const toggle = document.getElementById('filters-toggle');
+    const panel = document.getElementById('filters-panel');
+    if (!toggle || !panel) return;
+
+    toggle.addEventListener('click', () => {
+        const willOpen = panel.hasAttribute('hidden');
+        panel.toggleAttribute('hidden', !willOpen);
+        toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    });
+}
+
+function updateFilterSummary(difficulties, tags, companies, solved) {
+    const el = document.getElementById('filters-summary');
+    if (!el) return;
+
+    const cap = v => v.charAt(0).toUpperCase() + v.slice(1);
+    const list = (vals, capitalize) =>
+        vals.includes('all') ? 'All' : (capitalize ? vals.map(cap) : vals).join(', ');
+    const solvedLabel = { unsolved: 'Unsolved', solved: 'Solved', all: 'All' }[solved] || cap(solved);
+
+    el.innerHTML = [
+        `Difficulties: <b>${list(difficulties, true)}</b>`,
+        `Tags: <b>${list(tags, false)}</b>`,
+        `Companies: <b>${list(companies, false)}</b>`,
+        `Solved: <b>${solvedLabel}</b>`,
+    ].join(' · ');
 }
 
 function createProblemCard(problem) {
@@ -569,62 +579,22 @@ function createPagination(currentPage, totalPages) {
     const paginationContainer = document.createElement('div');
     paginationContainer.className = 'pagination';
 
-    const isMobile = window.innerWidth <= 640;
-    
-    // Always show first page
-    paginationContainer.appendChild(createPageButton(1, currentPage));
+    if (totalPages < 1) return paginationContainer;
 
-    if (isMobile) {
-        // Mobile layout: Show only key pages
-        if (currentPage > 2) {
-            paginationContainer.appendChild(createEllipsis());
-        }
-        
-        // Show 1-2 pages before current
-        if (currentPage > 1) {
-            const prevPage = createPageButton(currentPage - 1, currentPage);
-            prevPage.classList.add('mobile-visible');
-            paginationContainer.appendChild(prevPage);
-        }
-        
-        if (currentPage !== 1 && currentPage !== totalPages) {
-            const currentBtn = createPageButton(currentPage, currentPage);
-            currentBtn.classList.add('mobile-visible');
-            paginationContainer.appendChild(currentBtn);
-        }
-        
-        // Show 1-2 pages after current
-        if (currentPage < totalPages) {
-            const nextPage = createPageButton(currentPage + 1, currentPage);
-            nextPage.classList.add('mobile-visible');
-            paginationContainer.appendChild(nextPage);
-        }
-        
-        if (currentPage < totalPages - 1) {
-            paginationContainer.appendChild(createEllipsis());
-        }
-    } else {
-        // Desktop layout: Show more pages
-        let startPage = Math.max(1, currentPage - 2);
-        let endPage = Math.min(totalPages, currentPage + 2);
+    const delta = window.innerWidth <= 640 ? 1 : 2;
 
-        if (startPage > 1) {
-            paginationContainer.appendChild(createEllipsis());
-        }
+    const pages = [1];
+    const start = Math.max(2, currentPage - delta);
+    const end = Math.min(totalPages - 1, currentPage + delta);
+    for (let i = start; i <= end; i++) pages.push(i);
+    if (totalPages > 1) pages.push(totalPages);
 
-        for (let i = startPage; i <= endPage; i++) {
-            paginationContainer.appendChild(createPageButton(i, currentPage));
-        }
-
-        if (endPage < totalPages) {
-            paginationContainer.appendChild(createEllipsis());
-        }
-    }
-
-    // Always show last page
-    if (totalPages > 1) {
-        paginationContainer.appendChild(createPageButton(totalPages, currentPage));
-    }
+    let prev = 0;
+    pages.forEach(page => {
+        if (page - prev > 1) paginationContainer.appendChild(createEllipsis());
+        paginationContainer.appendChild(createPageButton(page, currentPage));
+        prev = page;
+    });
 
     return paginationContainer;
 }
@@ -722,8 +692,8 @@ async function filterProblems() {
     paginationContainer.innerHTML = '';
     paginationContainer.appendChild(createPagination(window.currentPage, totalPages));
 
-    updateSolvedStats();
-    renderTimeStats();
+    renderStatsWidget();
+    updateFilterSummary(selectedDifficulties, selectedTags, selectedCompanies, solvedFilter);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -731,6 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSolvedFilter();
     initializeCompanySearch(); // Add this line
     initializeTimedMode();
+    initializeFiltersToggle();
     filterProblems();
 
     window.addEventListener('resize', debounce(() => {
